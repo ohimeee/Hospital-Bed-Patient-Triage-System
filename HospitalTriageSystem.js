@@ -269,11 +269,11 @@ class HospitalTriageUI {
                     <h1>Bed Availability & Patient Triage</h1>
                 </div>
                 <div class="header-actions">
-                    <button id="logoutButton" class="ghost-button" type="button">Logout</button>
                     <div class="capacity-pill ${capacityState}">
                         <span>${percent}%</span>
                         <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
                     </div>
+                    <button id="logoutButton" class="ghost-button logout-button" type="button">Logout</button>
                 </div>
             </header>
 

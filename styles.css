@@ -55,7 +55,14 @@ button {
 .header-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 16px;
+}
+
+.logout-button {
+    min-width: 110px;
+    padding: 0 16px;
+    font-size: 0.95rem;
 }
 
 .eyebrow {
