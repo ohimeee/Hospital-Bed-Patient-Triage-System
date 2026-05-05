@@ -481,6 +481,17 @@ select:focus {
     }
 }
 
+.right-column {
+    display: grid;
+    gap: 16px;
+}
+
+@media (max-width: 1024px) {
+    .work-area {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Simple auth page styles */
 body {
     background: radial-gradient(circle at top left, rgba(23, 107, 135, 0.16), transparent 28%),

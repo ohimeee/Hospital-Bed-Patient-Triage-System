@@ -281,21 +281,23 @@ class HospitalTriageUI {
                         <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
                     </div>
 
-                    <div class="panel beds-panel">
-                        <div class="panel-heading">
-                            <h2>Ward Beds</h2>
-                            <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
+                    <div class="right-column">
+                        <div class="panel beds-panel">
+                            <div class="panel-heading">
+                                <h2>Ward Beds</h2>
+                                <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
+                            </div>
+                            <div id="bedsGrid" class="beds-grid"></div>
                         </div>
-                        <div id="bedsGrid" class="beds-grid"></div>
-                    </div>
-                </section>
 
-                <section class="panel log-panel">
-                    <div class="panel-heading">
-                        <h2>Activity Log</h2>
-                        <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                        <div class="panel log-panel">
+                            <div class="panel-heading">
+                                <h2>Activity Log</h2>
+                                <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                            </div>
+                            <div id="activityLog" class="activity-log" aria-live="polite"></div>
+                        </div>
                     </div>
-                    <div id="activityLog" class="activity-log" aria-live="polite"></div>
                 </section>
             </main>
         `;
