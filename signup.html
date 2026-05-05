@@ -136,7 +136,6 @@
         
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value.trim();
-        const rememberMe = document.getElementById('rememberMe').checked;
         
         if (!email) {
             alert('Please enter your email');
@@ -148,8 +147,7 @@
             return;
         }
         
-        // Simulate successful login
-        alert('Logged in successfully!');
+        // Redirect directly to dashboard
         window.location.href = 'index.html';
     });
 
