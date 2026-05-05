@@ -539,11 +539,6 @@ select:focus {
     }
 }
 
-.right-column {
-    display: grid;
-    gap: 16px;
-}
-
 @media (max-width: 1024px) {
     .work-area {
         grid-template-columns: 1fr;
