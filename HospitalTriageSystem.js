@@ -268,12 +268,9 @@ class HospitalTriageUI {
                     <p class="eyebrow">Hospital Operations</p>
                     <h1>Bed Availability & Patient Triage</h1>
                 </div>
-                <div class="header-actions">
-                    <button id="logoutButton" class="ghost-button" type="button">Logout</button>
-                    <div class="capacity-pill ${capacityState}">
-                        <span>${percent}%</span>
-                        <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
-                    </div>
+                <div class="capacity-pill ${capacityState}">
+                    <span>${percent}%</span>
+                    <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
                 </div>
             </header>
 
@@ -311,44 +308,23 @@ class HospitalTriageUI {
                         </select>
 
                         <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
-
-                        <hr />
-
-                        <label for="newRoomId">New room ID</label>
-                        <input id="newRoomId" type="text" placeholder="e.g., ICU-03" />
-
-                        <label for="newRoomType">Room type</label>
-                        <select id="newRoomType">
-                            <option value="ICU">ICU</option>
-                            <option value="Emergency">Emergency</option>
-                            <option value="Pediatric">Pediatric</option>
-                            <option value="Maternity">Maternity</option>
-                            <option value="General">General</option>
-                        </select>
-
-                        <label for="wardName">Ward name (optional)</label>
-                        <input id="wardName" type="text" placeholder="e.g., ICU Ward" />
-
-                        <button id="createRoomButton" class="secondary-button" type="button">Add Room</button>
                     </div>
 
-                    <div class="right-column">
-                        <div class="panel beds-panel">
-                            <div class="panel-heading">
-                                <h2>Ward Beds</h2>
-                                <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
-                            </div>
-                            <div id="bedsGrid" class="beds-grid"></div>
+                    <div class="panel beds-panel">
+                        <div class="panel-heading">
+                            <h2>Ward Beds</h2>
+                            <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
                         </div>
-
-                        <div class="panel log-panel">
-                            <div class="panel-heading">
-                                <h2>Activity Log</h2>
-                                <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
-                            </div>
-                            <div id="activityLog" class="activity-log" aria-live="polite"></div>
-                        </div>
+                        <div id="bedsGrid" class="beds-grid"></div>
                     </div>
+                </section>
+
+                <section class="panel log-panel">
+                    <div class="panel-heading">
+                        <h2>Activity Log</h2>
+                        <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                    </div>
+                    <div id="activityLog" class="activity-log" aria-live="polite"></div>
                 </section>
             </main>
         `;
@@ -422,24 +398,6 @@ class HospitalTriageUI {
             this.refresh();
         };
 
-        this.getElement("createRoomButton").onclick = () => {
-            const idInput = this.getElement("newRoomId");
-            const typeSelect = this.getElement("newRoomType");
-            const wardInput = this.getElement("wardName");
-            const bedId = idInput.value.trim();
-            if (!bedId) {
-                this.addLog("[INFO] Enter a room ID to add.");
-                idInput.focus();
-                return;
-            }
-            const type = typeSelect.value;
-            const ward = wardInput.value.trim();
-            this.addLog(this.system.addBed(type, bedId, ward));
-            idInput.value = "";
-            wardInput.value = "";
-            this.refresh();
-        };
-
         this.getElement("summaryButton").onclick = () => {
             const { occupied, total, percent } = this.system.getCapacitySummary();
             this.addLog(`--- Ward Summary: ${occupied}/${total} occupied, ${percent}% capacity utilized. ---`);
@@ -447,15 +405,7 @@ class HospitalTriageUI {
 
         this.getElement("clearLogButton").onclick = () => {
             this.getElement("activityLog").innerHTML = "";
-<<<<<<< HEAD
         };
-=======
-        });
-
-        this.getElement("logoutButton").addEventListener("click", () => {
-            window.location.href = 'signup.html';
-        });
->>>>>>> CB-branch
     }
 
     refresh() {
