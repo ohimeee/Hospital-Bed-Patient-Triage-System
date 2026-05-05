@@ -236,9 +236,12 @@ class HospitalTriageUI {
                     <p class="eyebrow">Hospital Operations</p>
                     <h1>Bed Availability & Patient Triage</h1>
                 </div>
-                <div class="capacity-pill ${capacityState}">
-                    <span>${percent}%</span>
-                    <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
+                <div class="header-actions">
+                    <button id="logoutButton" class="ghost-button" type="button">Logout</button>
+                    <div class="capacity-pill ${capacityState}">
+                        <span>${percent}%</span>
+                        <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
+                    </div>
                 </div>
             </header>
 
@@ -364,6 +367,10 @@ class HospitalTriageUI {
         });
         this.getElement("clearLogButton").addEventListener("click", () => {
             this.getElement("activityLog").innerHTML = "";
+        });
+
+        this.getElement("logoutButton").addEventListener("click", () => {
+            window.location.href = 'signup.html';
         });
     }
     refresh() {

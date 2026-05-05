@@ -52,6 +52,12 @@ button {
     padding: 28px 0 18px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .eyebrow {
     margin: 0 0 6px;
     color: var(--brand);
