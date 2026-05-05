@@ -228,7 +228,7 @@ class HospitalTriageSystem {
         this.bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
     }
 
-    public admitPatient(bedType: BedType, patientName: string): void {
+    public admitPatient(bedType: BedType, patientName: string): string {
         const bed = this.bedsList.find((b) => {
             if (bedType === "ICU" && b instanceof ICUBed && !b.getIsOccupied()) return true;
             if (bedType === "Emergency" && b instanceof EmergencyBed && !b.getIsOccupied()) return true;
@@ -238,24 +238,24 @@ class HospitalTriageSystem {
         });
 
         if (bed) {
-            console.log(`[ADMIT] ${bed.admitPatient(patientName)}`);
-        } else {
-            console.log(`[FAILED] No available ${bedType} beds found.`);
+            return `[ADMIT] ${bed.admitPatient(patientName)}`;
         }
+
+        return `[FAILED] No available ${bedType} beds found.`;
     }
 
-    public dischargePatient(bedId: string): void {
+    public dischargePatient(bedId: string): string {
         const bed = this.bedsList.find((b) => b.getBedId() === bedId);
 
         if (bed) {
             if (bed.getIsOccupied()) {
-                console.log(`[DISCHARGE] ${bed.dischargePatient()}`);
-            } else {
-                console.log(`[INFO] Bed ${bedId} is already vacant.`);
+                return `[DISCHARGE] ${bed.dischargePatient()}`;
             }
-        } else {
-            console.log(`[ERROR] Bed ID ${bedId} not found.`);
+
+            return `[INFO] Bed ${bedId} is already vacant.`;
         }
+
+        return `[ERROR] Bed ID ${bedId} not found.`;
     }
 
     public printWardSummary(): void {
@@ -283,4 +283,219 @@ class HospitalTriageSystem {
 
         console.log("---------------------\n");
     }
+
+    public getBedsList(): HospitalBed[] {
+        return [...this.bedsList];
+    }
+
+    public getCapacitySummary(): { occupied: number; total: number; percent: number } {
+        const occupied = this.bedsList.filter((bed) => bed.getIsOccupied()).length;
+        const total = this.bedsList.length;
+        const percent = Math.round((occupied * 100) / total);
+
+        return { occupied, total, percent };
+    }
+}
+
+class HospitalTriageUI {
+    private readonly system = new HospitalTriageSystem();
+    private readonly app: HTMLElement;
+    private selectedBedId = "";
+
+    constructor(app: HTMLElement) {
+        this.app = app;
+        this.render();
+        this.addLog("System ready. All wards loaded.");
+    }
+
+    private render(): void {
+        const { occupied, total, percent } = this.system.getCapacitySummary();
+        const available = total - occupied;
+        const capacityState = percent >= 80 ? "critical" : "normal";
+
+        this.app.innerHTML = `
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Hospital Operations</p>
+                    <h1>Bed Availability & Patient Triage</h1>
+                </div>
+                <div class="capacity-pill ${capacityState}">
+                    <span>${percent}%</span>
+                    <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
+                </div>
+            </header>
+
+            <main class="layout">
+                <section class="summary-grid" aria-label="Bed summary">
+                    <article class="summary-card">
+                        <span>Total Beds</span>
+                        <strong>${total}</strong>
+                    </article>
+                    <article class="summary-card">
+                        <span>Occupied</span>
+                        <strong>${occupied}</strong>
+                    </article>
+                    <article class="summary-card">
+                        <span>Available</span>
+                        <strong>${available}</strong>
+                    </article>
+                </section>
+
+                <section class="work-area">
+                    <div class="panel triage-panel">
+                        <div class="panel-heading">
+                            <h2>Patient Triage</h2>
+                        </div>
+
+                        <label for="patientName">Patient name</label>
+                        <input id="patientName" type="text" placeholder="Enter patient name" autocomplete="off" />
+
+                        <label for="bedType">Bed type</label>
+                        <select id="bedType">
+                            <option value="ICU">ICU</option>
+                            <option value="Emergency">Emergency</option>
+                            <option value="Pediatric">Pediatric</option>
+                            <option value="Maternity">Maternity</option>
+                        </select>
+
+                        <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
+                    </div>
+
+                    <div class="panel beds-panel">
+                        <div class="panel-heading">
+                            <h2>Ward Beds</h2>
+                            <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
+                        </div>
+                        <div id="bedsGrid" class="beds-grid"></div>
+                    </div>
+                </section>
+
+                <section class="panel log-panel">
+                    <div class="panel-heading">
+                        <h2>Activity Log</h2>
+                        <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                    </div>
+                    <div id="activityLog" class="activity-log" aria-live="polite"></div>
+                </section>
+            </main>
+        `;
+
+        this.renderBeds();
+        this.bindEvents();
+    }
+
+    private renderBeds(): void {
+        const bedsGrid = this.getElement<HTMLDivElement>("bedsGrid");
+        const beds = this.system.getBedsList();
+
+        bedsGrid.innerHTML = beds.map((bed) => {
+            const occupied = bed.getIsOccupied();
+            const selected = bed.getBedId() === this.selectedBedId;
+
+            return `
+                <article class="bed-card ${occupied ? "occupied" : "available"} ${selected ? "selected" : ""}">
+                    <div class="bed-card-header">
+                        <div>
+                            <strong>${bed.getBedId()}</strong>
+                            <span>${this.getBedTypeLabel(bed)}</span>
+                        </div>
+                        <mark>${occupied ? "Occupied" : "Available"}</mark>
+                    </div>
+                    <p>${bed.getWardName()}</p>
+                    <p class="bed-info">${bed.getBedInfo()}</p>
+                    <div class="patient-line">
+                        <span>Patient</span>
+                        <strong>${bed.getPatientName()}</strong>
+                    </div>
+                    <button class="secondary-button" type="button" data-bed-id="${bed.getBedId()}">
+                        ${occupied ? "Discharge" : "Select"}
+                    </button>
+                </article>
+            `;
+        }).join("");
+
+        bedsGrid.querySelectorAll<HTMLButtonElement>("[data-bed-id]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const bedId = button.dataset.bedId ?? "";
+                const bed = this.system.getBedsList().find((item) => item.getBedId() === bedId);
+
+                if (!bed) {
+                    return;
+                }
+
+                this.selectedBedId = bedId;
+
+                if (bed.getIsOccupied()) {
+                    this.addLog(this.system.dischargePatient(bedId));
+                    this.refresh();
+                    return;
+                }
+
+                this.addLog(`[INFO] Selected available bed ${bedId}.`);
+                this.renderBeds();
+            });
+        });
+    }
+
+    private bindEvents(): void {
+        this.getElement<HTMLButtonElement>("admitButton").addEventListener("click", () => {
+            const patientNameInput = this.getElement<HTMLInputElement>("patientName");
+            const bedTypeSelect = this.getElement<HTMLSelectElement>("bedType");
+            const patientName = patientNameInput.value.trim();
+
+            if (!patientName) {
+                this.addLog("[INFO] Enter a patient name before admission.");
+                patientNameInput.focus();
+                return;
+            }
+
+            this.addLog(this.system.admitPatient(bedTypeSelect.value as BedType, patientName));
+            patientNameInput.value = "";
+            this.refresh();
+        });
+
+        this.getElement<HTMLButtonElement>("summaryButton").addEventListener("click", () => {
+            const { occupied, total, percent } = this.system.getCapacitySummary();
+            this.addLog(`--- Ward Summary: ${occupied}/${total} occupied, ${percent}% capacity utilized. ---`);
+        });
+
+        this.getElement<HTMLButtonElement>("clearLogButton").addEventListener("click", () => {
+            this.getElement<HTMLDivElement>("activityLog").innerHTML = "";
+        });
+    }
+
+    private refresh(): void {
+        const logs = this.getElement<HTMLDivElement>("activityLog").innerHTML;
+        this.render();
+        this.getElement<HTMLDivElement>("activityLog").innerHTML = logs;
+    }
+
+    private addLog(message: string): void {
+        const activityLog = this.getElement<HTMLDivElement>("activityLog");
+        const row = document.createElement("p");
+        row.textContent = message;
+        activityLog.prepend(row);
+    }
+
+    private getBedTypeLabel(bed: HospitalBed): string {
+        if (bed instanceof ICUBed) return "ICU Bed";
+        if (bed instanceof EmergencyBed) return "Emergency Bed";
+        if (bed instanceof PediatricBed) return "Pediatric Bed";
+        if (bed instanceof MaternityBed) return "Maternity Bed";
+        return "Hospital Bed";
+    }
+
+    private getElement<T extends HTMLElement>(id: string): T {
+        const element = document.getElementById(id);
+        if (!element) {
+            throw new Error(`Missing UI element: ${id}`);
+        }
+
+        return element as T;
+    }
+}
+
+const app = document.getElementById("app");
+if (app) {
+    new HospitalTriageUI(app);
 }
