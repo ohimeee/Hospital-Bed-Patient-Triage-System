@@ -1,13 +1,38 @@
 <!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hospital Bed Availability & Patient Triage System</title>
     <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevate Health - Triage System Sign In</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app"></div>
+    <div class="container">
+        <div class="login-card">
+            <header>
+                <div class="logo">🏥</div>
+                <h1>Elevate Health</h1>
+                <p>Hospital Bed & Patient Triage System</p>
+            </header>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-signin">Sign In</button>
+            </form>
+        </div>
+    </div>
     <script src="HospitalTriageSystem.js"></script>
 </body>
 </html>
