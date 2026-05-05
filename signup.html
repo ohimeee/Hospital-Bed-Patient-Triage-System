@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | Hospital Bed Patient Triage</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="auth-shell">
+    <main class="auth-card">
+        <h1>Register</h1>
+        <p class="auth-desc">Create your account to manage hospital bed triage.</p>
+
+        <form class="auth-form">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text" placeholder="Enter full name" />
+
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Create a password" />
+
+            <button type="submit" class="primary-button">Sign Up</button>
+
+            <div class="divider"><span>OR</span></div>
+
+            <button type="button" class="google-button">
+                <svg viewBox="0 0 24 24" class="google-icon" aria-hidden="true">
+                    <path fill="#4285F4" d="M23.5 12.27c0-.82-.08-1.61-.23-2.37H12v4.5h6.36c-.28 1.5-1.13 2.78-2.4 3.63v3.02h3.88c2.27-2.09 3.58-5.18 3.58-8.78z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.06 7.93-2.88l-3.88-3.02c-1.08.72-2.47 1.14-4.05 1.14-3.1 0-5.72-2.1-6.66-4.95H1.22v3.09C3.16 21.81 7.29 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.34 14.29c-.24-.72-.38-1.5-.38-2.29s.14-1.57.38-2.29V6.62H1.22A11.99 11.99 0 0 0 0 12c0 1.95.47 3.79 1.22 5.38l4.12-3.09z"/>
+                    <path fill="#EA4335" d="M12 4.8c1.76 0 3.33.61 4.57 1.81l3.42-3.42C17.94 1.16 15.24 0 12 0 7.29 0 3.16 2.19 1.22 5.62l4.12 3.09C6.28 6.9 8.9 4.8 12 4.8z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <p class="signup-line">Already have an account? <a href="#" onclick="showLoginModal(); return false;">Login</a></p>
+        </form>
+    </main>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon">✓</div>
+        <h2>Account Created!</h2>
+        <p id="successMessage">Your account has been successfully created.</p>
+        <button class="primary-button" onclick="showLoginModal()">Continue to Login</button>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal-overlay">
+    <div class="modal-content login-modal-content">
+        <h1>Login</h1>
+        <p class="modal-desc">Welcome back to Hospital Bed Triage</p>
+
+        <form class="modal-form" id="loginForm">
+            <label for="loginName">Full Name</label>
+            <input id="loginName" type="text" placeholder="Enter your full name" />
+
+            <label for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" placeholder="Enter your password" />
+
+            <label class="checkbox-label">
+                <input type="checkbox" id="rememberMe" />
+                <span>Remember me</span>
+            </label>
+            
+            <a href="#" class="forgot-password">Forgot Password?</a>
+
+            <button type="submit" class="primary-button">Login</button>
+
+            <div class="divider"><span>OR</span></div>
+
+            <button type="button" class="google-button">
+                <svg viewBox="0 0 24 24" class="google-icon" aria-hidden="true">
+                    <path fill="#4285F4" d="M23.5 12.27c0-.82-.08-1.61-.23-2.37H12v4.5h6.36c-.28 1.5-1.13 2.78-2.4 3.63v3.02h3.88c2.27-2.09 3.58-5.18 3.58-8.78z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.06 7.93-2.88l-3.88-3.02c-1.08.72-2.47 1.14-4.05 1.14-3.1 0-5.72-2.1-6.66-4.95H1.22v3.09C3.16 21.81 7.29 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.34 14.29c-.24-.72-.38-1.5-.38-2.29s.14-1.57.38-2.29V6.62H1.22A11.99 11.99 0 0 0 0 12c0 1.95.47 3.79 1.22 5.38l4.12-3.09z"/>
+                    <path fill="#EA4335" d="M12 4.8c1.76 0 3.33.61 4.57 1.81l3.42-3.42C17.94 1.16 15.24 0 12 0 7.29 0 3.16 2.19 1.22 5.62l4.12 3.09C6.28 6.9 8.9 4.8 12 4.8z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <p class="modal-signup-line">Don't have an account? <a href="#" onclick="closeLoginModal(); return false;">Sign Up</a></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showLoginModal() {
+        document.getElementById('successModal').style.display = 'none';
+        document.getElementById('loginModal').style.display = 'flex';
+    }
+
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('successModal').style.display = 'none';
+        document.getElementById('fullName').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    function redirectToLogin() {
+        window.location.href = 'index.html';
+    }
+
+    document.querySelector('.auth-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!fullName) {
+            alert('Please enter your full name');
+            return;
+        }
+        
+        if (!password) {
+            alert('Please enter a password');
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters');
+            return;
+        }
+        
+        // Show success modal
+        document.getElementById('successMessage').textContent = 'Welcome, ' + fullName + '! Your account has been successfully created.';
+        document.getElementById('successModal').style.display = 'flex';
+    });
+
+    // Handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('loginName').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        
+        if (!name) {
+            alert('Please enter your full name');
+            return;
+        }
+        
+        if (!password) {
+            alert('Please enter your password');
+            return;
+        }
+        
+        // Redirect directly to dashboard
+        window.location.href = 'index.html';
+    });
+
+    // Handle Google signup button
+    document.querySelector('.auth-form .google-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Google sign-up integration would go here');
+    });
+
+    // Handle Google login button
+    const loginGoogleBtn = document.querySelector('#loginModal .google-button');
+    if (loginGoogleBtn) {
+        loginGoogleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Google sign-in integration would go here');
+        });
+    }
+</script>
+</body>
+</html>
