@@ -1,318 +1,235 @@
-
-abstract class HospitalBed {
-
-    private bedId: string;
-    private wardName: string;
-    private isOccupied: boolean;
-    private patientName: string;
-
-    constructor(bedId: string, wardName: string) {
+"use strict";
+class HospitalBed {
+    constructor(bedId, wardName) {
         this.bedId = bedId;
         this.wardName = wardName;
         this.isOccupied = false;
         this.patientName = "None";
     }
-
-    
-    public getBedId(): string {
+    getBedId() {
         return this.bedId;
     }
-
-    public setBedId(bedId: string): void {
+    setBedId(bedId) {
         this.bedId = bedId;
     }
-
-    public getWardName(): string {
+    getWardName() {
         return this.wardName;
     }
-
-    public setWardName(wardName: string): void {
+    setWardName(wardName) {
         this.wardName = wardName;
     }
-
-    public getIsOccupied(): boolean {
+    getIsOccupied() {
         return this.isOccupied;
     }
-
-    public setIsOccupied(occupied: boolean): void {
+    setIsOccupied(occupied) {
         this.isOccupied = occupied;
     }
-
-    public getPatientName(): string {
+    getPatientName() {
         return this.patientName;
     }
-
-    public setPatientName(patientName: string): void {
+    setPatientName(patientName) {
         this.patientName = patientName;
     }
-
-   
-    public abstract admitPatient(pName: string): string;
-    public abstract dischargePatient(): string;
-    public abstract getBedInfo(): string;
 }
-
-
-abstract class CriticalBed extends HospitalBed {
-    private monitoringLevel: string;
-
-    constructor(bedId: string, wardName: string, monitoringLevel: string) {
+class CriticalBed extends HospitalBed {
+    constructor(bedId, wardName, monitoringLevel) {
         super(bedId, wardName);
         this.monitoringLevel = monitoringLevel;
     }
-
-    public getMonitoringLevel(): string {
+    getMonitoringLevel() {
         return this.monitoringLevel;
     }
-
-    public setMonitoringLevel(monitoringLevel: string): void {
+    setMonitoringLevel(monitoringLevel) {
         this.monitoringLevel = monitoringLevel;
     }
 }
-
-
 class ICUBed extends CriticalBed {
-    constructor(bedId: string, wardName: string, monitoringLevel: string) {
+    constructor(bedId, wardName, monitoringLevel) {
         super(bedId, wardName, monitoringLevel);
     }
-
-    public admitPatient(pName: string): string {
+    admitPatient(pName) {
         if (this.getIsOccupied()) {
             return `ICU Bed ${this.getBedId()} is already occupied by ${this.getPatientName()}.`;
         }
-
         this.setIsOccupied(true);
         this.setPatientName(pName);
         return `ICU Bed ${this.getBedId()} admitted. Check if patient needs ventilator, and flag staff.`;
     }
-
-    public dischargePatient(): string {
+    dischargePatient() {
         if (!this.getIsOccupied()) {
             return `ICU Bed ${this.getBedId()} is already vacant.`;
         }
-
         this.setIsOccupied(false);
         this.setPatientName("None");
         return `ICU Bed ${this.getBedId()} released. Requires doctor approval before freeing bed.`;
     }
-
-    public getBedInfo(): string {
+    getBedInfo() {
         return `ICU Bed [${this.getBedId()}] - Level: ${this.getMonitoringLevel()}`;
     }
 }
-
 class EmergencyBed extends CriticalBed {
-    constructor(bedId: string, wardName: string, monitoringLevel: string) {
+    constructor(bedId, wardName, monitoringLevel) {
         super(bedId, wardName, monitoringLevel);
     }
-
-    public admitPatient(pName: string): string {
+    admitPatient(pName) {
         if (this.getIsOccupied()) {
             return `Emergency Bed ${this.getBedId()} is already occupied by ${this.getPatientName()}.`;
         }
-
         this.setIsOccupied(true);
         this.setPatientName(pName);
         return `Emergency Bed ${this.getBedId()} admitted. Fast-tracked admission (no prior paperwork).`;
     }
-
-    public dischargePatient(): string {
+    dischargePatient() {
         if (!this.getIsOccupied()) {
             return `Emergency Bed ${this.getBedId()} is already vacant.`;
         }
-
         this.setIsOccupied(false);
         this.setPatientName("None");
         return `Emergency Bed ${this.getBedId()} released. Auto-moved patient to regular ward if stable.`;
     }
-
-    public getBedInfo(): string {
+    getBedInfo() {
         return `Emergency Bed [${this.getBedId()}] - Level: ${this.getMonitoringLevel()}`;
     }
 }
-
-
-abstract class GeneralBed extends HospitalBed {
-    private wardFloor: string;
-
-    constructor(bedId: string, wardName: string, wardFloor: string) {
+class GeneralBed extends HospitalBed {
+    constructor(bedId, wardName, wardFloor) {
         super(bedId, wardName);
         this.wardFloor = wardFloor;
     }
-
-    public getWardFloor(): string {
+    getWardFloor() {
         return this.wardFloor;
     }
-
-    public setWardFloor(wardFloor: string): void {
+    setWardFloor(wardFloor) {
         this.wardFloor = wardFloor;
     }
 }
-
-
 class PediatricBed extends GeneralBed {
-    constructor(bedId: string, wardName: string, wardFloor: string) {
+    constructor(bedId, wardName, wardFloor) {
         super(bedId, wardName, wardFloor);
     }
-
-    public admitPatient(pName: string): string {
+    admitPatient(pName) {
         if (this.getIsOccupied()) {
             return `Pediatric Bed ${this.getBedId()} is already occupied by ${this.getPatientName()}.`;
         }
-
         this.setIsOccupied(true);
         this.setPatientName(pName);
         return `Pediatric Bed ${this.getBedId()} admitted. Requires guardian info before admission.`;
     }
-
-    public dischargePatient(): string {
+    dischargePatient() {
         if (!this.getIsOccupied()) {
             return `Pediatric Bed ${this.getBedId()} is already vacant.`;
         }
-
         this.setIsOccupied(false);
         this.setPatientName("None");
         return `Pediatric Bed ${this.getBedId()} released. Sends discharge summary to guardian.`;
     }
-
-    public getBedInfo(): string {
+    getBedInfo() {
         return `Pediatric Bed [${this.getBedId()}] - Floor: ${this.getWardFloor()}`;
     }
 }
-
 class MaternityBed extends GeneralBed {
-    constructor(bedId: string, wardName: string, wardFloor: string) {
+    constructor(bedId, wardName, wardFloor) {
         super(bedId, wardName, wardFloor);
     }
-
-    public admitPatient(pName: string): string {
+    admitPatient(pName) {
         if (this.getIsOccupied()) {
             return `Maternity Bed ${this.getBedId()} is already occupied by ${this.getPatientName()}.`;
         }
-
         this.setIsOccupied(true);
         this.setPatientName(pName);
         return `Maternity Bed ${this.getBedId()} admitted. Logs expected delivery date.`;
     }
-
-    public dischargePatient(): string {
+    dischargePatient() {
         if (!this.getIsOccupied()) {
             return `Maternity Bed ${this.getBedId()} is already vacant.`;
         }
-
         this.setIsOccupied(false);
         this.setPatientName("None");
         return `Maternity Bed ${this.getBedId()} released. Requires newborn record before release.`;
     }
-
-    public getBedInfo(): string {
+    getBedInfo() {
         return `Maternity Bed [${this.getBedId()}] - Floor: ${this.getWardFloor()}`;
     }
 }
-
-type BedType = "ICU" | "Emergency" | "Pediatric" | "Maternity";
-
-
 class HospitalTriageSystem {
-    private bedsList: HospitalBed[] = [];
-
     constructor() {
+        this.bedsList = [];
         this.initializeData();
     }
-
-    private initializeData(): void {
+    initializeData() {
         this.bedsList.push(new ICUBed("ICU-01", "ICU Ward", "High"));
         this.bedsList.push(new ICUBed("ICU-02", "ICU Ward", "Medium"));
         this.bedsList.push(new EmergencyBed("EM-01", "Emergency Ward", "High"));
         this.bedsList.push(new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"));
         this.bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
     }
-
-    public admitPatient(bedType: BedType, patientName: string): string {
+    admitPatient(bedType, patientName) {
         const bed = this.bedsList.find((b) => {
-            if (bedType === "ICU" && b instanceof ICUBed && !b.getIsOccupied()) return true;
-            if (bedType === "Emergency" && b instanceof EmergencyBed && !b.getIsOccupied()) return true;
-            if (bedType === "Pediatric" && b instanceof PediatricBed && !b.getIsOccupied()) return true;
-            if (bedType === "Maternity" && b instanceof MaternityBed && !b.getIsOccupied()) return true;
+            if (bedType === "ICU" && b instanceof ICUBed && !b.getIsOccupied())
+                return true;
+            if (bedType === "Emergency" && b instanceof EmergencyBed && !b.getIsOccupied())
+                return true;
+            if (bedType === "Pediatric" && b instanceof PediatricBed && !b.getIsOccupied())
+                return true;
+            if (bedType === "Maternity" && b instanceof MaternityBed && !b.getIsOccupied())
+                return true;
             return false;
         });
-
         if (bed) {
             return `[ADMIT] ${bed.admitPatient(patientName)}`;
         }
-
         return `[FAILED] No available ${bedType} beds found.`;
     }
-
-    public dischargePatient(bedId: string): string {
+    dischargePatient(bedId) {
         const bed = this.bedsList.find((b) => b.getBedId() === bedId);
-
         if (bed) {
             if (bed.getIsOccupied()) {
                 return `[DISCHARGE] ${bed.dischargePatient()}`;
             }
-
             return `[INFO] Bed ${bedId} is already vacant.`;
         }
-
         return `[ERROR] Bed ID ${bedId} not found.`;
     }
-
-    public printWardSummary(): void {
+    printWardSummary() {
         let occupied = 0;
         console.log("\n--- Ward Summary ---");
-
         this.bedsList.forEach((b) => {
-            console.log(
-                `ID: ${b.getBedId()} | Ward: ${b.getWardName()} | Bed Info: ${b.getBedInfo()} | Status: ${
-                    b.getIsOccupied() ? "Occupied (" + b.getPatientName() + ")" : "Available"
-                }`
-            );
-
+            console.log(`ID: ${b.getBedId()} | Ward: ${b.getWardName()} | Bed Info: ${b.getBedInfo()} | Status: ${b.getIsOccupied() ? "Occupied (" + b.getPatientName() + ")" : "Available"}`);
             if (b.getIsOccupied()) {
                 occupied++;
             }
         });
-
         const capacityRatio = occupied / this.bedsList.length;
         if (capacityRatio >= 0.8) {
             console.log(`\x1b[31m[CRITICAL CAPACITY ALERT] ${Math.round(capacityRatio * 100)}% full!\x1b[0m`);
-        } else {
+        }
+        else {
             console.log(`\x1b[32m[STATUS NORMAL] ${Math.round(capacityRatio * 100)}% capacity utilized.\x1b[0m`);
         }
-
         console.log("---------------------\n");
     }
-
-    public getBedsList(): HospitalBed[] {
+    getBedsList() {
         return [...this.bedsList];
     }
-
-    public getCapacitySummary(): { occupied: number; total: number; percent: number } {
+    getCapacitySummary() {
         const occupied = this.bedsList.filter((bed) => bed.getIsOccupied()).length;
         const total = this.bedsList.length;
         const percent = Math.round((occupied * 100) / total);
-
         return { occupied, total, percent };
     }
 }
-
 class HospitalTriageUI {
-    private readonly system = new HospitalTriageSystem();
-    private readonly app: HTMLElement;
-    private selectedBedId = "";
-
-    constructor(app: HTMLElement) {
+    constructor(app) {
+        this.system = new HospitalTriageSystem();
+        this.selectedBedId = "";
         this.app = app;
         this.render();
         this.addLog("System ready. All wards loaded.");
     }
-
-    private render(): void {
+    render() {
         const { occupied, total, percent } = this.system.getCapacitySummary();
         const available = total - occupied;
         const capacityState = percent >= 80 ? "critical" : "normal";
-
         this.app.innerHTML = `
             <header class="topbar">
                 <div>
@@ -379,19 +296,15 @@ class HospitalTriageUI {
                 </section>
             </main>
         `;
-
         this.renderBeds();
         this.bindEvents();
     }
-
-    private renderBeds(): void {
-        const bedsGrid = this.getElement<HTMLDivElement>("bedsGrid");
+    renderBeds() {
+        const bedsGrid = this.getElement("bedsGrid");
         const beds = this.system.getBedsList();
-
         bedsGrid.innerHTML = beds.map((bed) => {
             const occupied = bed.getIsOccupied();
             const selected = bed.getBedId() === this.selectedBedId;
-
             return `
                 <article class="bed-card ${occupied ? "occupied" : "available"} ${selected ? "selected" : ""}">
                     <div class="bed-card-header">
@@ -413,88 +326,76 @@ class HospitalTriageUI {
                 </article>
             `;
         }).join("");
-
-        bedsGrid.querySelectorAll<HTMLButtonElement>("[data-bed-id]").forEach((button) => {
+        bedsGrid.querySelectorAll("[data-bed-id]").forEach((button) => {
             button.addEventListener("click", () => {
                 const bedId = button.dataset.bedId ?? "";
                 const bed = this.system.getBedsList().find((item) => item.getBedId() === bedId);
-
                 if (!bed) {
                     return;
                 }
-
                 this.selectedBedId = bedId;
-
                 if (bed.getIsOccupied()) {
                     this.addLog(this.system.dischargePatient(bedId));
                     this.refresh();
                     return;
                 }
-
                 this.addLog(`[INFO] Selected available bed ${bedId}.`);
                 this.renderBeds();
             });
         });
     }
-
-    private bindEvents(): void {
-        this.getElement<HTMLButtonElement>("admitButton").addEventListener("click", () => {
-            const patientNameInput = this.getElement<HTMLInputElement>("patientName");
-            const bedTypeSelect = this.getElement<HTMLSelectElement>("bedType");
+    bindEvents() {
+        this.getElement("admitButton").addEventListener("click", () => {
+            const patientNameInput = this.getElement("patientName");
+            const bedTypeSelect = this.getElement("bedType");
             const patientName = patientNameInput.value.trim();
-
             if (!patientName) {
                 this.addLog("[INFO] Enter a patient name before admission.");
                 patientNameInput.focus();
                 return;
             }
-
-            this.addLog(this.system.admitPatient(bedTypeSelect.value as BedType, patientName));
+            this.addLog(this.system.admitPatient(bedTypeSelect.value, patientName));
             patientNameInput.value = "";
             this.refresh();
         });
-
-        this.getElement<HTMLButtonElement>("summaryButton").addEventListener("click", () => {
+        this.getElement("summaryButton").addEventListener("click", () => {
             const { occupied, total, percent } = this.system.getCapacitySummary();
             this.addLog(`--- Ward Summary: ${occupied}/${total} occupied, ${percent}% capacity utilized. ---`);
         });
-
-        this.getElement<HTMLButtonElement>("clearLogButton").addEventListener("click", () => {
-            this.getElement<HTMLDivElement>("activityLog").innerHTML = "";
+        this.getElement("clearLogButton").addEventListener("click", () => {
+            this.getElement("activityLog").innerHTML = "";
         });
     }
-
-    private refresh(): void {
-        const logs = this.getElement<HTMLDivElement>("activityLog").innerHTML;
+    refresh() {
+        const logs = this.getElement("activityLog").innerHTML;
         this.render();
-        this.getElement<HTMLDivElement>("activityLog").innerHTML = logs;
+        this.getElement("activityLog").innerHTML = logs;
     }
-
-    private addLog(message: string): void {
-        const activityLog = this.getElement<HTMLDivElement>("activityLog");
+    addLog(message) {
+        const activityLog = this.getElement("activityLog");
         const row = document.createElement("p");
         row.textContent = message;
         activityLog.prepend(row);
     }
-
-    private getBedTypeLabel(bed: HospitalBed): string {
-        if (bed instanceof ICUBed) return "ICU Bed";
-        if (bed instanceof EmergencyBed) return "Emergency Bed";
-        if (bed instanceof PediatricBed) return "Pediatric Bed";
-        if (bed instanceof MaternityBed) return "Maternity Bed";
+    getBedTypeLabel(bed) {
+        if (bed instanceof ICUBed)
+            return "ICU Bed";
+        if (bed instanceof EmergencyBed)
+            return "Emergency Bed";
+        if (bed instanceof PediatricBed)
+            return "Pediatric Bed";
+        if (bed instanceof MaternityBed)
+            return "Maternity Bed";
         return "Hospital Bed";
     }
-
-    private getElement<T extends HTMLElement>(id: string): T {
+    getElement(id) {
         const element = document.getElementById(id);
         if (!element) {
             throw new Error(`Missing UI element: ${id}`);
         }
-
-        return element as T;
+        return element;
     }
 }
-
 const app = typeof document === "undefined" ? null : document.getElementById("app");
 if (app) {
     new HospitalTriageUI(app);
