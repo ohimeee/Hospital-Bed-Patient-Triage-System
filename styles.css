@@ -224,6 +224,57 @@ select:focus {
     background: #dff0f5;
 }
 
+/* Selected button state for chosen available bed */
+.secondary-button.selected-button {
+    background: var(--brand);
+    color: #ffffff;
+    border-color: var(--brand-dark);
+    box-shadow: 0 6px 18px rgba(15, 77, 99, 0.18);
+}
+
+.secondary-button.selected-button:hover {
+    background: var(--brand-dark);
+}
+
+/* Monitoring level badges (neon-style) */
+/* Monitoring level badges removed per request */
+
+/* Slightly smaller bed heading text so badge looks proportional */
+.bed-card-header strong {
+    font-size: 0.95rem;
+}
+.bed-card-header span {
+    font-size: 0.78rem;
+}
+
+/* Compact typography inside panels/cards */
+.panel,
+.summary-card,
+.bed-card {
+    font-size: 0.90rem;
+}
+
+.bed-card-header strong {
+    font-size: 0.9rem;
+}
+
+.bed-card-header span {
+    font-size: 0.72rem;
+}
+
+.bed-info {
+    font-size: 0.82rem;
+}
+
+.patient-line,
+.patient-line strong {
+    font-size: 0.82rem;
+}
+
+.activity-log p {
+    font-size: 0.82rem;
+}
+
 .ghost-button {
     min-height: 34px;
     padding: 0 12px;
