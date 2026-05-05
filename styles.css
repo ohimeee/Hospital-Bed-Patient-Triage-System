@@ -477,7 +477,9 @@ select:focus {
 
 /* Simple auth page styles */
 body {
-    background: radial-gradient(circle at top, #5b3bd8 0%, #321e7f 52%, #1d0f47 100%);
+    background: radial-gradient(circle at top left, rgba(23, 107, 135, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(34, 184, 203, 0.16), transparent 26%),
+        linear-gradient(180deg, #eaf3f7 0%, #d9f0f7 42%, #eef8fb 100%);
     min-height: 100vh;
 }
 
@@ -492,22 +494,23 @@ body {
     width: min(420px, 100%);
     padding: 36px 32px;
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(18px);
-    color: white;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(23, 107, 135, 0.18);
+    box-shadow: 0 24px 60px rgba(23, 107, 135, 0.12);
+    backdrop-filter: blur(16px);
+    color: var(--ink);
 }
 
 .auth-card h1 {
     margin: 0 0 10px;
     font-size: 2rem;
     letter-spacing: 0.02em;
+    color: var(--brand-dark);
 }
 
 .auth-desc {
     margin: 0 0 24px;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--muted);
     font-size: 0.95rem;
 }
 
@@ -519,48 +522,48 @@ body {
 .auth-form label {
     font-weight: 600;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--brand-dark);
 }
 
 .auth-form input {
     width: 100%;
     min-height: 48px;
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(23, 107, 135, 0.2);
+    background: #fbfdff;
     padding: 0 16px;
-    color: white;
+    color: var(--ink);
     font-size: 1rem;
     outline: none;
 }
 
 .auth-form input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(23, 107, 135, 0.45);
 }
 
 .auth-form input:focus {
-    border-color: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 0 0 6px rgba(115, 84, 255, 0.12);
+    border-color: rgba(23, 107, 135, 0.55);
+    box-shadow: 0 0 0 8px rgba(23, 107, 135, 0.12);
 }
 
 .primary-button {
-    background: linear-gradient(135deg, #a359f7, #6c37f0);
+    background: linear-gradient(135deg, #22b8cb, #1091a9);
     color: white;
     border-radius: 14px;
     min-height: 50px;
     border: none;
-    box-shadow: 0 18px 40px rgba(92, 39, 188, 0.3);
+    box-shadow: 0 18px 40px rgba(16, 145, 169, 0.22);
 }
 
 .primary-button:hover {
-    background: linear-gradient(135deg, #8140f0, #5122c6);
+    background: linear-gradient(135deg, #1a99ad, #0d7a8b);
 }
 
 .divider {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--muted);
     font-size: 0.9rem;
 }
 
@@ -569,7 +572,7 @@ body {
     content: "";
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.16);
+    background: rgba(23, 107, 135, 0.18);
 }
 
 .google-button {
@@ -579,13 +582,13 @@ body {
     gap: 12px;
     min-height: 50px;
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    background: rgba(255, 255, 255, 0.12);
-    color: white;
+    border: 1px solid rgba(23, 107, 135, 0.2);
+    background: white;
+    color: var(--ink);
 }
 
 .google-button:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: #f3fbff;
 }
 
 .google-icon {
@@ -597,11 +600,11 @@ body {
     margin: 0;
     padding-top: 8px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--muted);
 }
 
 .signup-line a {
-    color: #f7f1ff;
+    color: var(--brand-dark);
     text-decoration: none;
     font-weight: 700;
 }
@@ -614,6 +617,144 @@ body {
     .auth-card h1 {
         font-size: 1.75rem;
     }
+}
+
+/* Modal styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    place-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 32px;
+    text-align: center;
+    max-width: 380px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #22b8cb, #1091a9);
+    border-radius: 50%;
+    color: white;
+    font-size: 2.5rem;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 18px;
+}
+
+.modal-content h2 {
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    color: var(--brand-dark);
+}
+
+.modal-content p {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.modal-content .primary-button {
+    width: 100%;
+}
+
+.login-modal-content {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-modal-content h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    color: var(--brand-dark);
+}
+
+.modal-desc {
+    margin: 0 0 24px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.modal-form {
+    display: grid;
+    gap: 16px;
+}
+
+.modal-form label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--brand-dark);
+}
+
+.modal-form input {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 14px;
+    border: 1px solid rgba(23, 107, 135, 0.2);
+    background: #fbfdff;
+    padding: 0 16px;
+    color: var(--ink);
+    font-size: 1rem;
+    outline: none;
+}
+
+.modal-form input:focus {
+    border-color: rgba(23, 107, 135, 0.55);
+    box-shadow: 0 0 0 8px rgba(23, 107, 135, 0.12);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--ink);
+    cursor: pointer;
+    margin-top: -8px;
+}
+
+.checkbox-label input {
+    width: auto;
+    min-height: auto;
+    cursor: pointer;
+    padding: 0;
+    border: 1px solid rgba(23, 107, 135, 0.3);
+}
+
+.forgot-password {
+    color: var(--brand-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: -8px;
+    align-self: flex-start;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.modal-signup-line {
+    margin: 0;
+    padding-top: 8px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.modal-signup-line a {
+    color: var(--brand-dark);
+    text-decoration: none;
+    font-weight: 700;
 }
 
 
