@@ -3,39 +3,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up | Hospital Bed Patient Triage</title>
+    <title>Register | Hospital Bed Patient Triage</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="landing-shell">
-    <div class="landing-background">
-        <div class="glow-circle circle-1"></div>
-        <div class="glow-circle circle-2"></div>
-        <div class="glow-circle circle-3"></div>
-        <div class="wave-line"></div>
-    </div>
+<div class="auth-shell">
+    <main class="auth-card">
+        <h1>Register</h1>
+        <p class="auth-desc">Create your account to manage hospital bed triage.</p>
 
-    <main class="landing-card">
-        <div class="brand-panel">
-            <div class="brand-icon">+</div>
-            <div>
-                <p class="brand-label">Create account</p>
-                <h1>Hospital Bed Patient Triage</h1>
-            </div>
-        </div>
-
-        <form class="login-form">
+        <form class="auth-form">
             <label for="fullName">Full Name</label>
-            <input id="fullName" type="text" placeholder="Enter your name" />
+            <input id="fullName" type="text" placeholder="Enter full name" />
 
-            <label for="email">Email or No. Handphone</label>
+            <label for="email">Email or Phone</label>
             <input id="email" type="email" placeholder="svarda@gmail.co.id" />
 
             <label for="password">Password</label>
             <input id="password" type="password" placeholder="Create a password" />
-
-            <label for="confirmPassword">Confirm Password</label>
-            <input id="confirmPassword" type="password" placeholder="Confirm password" />
 
             <button type="submit" class="primary-button">Sign Up</button>
 
@@ -51,7 +36,7 @@
                 Continue with Google
             </button>
 
-            <p class="signup-line">Already have an account? <a href="index.html">Sign In</a></p>
+            <p class="signup-line">Already have an account? <a href="index.html">Login</a></p>
         </form>
     </main>
 </div>
