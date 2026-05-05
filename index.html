@@ -2,12 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hospital Bed Availability & Patient Triage System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital Bed Availability & Triage System</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-    <div id="app"></div>
-    <script src="HospitalTriageSystem.js"></script>
+
+<div id="app">
+
+    <!-- HEADER -->
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">Hospital Operations</p>
+            <h1>Bed Availability & Patient Triage</h1>
+        </div>
+
+        <div id="capacity-pill" class="capacity-pill normal">
+            <span id="capacity-percent">0%</span>
+            <small id="capacity-text">Capacity normal</small>
+        </div>
+    </header>
+
+    <main class="layout">
+
+        <!-- SUMMARY -->
+        <section class="summary-grid">
+            <article class="summary-card">
+                <span>Total Beds</span>
+                <strong id="totalBeds">0</strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Occupied</span>
+                <strong id="occupiedBeds">0</strong>
+            </article>
+
+            <article class="summary-card">
+                <span>Available</span>
+                <strong id="availableBeds">0</strong>
+            </article>
+        </section>
+
+        <!-- TRIAGE -->
+        <section class="work-area">
+
+            <div class="panel triage-panel">
+                <h2>Patient Triage</h2>
+
+                <label>Patient Name</label>
+                <input id="patientName" type="text" placeholder="Enter patient name"/>
+
+                <label>Bed Type</label>
+                <select id="bedType">
+                    <option value="ICU">ICU</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Pediatric">Pediatric</option>
+                    <option value="Maternity">Maternity</option>
+                </select>
+
+                <button id="admitButton">Admit Patient</button>
+            </div>
+
+            <!-- BEDS -->
+            <div class="panel beds-panel">
+                <div class="panel-heading">
+                    <h2>Ward Beds</h2>
+                    <button id="summaryButton">Print Summary</button>
+                </div>
+
+                <div id="bedsGrid" class="beds-grid"></div>
+            </div>
+
+        </section>
+
+        <!-- LOG -->
+        <section class="panel log-panel">
+            <div class="panel-heading">
+                <h2>Activity Log</h2>
+                <button id="clearLogButton">Clear</button>
+            </div>
+
+            <div id="activityLog"></div>
+        </section>
+
+    </main>
+</div>
+
+<script src="HospitalTriageSystem.js"></script>
 </body>
 </html>
