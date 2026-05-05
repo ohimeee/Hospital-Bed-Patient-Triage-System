@@ -268,9 +268,12 @@ class HospitalTriageUI {
                     <p class="eyebrow">Hospital Operations</p>
                     <h1>Bed Availability & Patient Triage</h1>
                 </div>
-                <div class="capacity-pill ${capacityState}">
-                    <span>${percent}%</span>
-                    <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
+                <div class="header-actions">
+                    <button id="logoutButton" class="ghost-button" type="button">Logout</button>
+                    <div class="capacity-pill ${capacityState}">
+                        <span>${percent}%</span>
+                        <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
+                    </div>
                 </div>
             </header>
 
@@ -329,21 +332,23 @@ class HospitalTriageUI {
                         <button id="createRoomButton" class="secondary-button" type="button">Add Room</button>
                     </div>
 
-                    <div class="panel beds-panel">
-                        <div class="panel-heading">
-                            <h2>Ward Beds</h2>
-                            <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
+                    <div class="right-column">
+                        <div class="panel beds-panel">
+                            <div class="panel-heading">
+                                <h2>Ward Beds</h2>
+                                <button id="summaryButton" class="ghost-button" type="button">Print Summary</button>
+                            </div>
+                            <div id="bedsGrid" class="beds-grid"></div>
                         </div>
-                        <div id="bedsGrid" class="beds-grid"></div>
-                    </div>
-                </section>
 
-                <section class="panel log-panel">
-                    <div class="panel-heading">
-                        <h2>Activity Log</h2>
-                        <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                        <div class="panel log-panel">
+                            <div class="panel-heading">
+                                <h2>Activity Log</h2>
+                                <button id="clearLogButton" class="ghost-button" type="button">Clear</button>
+                            </div>
+                            <div id="activityLog" class="activity-log" aria-live="polite"></div>
+                        </div>
                     </div>
-                    <div id="activityLog" class="activity-log" aria-live="polite"></div>
                 </section>
             </main>
         `;
@@ -442,7 +447,15 @@ class HospitalTriageUI {
 
         this.getElement("clearLogButton").onclick = () => {
             this.getElement("activityLog").innerHTML = "";
+<<<<<<< HEAD
         };
+=======
+        });
+
+        this.getElement("logoutButton").addEventListener("click", () => {
+            window.location.href = 'signup.html';
+        });
+>>>>>>> CB-branch
     }
 
     refresh() {
