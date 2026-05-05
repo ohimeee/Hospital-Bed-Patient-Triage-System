@@ -1,0 +1,1 @@
+# Hospital-Bed-Patient-Triage-System
