@@ -163,36 +163,6 @@ class HospitalTriageSystem {
         this.bedsList.push(new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"));
         this.bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
     }
-
-    addBed(type, bedId, wardName) {
-        if (!bedId || typeof bedId !== "string") {
-            return `[ERROR] Invalid bed ID.`;
-        }
-        if (this.bedsList.find((b) => b.getBedId() === bedId)) {
-            return `[ERROR] Bed ID ${bedId} already exists.`;
-        }
-        const ward = wardName && wardName.trim().length ? wardName.trim() : (type === 'General' ? 'General Ward' : `${type} Ward`);
-        let bed;
-        switch (type) {
-            case "ICU":
-                bed = new ICUBed(bedId, ward, "Medium");
-                break;
-            case "Emergency":
-                bed = new EmergencyBed(bedId, ward, "Medium");
-                break;
-            case "Pediatric":
-                bed = new PediatricBed(bedId, ward, "3rd Floor");
-                break;
-            case "Maternity":
-                bed = new MaternityBed(bedId, ward, "2nd Floor");
-                break;
-            default:
-                bed = new GeneralBed(bedId, ward, "1st Floor");
-                break;
-        }
-        this.bedsList.push(bed);
-        return `[ADDED] Bed ${bedId} (${type}) added to ${ward}.`;
-    }
     admitPatient(bedType, patientName) {
         const bed = this.bedsList.find((b) => {
             if (bedType === "ICU" && b instanceof ICUBed && !b.getIsOccupied())
@@ -256,24 +226,19 @@ class HospitalTriageUI {
         this.render();
         this.addLog("System ready. All wards loaded.");
     }
-
     render() {
         const { occupied, total, percent } = this.system.getCapacitySummary();
         const available = total - occupied;
         const capacityState = percent >= 80 ? "critical" : "normal";
-
         this.app.innerHTML = `
             <header class="topbar">
                 <div>
                     <p class="eyebrow">Hospital Operations</p>
                     <h1>Bed Availability & Patient Triage</h1>
                 </div>
-                <div class="header-actions">
-                    <div class="capacity-pill ${capacityState}">
-                        <span>${percent}%</span>
-                        <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
-                    </div>
-                    <button id="logoutButton" class="ghost-button logout-button" type="button">Logout</button>
+                <div class="capacity-pill ${capacityState}">
+                    <span>${percent}%</span>
+                    <small>${capacityState === "critical" ? "Critical capacity" : "Capacity normal"}</small>
                 </div>
             </header>
 
@@ -311,26 +276,8 @@ class HospitalTriageUI {
                         </select>
 
                         <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
-
-                        <hr />
-
-                        <label for="newRoomId">New room ID</label>
-                        <input id="newRoomId" type="text" placeholder="e.g., ICU-03" />
-
-                        <label for="newRoomType">Room type</label>
-                        <select id="newRoomType">
-                            <option value="ICU">ICU</option>
-                            <option value="Emergency">Emergency</option>
-                            <option value="Pediatric">Pediatric</option>
-                            <option value="Maternity">Maternity</option>
-                            <option value="General">General</option>
-                        </select>
-
-                        <label for="wardName">Ward name (optional)</label>
-                        <input id="wardName" type="text" placeholder="e.g., ICU Ward" />
-
-                        <button id="createRoomButton" class="secondary-button" type="button">Add Room</button>
                     </div>
+
                     <div class="panel beds-panel">
                         <div class="panel-heading">
                             <h2>Ward Beds</h2>
@@ -349,22 +296,15 @@ class HospitalTriageUI {
                 </section>
             </main>
         `;
-
         this.renderBeds();
         this.bindEvents();
     }
-
     renderBeds() {
         const bedsGrid = this.getElement("bedsGrid");
         const beds = this.system.getBedsList();
         bedsGrid.innerHTML = beds.map((bed) => {
             const occupied = bed.getIsOccupied();
             const selected = bed.getBedId() === this.selectedBedId;
-            const btnText = occupied ? "Discharge" : (selected ? "Selected" : "Select");
-            const btnClass = `secondary-button ${selected ? 'selected-button' : ''}`;
-
-            // monitoring badges removed — keep bed id only
-
             return `
                 <article class="bed-card ${occupied ? "occupied" : "available"} ${selected ? "selected" : ""}">
                     <div class="bed-card-header">
@@ -380,17 +320,19 @@ class HospitalTriageUI {
                         <span>Patient</span>
                         <strong>${bed.getPatientName()}</strong>
                     </div>
-                    <button class="${btnClass}" type="button" data-bed-id="${bed.getBedId()}">
-                        ${btnText}
+                    <button class="secondary-button" type="button" data-bed-id="${bed.getBedId()}">
+                        ${occupied ? "Discharge" : "Select"}
                     </button>
                 </article>
             `;
         }).join("");
         bedsGrid.querySelectorAll("[data-bed-id]").forEach((button) => {
-            button.onclick = () => {
+            button.addEventListener("click", () => {
                 const bedId = button.dataset.bedId ?? "";
                 const bed = this.system.getBedsList().find((item) => item.getBedId() === bedId);
-                if (!bed) return;
+                if (!bed) {
+                    return;
+                }
                 this.selectedBedId = bedId;
                 if (bed.getIsOccupied()) {
                     this.addLog(this.system.dischargePatient(bedId));
@@ -399,13 +341,11 @@ class HospitalTriageUI {
                 }
                 this.addLog(`[INFO] Selected available bed ${bedId}.`);
                 this.renderBeds();
-            };
+            });
         });
     }
-
     bindEvents() {
-        // assign onclick to avoid duplicate listeners on re-render
-        this.getElement("admitButton").onclick = () => {
+        this.getElement("admitButton").addEventListener("click", () => {
             const patientNameInput = this.getElement("patientName");
             const bedTypeSelect = this.getElement("bedType");
             const patientName = patientNameInput.value.trim();
@@ -417,65 +357,37 @@ class HospitalTriageUI {
             this.addLog(this.system.admitPatient(bedTypeSelect.value, patientName));
             patientNameInput.value = "";
             this.refresh();
-        };
-
-        this.getElement("createRoomButton").onclick = () => {
-            const idInput = this.getElement("newRoomId");
-            const typeSelect = this.getElement("newRoomType");
-            const wardInput = this.getElement("wardName");
-            const bedId = idInput.value.trim();
-            if (!bedId) {
-                this.addLog("[INFO] Enter a room ID to add.");
-                idInput.focus();
-                return;
-            }
-            const type = typeSelect.value;
-            const ward = wardInput.value.trim();
-            this.addLog(this.system.addBed(type, bedId, ward));
-            idInput.value = "";
-            wardInput.value = "";
-            this.refresh();
-        };
-
-        this.getElement("summaryButton").onclick = () => {
+        });
+        this.getElement("summaryButton").addEventListener("click", () => {
             const { occupied, total, percent } = this.system.getCapacitySummary();
             this.addLog(`--- Ward Summary: ${occupied}/${total} occupied, ${percent}% capacity utilized. ---`);
-        };
-
-        this.getElement("clearLogButton").onclick = () => {
+        });
+        this.getElement("clearLogButton").addEventListener("click", () => {
             this.getElement("activityLog").innerHTML = "";
-<<<<<<< HEAD
-        };
-=======
         });
-
-        this.getElement("logoutButton").addEventListener("click", () => {
-            window.location.href = 'signup.html';
-        });
->>>>>>> CB-branch
     }
-
     refresh() {
         const logs = this.getElement("activityLog").innerHTML;
         this.render();
         this.getElement("activityLog").innerHTML = logs;
     }
-
     addLog(message) {
         const activityLog = this.getElement("activityLog");
         const row = document.createElement("p");
         row.textContent = message;
         activityLog.prepend(row);
     }
-
     getBedTypeLabel(bed) {
-        if (bed instanceof ICUBed) return "ICU Bed";
-        if (bed instanceof EmergencyBed) return "Emergency Bed";
-        if (bed instanceof PediatricBed) return "Pediatric Bed";
-        if (bed instanceof MaternityBed) return "Maternity Bed";
+        if (bed instanceof ICUBed)
+            return "ICU Bed";
+        if (bed instanceof EmergencyBed)
+            return "Emergency Bed";
+        if (bed instanceof PediatricBed)
+            return "Pediatric Bed";
+        if (bed instanceof MaternityBed)
+            return "Maternity Bed";
         return "Hospital Bed";
     }
-
     getElement(id) {
         const element = document.getElementById(id);
         if (!element) {
