@@ -61,7 +61,24 @@
                     <option value="Maternity">Maternity</option>
                 </select>
 
-                <button id="admitButton">Admit Patient</button>
+                <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
+
+                <div class="form-divider"></div>
+
+                <h2>Add Bed</h2>
+
+                <label for="newBedId">Bed ID</label>
+                <input id="newBedId" type="text" placeholder="Example: ICU-03"/>
+
+                <label for="newBedType">Bed Type</label>
+                <select id="newBedType">
+                    <option value="ICU">ICU</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Pediatric">Pediatric</option>
+                    <option value="Maternity">Maternity</option>
+                </select>
+
+                <button id="addBedButton" class="secondary-button" type="button">Add Bed</button>
             </div>
 
             <!-- BEDS -->

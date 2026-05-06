@@ -10,6 +10,7 @@ A browser-based hospital bed availability and patient triage system built with T
   - Emergency
   - Pediatric
   - Maternity
+- Add new beds by bed ID and bed type
 - Discharge occupied beds directly from the ward bed cards
 - Display bed status, ward name, patient name, and bed-specific information
 - Show activity logs for admissions, discharges, selections, and capacity summaries
@@ -78,7 +79,7 @@ tsc --noEmit
 - `PediatricBed` - pediatric-specific admission and discharge behavior
 - `MaternityBed` - maternity-specific admission and discharge behavior
 - `HospitalTriageSystem` - manages bed data and triage operations
-- `HospitalTriageUI` - renders and updates the browser interface
+- `mountHospitalSystem()` - connects the browser interface to the triage system
 
 ## Notes
 

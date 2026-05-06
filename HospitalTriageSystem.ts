@@ -161,6 +161,10 @@ class MaternityBed extends GeneralBed {
 }
 
 type BedType = "ICU" | "Emergency" | "Pediatric" | "Maternity";
+type BedDefaults = {
+    wardName: string;
+    detail: string;
+};
 
 const BED_TYPE_LABELS = new Map<Function, string>([
     [ICUBed,       "ICU Bed"],
@@ -168,6 +172,13 @@ const BED_TYPE_LABELS = new Map<Function, string>([
     [PediatricBed, "Pediatric Bed"],
     [MaternityBed, "Maternity Bed"],
 ]);
+
+const BED_DEFAULTS: Record<BedType, BedDefaults> = {
+    ICU:       { wardName: "ICU Ward",       detail: "Medium" },
+    Emergency: { wardName: "Emergency Ward", detail: "Medium" },
+    Pediatric: { wardName: "Pediatric Ward", detail: "3rd Floor" },
+    Maternity: { wardName: "Maternity Ward", detail: "2nd Floor" },
+};
 
 
 class HospitalTriageSystem {
@@ -198,6 +209,39 @@ class HospitalTriageSystem {
 
     private findBedById(bedId: string): HospitalBed | undefined {
         return this.bedsList.find((bed) => bed.getBedId() === bedId);
+    }
+
+    private createBed(bedType: BedType, bedId: string): HospitalBed {
+        const defaults = BED_DEFAULTS[bedType];
+        const ward = defaults.wardName;
+
+        switch (bedType) {
+            case "ICU":
+                return new ICUBed(bedId, ward, defaults.detail);
+            case "Emergency":
+                return new EmergencyBed(bedId, ward, defaults.detail);
+            case "Pediatric":
+                return new PediatricBed(bedId, ward, defaults.detail);
+            case "Maternity":
+                return new MaternityBed(bedId, ward, defaults.detail);
+        }
+    }
+
+    public addBed(bedType: BedType, bedId: string): string {
+        const cleanedBedId = bedId.trim().toUpperCase();
+
+        if (!cleanedBedId) {
+            return "[ERROR] Enter a bed ID before adding a bed.";
+        }
+
+        if (this.findBedById(cleanedBedId)) {
+            return `[ERROR] Bed ID ${cleanedBedId} already exists.`;
+        }
+
+        const bed = this.createBed(bedType, cleanedBedId);
+        this.bedsList.push(bed);
+
+        return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.getWardName()}.`;
     }
 
     public admitPatient(bedType: BedType, patientName: string): string {
@@ -250,6 +294,7 @@ class HospitalTriageSystem {
     public getBedTypeLabel(bed: HospitalBed): string {
         return BED_TYPE_LABELS.get(bed.constructor) ?? "Hospital Bed";
     }
+
 }
 
 function mountHospitalSystem() {
@@ -257,7 +302,8 @@ function mountHospitalSystem() {
 
     const patientName = document.getElementById("patientName") as HTMLInputElement;
     const bedType = document.getElementById("bedType") as HTMLSelectElement;
-
+    const newBedId = document.getElementById("newBedId") as HTMLInputElement;
+    const newBedType = document.getElementById("newBedType") as HTMLSelectElement;
     const bedsGrid = document.getElementById("bedsGrid")!;
     const log = document.getElementById("activityLog")!;
 
@@ -275,6 +321,14 @@ function mountHospitalSystem() {
         log.prepend(p);
     };
 
+    const escapeHtml = (value: string): string =>
+        value
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
     const refresh = () => {
         const data = system.getCapacitySummary();
         const beds = system.getBedsList();
@@ -289,12 +343,12 @@ function mountHospitalSystem() {
 
         bedsGrid.innerHTML = beds.map(bed => `
             <div class="bed-card">
-                <strong>${bed.getBedId()}</strong>
-                <p>${bed.getWardName()}</p>
-                <p>${bed.getBedInfo()}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Available"}</p>
+                <strong>${escapeHtml(bed.getBedId())}</strong>
+                <p>${escapeHtml(bed.getWardName())}</p>
+                <p>${escapeHtml(bed.getBedInfo())}</p>
+                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
 
-                <button data-id="${bed.getBedId()}">
+                <button data-id="${escapeHtml(bed.getBedId())}">
                     ${bed.getIsOccupied() ? "Discharge" : "Select"}
                 </button>
             </div>
@@ -328,6 +382,19 @@ function mountHospitalSystem() {
 
         logMsg(system.admitPatient(bedType.value as any, name));
         patientName.value = "";
+        refresh();
+    });
+
+    document.getElementById("addBedButton")!.addEventListener("click", () => {
+        const bedId = newBedId.value.trim();
+
+        const result = system.addBed(newBedType.value as BedType, bedId);
+        logMsg(result);
+
+        if (result.startsWith("[ADDED]")) {
+            newBedId.value = "";
+        }
+
         refresh();
     });
 

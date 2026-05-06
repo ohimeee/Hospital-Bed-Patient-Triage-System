@@ -131,6 +131,12 @@ const BED_TYPE_LABELS = new Map([
     [PediatricBed, "Pediatric Bed"],
     [MaternityBed, "Maternity Bed"],
 ]);
+const BED_DEFAULTS = {
+    ICU: { wardName: "ICU Ward", detail: "Medium" },
+    Emergency: { wardName: "Emergency Ward", detail: "Medium" },
+    Pediatric: { wardName: "Pediatric Ward", detail: "3rd Floor" },
+    Maternity: { wardName: "Maternity Ward", detail: "2nd Floor" },
+};
 class HospitalTriageSystem {
     constructor() {
         this.bedsList = [];
@@ -155,6 +161,32 @@ class HospitalTriageSystem {
     }
     findBedById(bedId) {
         return this.bedsList.find((bed) => bed.getBedId() === bedId);
+    }
+    createBed(bedType, bedId) {
+        const defaults = BED_DEFAULTS[bedType];
+        const ward = defaults.wardName;
+        switch (bedType) {
+            case "ICU":
+                return new ICUBed(bedId, ward, defaults.detail);
+            case "Emergency":
+                return new EmergencyBed(bedId, ward, defaults.detail);
+            case "Pediatric":
+                return new PediatricBed(bedId, ward, defaults.detail);
+            case "Maternity":
+                return new MaternityBed(bedId, ward, defaults.detail);
+        }
+    }
+    addBed(bedType, bedId) {
+        const cleanedBedId = bedId.trim().toUpperCase();
+        if (!cleanedBedId) {
+            return "[ERROR] Enter a bed ID before adding a bed.";
+        }
+        if (this.findBedById(cleanedBedId)) {
+            return `[ERROR] Bed ID ${cleanedBedId} already exists.`;
+        }
+        const bed = this.createBed(bedType, cleanedBedId);
+        this.bedsList.push(bed);
+        return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.getWardName()}.`;
     }
     admitPatient(bedType, patientName) {
         const bed = this.findAvailableBed(bedType);
@@ -207,6 +239,8 @@ function mountHospitalSystem() {
     const system = new HospitalTriageSystem();
     const patientName = document.getElementById("patientName");
     const bedType = document.getElementById("bedType");
+    const newBedId = document.getElementById("newBedId");
+    const newBedType = document.getElementById("newBedType");
     const bedsGrid = document.getElementById("bedsGrid");
     const log = document.getElementById("activityLog");
     const totalBeds = document.getElementById("totalBeds");
@@ -220,6 +254,12 @@ function mountHospitalSystem() {
         p.textContent = msg;
         log.prepend(p);
     };
+    const escapeHtml = (value) => value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     const refresh = () => {
         const data = system.getCapacitySummary();
         const beds = system.getBedsList();
@@ -231,12 +271,12 @@ function mountHospitalSystem() {
         pill.className = `capacity-pill ${data.percent >= 80 ? "critical" : "normal"}`;
         bedsGrid.innerHTML = beds.map(bed => `
             <div class="bed-card">
-                <strong>${bed.getBedId()}</strong>
-                <p>${bed.getWardName()}</p>
-                <p>${bed.getBedInfo()}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Available"}</p>
+                <strong>${escapeHtml(bed.getBedId())}</strong>
+                <p>${escapeHtml(bed.getWardName())}</p>
+                <p>${escapeHtml(bed.getBedInfo())}</p>
+                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
 
-                <button data-id="${bed.getBedId()}">
+                <button data-id="${escapeHtml(bed.getBedId())}">
                     ${bed.getIsOccupied() ? "Discharge" : "Select"}
                 </button>
             </div>
@@ -265,6 +305,15 @@ function mountHospitalSystem() {
         }
         logMsg(system.admitPatient(bedType.value, name));
         patientName.value = "";
+        refresh();
+    });
+    document.getElementById("addBedButton").addEventListener("click", () => {
+        const bedId = newBedId.value.trim();
+        const result = system.addBed(newBedType.value, bedId);
+        logMsg(result);
+        if (result.startsWith("[ADDED]")) {
+            newBedId.value = "";
+        }
         refresh();
     });
     document.getElementById("summaryButton").addEventListener("click", () => {
