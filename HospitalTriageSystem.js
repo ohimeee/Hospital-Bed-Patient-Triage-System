@@ -6,14 +6,30 @@ class HospitalBed {
         this.isOccupied = false;
         this.patientName = "None";
     }
-    getBedId() { return this.bedId; }
-    setBedId(v) { this.bedId = v; }
-    getWardName() { return this.wardName; }
-    setWardName(v) { this.wardName = v; }
-    getIsOccupied() { return this.isOccupied; }
-    setIsOccupied(v) { this.isOccupied = v; }
-    getPatientName() { return this.patientName; }
-    setPatientName(v) { this.patientName = v; }
+    getBedId() {
+        return this.bedId;
+    }
+    setBedId(v) {
+        this.bedId = v;
+    }
+    getWardName() {
+        return this.wardName;
+    }
+    setWardName(v) {
+        this.wardName = v;
+    }
+    getIsOccupied() {
+        return this.isOccupied;
+    }
+    setIsOccupied(v) {
+        this.isOccupied = v;
+    }
+    getPatientName() {
+        return this.patientName;
+    }
+    setPatientName(v) {
+        this.patientName = v;
+    }
     baseAdmit(patientName) {
         if (this.isOccupied)
             return false;
@@ -40,8 +56,12 @@ class CriticalBed extends HospitalBed {
         super(bedId, wardName);
         this.monitoringLevel = monitoringLevel;
     }
-    getMonitoringLevel() { return this.monitoringLevel; }
-    setMonitoringLevel(v) { this.monitoringLevel = v; }
+    getMonitoringLevel() {
+        return this.monitoringLevel;
+    }
+    setMonitoringLevel(v) {
+        this.monitoringLevel = v;
+    }
     getBedInfo() {
         return `${this.getBedId()} - Monitoring level: ${this.monitoringLevel}`;
     }
@@ -51,8 +71,12 @@ class GeneralBed extends HospitalBed {
         super(bedId, wardName);
         this.wardFloor = wardFloor;
     }
-    getWardFloor() { return this.wardFloor; }
-    setWardFloor(v) { this.wardFloor = v; }
+    getWardFloor() {
+        return this.wardFloor;
+    }
+    setWardFloor(v) {
+        this.wardFloor = v;
+    }
     getBedInfo() {
         return `${this.getBedId()} - Floor: ${this.wardFloor}`;
     }
@@ -202,26 +226,6 @@ class HospitalTriageSystem {
             return `[INFO] Bed ${bedId} is already vacant.`;
         return `[DISCHARGE] ${bed.dischargePatient()}`;
     }
-    printWardSummary() {
-        console.log("\n--- Ward Summary ---");
-        let occupiedCount = 0;
-        this.bedsList.forEach((bed) => {
-            const status = bed.getIsOccupied()
-                ? `Occupied by ${bed.getPatientName()}`
-                : "Available";
-            console.log(`${bed.getBedId()} | ${bed.getWardName()} | ${bed.getBedInfo()} | ${status}`);
-            if (bed.getIsOccupied())
-                occupiedCount++;
-        });
-        const capacityPercent = Math.round((occupiedCount / this.bedsList.length) * 100);
-        const isCritical = capacityPercent >= 80;
-        const statusColor = isCritical ? "\x1b[31m" : "\x1b[32m";
-        const statusMessage = isCritical
-            ? `[CRITICAL CAPACITY ALERT] ${capacityPercent}% full!`
-            : `[STATUS NORMAL] ${capacityPercent}% capacity utilized.`;
-        console.log(`${statusColor}${statusMessage}\x1b[0m`);
-        console.log("---------------------\n");
-    }
     getBedsList() {
         return [...this.bedsList];
     }
@@ -254,12 +258,6 @@ function mountHospitalSystem() {
         p.textContent = msg;
         log.prepend(p);
     };
-    const escapeHtml = (value) => value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
     const refresh = () => {
         const data = system.getCapacitySummary();
         const beds = system.getBedsList();
@@ -269,22 +267,24 @@ function mountHospitalSystem() {
         percent.textContent = `${data.percent}%`;
         pillText.textContent = data.percent >= 80 ? "Critical capacity" : "Capacity normal";
         pill.className = `capacity-pill ${data.percent >= 80 ? "critical" : "normal"}`;
-        bedsGrid.innerHTML = beds.map(bed => `
+        bedsGrid.innerHTML = beds
+            .map((bed) => `
             <div class="bed-card">
-                <strong>${escapeHtml(bed.getBedId())}</strong>
-                <p>${escapeHtml(bed.getWardName())}</p>
-                <p>${escapeHtml(bed.getBedInfo())}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
+                <strong>${bed.getBedId()}</strong>
+                <p>${bed.getWardName()}</p>
+                <p>${bed.getBedInfo()}</p>
+                <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Unoccupied"}</p>
 
-                <button data-id="${escapeHtml(bed.getBedId())}">
-                    ${bed.getIsOccupied() ? "Discharge" : "Select"}
+                <button data-id="${bed.getBedId()}">
+                    ${bed.getIsOccupied() ? "Discharge" : "Available"}
                 </button>
             </div>
-        `).join("");
-        bedsGrid.querySelectorAll("button").forEach(btn => {
+        `)
+            .join("");
+        bedsGrid.querySelectorAll("button").forEach((btn) => {
             btn.addEventListener("click", () => {
                 const id = btn.dataset.id;
-                const bed = system.getBedsList().find(b => b.getBedId() === id);
+                const bed = system.getBedsList().find((b) => b.getBedId() === id);
                 if (!bed)
                     return;
                 if (bed.getIsOccupied()) {
@@ -315,10 +315,6 @@ function mountHospitalSystem() {
             newBedId.value = "";
         }
         refresh();
-    });
-    document.getElementById("summaryButton").addEventListener("click", () => {
-        const s = system.getCapacitySummary();
-        logMsg(`Summary: ${s.occupied}/${s.total} occupied (${s.percent}%)`);
     });
     document.getElementById("clearLogButton").addEventListener("click", () => {
         log.innerHTML = "";
