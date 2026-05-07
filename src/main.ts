@@ -17,6 +17,13 @@ const BED_DEFAULTS: Record<BedType, BedDefaults> = {
   Maternity: { wardName: "Maternity Ward", detail: "2nd Floor" },
 };
 
+const BED_TYPE_MAP: Record<BedType, Function> = {
+  ICU: ICUBed,
+  Emergency: EmergencyBed,
+  Pediatric: PediatricBed,
+  Maternity: MaternityBed,
+};
+
 class HospitalTriageSystem {
   private _bedsList: HospitalBed[] = [];
 
@@ -31,13 +38,7 @@ class HospitalTriageSystem {
   }
 
   private findAvailableBed(bedType: BedType): HospitalBed | undefined {
-    const typeMap: Record<BedType, Function> = {
-      ICU: ICUBed,
-      Emergency: EmergencyBed,
-      Pediatric: PediatricBed,
-      Maternity: MaternityBed,
-    };
-    const BedClass = typeMap[bedType];
+    const BedClass = BED_TYPE_MAP[bedType];
     return this._bedsList.find((bed) => bed instanceof BedClass && !bed.isOccupied);
   }
 
