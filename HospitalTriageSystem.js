@@ -264,24 +264,6 @@ var HospitalTriageSystem = /** @class */ (function () {
             return "[INFO] Bed ".concat(bedId, " is already vacant.");
         return "[DISCHARGE] ".concat(bed.dischargePatient());
     };
-    HospitalTriageSystem.prototype.printWardSummary = function () {
-        console.log("\n--- Ward Summary ---");
-        var occupiedCount = 0;
-        this.bedsList.forEach(function (bed) {
-            var status = bed.getIsOccupied() ? "Occupied by ".concat(bed.getPatientName()) : "Available";
-            console.log("".concat(bed.getBedId(), " | ").concat(bed.getWardName(), " | ").concat(bed.getBedInfo(), " | ").concat(status));
-            if (bed.getIsOccupied())
-                occupiedCount++;
-        });
-        var capacityPercent = Math.round((occupiedCount / this.bedsList.length) * 100);
-        var isCritical = capacityPercent >= 80;
-        var statusColor = isCritical ? "\x1b[31m" : "\x1b[32m";
-        var statusMessage = isCritical
-            ? "[CRITICAL CAPACITY ALERT] ".concat(capacityPercent, "% full!")
-            : "[STATUS NORMAL] ".concat(capacityPercent, "% capacity utilized.");
-        console.log("".concat(statusColor).concat(statusMessage, "\u001B[0m"));
-        console.log("---------------------\n");
-    };
     HospitalTriageSystem.prototype.getBedsList = function () {
         return __spreadArray([], this.bedsList, true);
     };
@@ -362,10 +344,6 @@ function mountHospitalSystem() {
             newBedId.value = "";
         }
         refresh();
-    });
-    document.getElementById("summaryButton").addEventListener("click", function () {
-        var s = system.getCapacitySummary();
-        logMsg("Summary: ".concat(s.occupied, "/").concat(s.total, " occupied (").concat(s.percent, "%)"));
     });
     document.getElementById("clearLogButton").addEventListener("click", function () {
         log.innerHTML = "";

@@ -274,27 +274,6 @@ class HospitalTriageSystem {
     return `[DISCHARGE] ${bed.dischargePatient()}`;
   }
 
-  public printWardSummary(): void {
-    console.log("\n--- Ward Summary ---");
-
-    let occupiedCount = 0;
-    this.bedsList.forEach((bed) => {
-      const status = bed.getIsOccupied() ? `Occupied by ${bed.getPatientName()}` : "Available";
-      console.log(`${bed.getBedId()} | ${bed.getWardName()} | ${bed.getBedInfo()} | ${status}`);
-      if (bed.getIsOccupied()) occupiedCount++;
-    });
-
-    const capacityPercent = Math.round((occupiedCount / this.bedsList.length) * 100);
-    const isCritical = capacityPercent >= 80;
-    const statusColor = isCritical ? "\x1b[31m" : "\x1b[32m";
-    const statusMessage = isCritical
-      ? `[CRITICAL CAPACITY ALERT] ${capacityPercent}% full!`
-      : `[STATUS NORMAL] ${capacityPercent}% capacity utilized.`;
-
-    console.log(`${statusColor}${statusMessage}\x1b[0m`);
-    console.log("---------------------\n");
-  }
-
   public getBedsList(): HospitalBed[] {
     return [...this.bedsList];
   }
@@ -406,11 +385,6 @@ function mountHospitalSystem() {
     }
 
     refresh();
-  });
-
-  document.getElementById("summaryButton")!.addEventListener("click", () => {
-    const s = system.getCapacitySummary();
-    logMsg(`Summary: ${s.occupied}/${s.total} occupied (${s.percent}%)`);
   });
 
   document.getElementById("clearLogButton")!.addEventListener("click", () => {
