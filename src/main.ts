@@ -25,18 +25,18 @@ const BED_DEFAULTS: Record<BedType, BedDefaults> = {
 };
 
 class HospitalTriageSystem {
-  private bedsList: HospitalBed[] = [];
+  private _bedsList: HospitalBed[] = [];
 
   constructor() {
-    this.initializeData();
+    this.defaultBeds();
   }
 
-  private initializeData(): void {
-    this.bedsList.push(new ICUBed("ICU-01", "ICU Ward", "High"));
-    this.bedsList.push(new ICUBed("ICU-02", "ICU Ward", "Medium"));
-    this.bedsList.push(new EmergencyBed("EM-01", "Emergency Ward", "High"));
-    this.bedsList.push(new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"));
-    this.bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
+  private defaultBeds(): void {
+    this._bedsList.push(new ICUBed("ICU-01", "ICU Ward", "High"));
+    this._bedsList.push(new ICUBed("ICU-02", "ICU Ward", "Medium"));
+    this._bedsList.push(new EmergencyBed("EM-01", "Emergency Ward", "High"));
+    this._bedsList.push(new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"));
+    this._bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
   }
 
   private findAvailableBed(bedType: BedType): HospitalBed | undefined {
@@ -47,11 +47,11 @@ class HospitalTriageSystem {
       Maternity: MaternityBed,
     };
     const BedClass = typeMap[bedType];
-    return this.bedsList.find((bed) => bed instanceof BedClass && !bed.isOccupied);
+    return this._bedsList.find((bed) => bed instanceof BedClass && !bed.isOccupied);
   }
 
   private findBedById(bedId: string): HospitalBed | undefined {
-    return this.bedsList.find((bed) => bed.bedId === bedId);
+    return this._bedsList.find((bed) => bed.bedId === bedId);
   }
 
   private createBed(bedType: BedType, bedId: string): HospitalBed {
@@ -82,7 +82,7 @@ class HospitalTriageSystem {
     }
 
     const bed = this.createBed(bedType, cleanedBedId);
-    this.bedsList.push(bed);
+    this._bedsList.push(bed);
 
     return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.wardName}.`;
   }
@@ -101,12 +101,12 @@ class HospitalTriageSystem {
   }
 
   public getBedsList(): HospitalBed[] {
-    return [...this.bedsList];
+    return [...this._bedsList];
   }
 
   public getCapacitySummary(): { occupied: number; total: number; percent: number } {
-    const total = this.bedsList.length;
-    const occupied = this.bedsList.filter((bed) => bed.isOccupied).length;
+    const total = this._bedsList.length;
+    const occupied = this._bedsList.filter((bed) => bed.isOccupied).length;
     const percent = Math.round((occupied / total) * 100);
     return { occupied, total, percent };
   }

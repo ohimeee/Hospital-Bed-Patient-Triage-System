@@ -3,12 +3,14 @@ export abstract class HospitalBed {
   private _wardName: string;
   private _isOccupied: boolean;
   private _patientName: string;
+  private _assignedDoctor: string;
 
   constructor(_bedId: string, _wardName: string) {
     this._bedId = _bedId;
     this._wardName = _wardName;
     this._isOccupied = false;
     this._patientName = "None";
+    this._assignedDoctor = "None";
   }
 
   // getters
@@ -24,6 +26,9 @@ export abstract class HospitalBed {
   public get patientName(): string {
     return this._patientName;
   }
+  public get assignedDoctor(): string {
+    return this._assignedDoctor;
+  }
 
   // setters
   public set bedId(value: string) {
@@ -37,6 +42,9 @@ export abstract class HospitalBed {
   }
   public set patientName(value: string) {
     this._patientName = value;
+  }
+  public set assignedDoctor(value: string) {
+    this._assignedDoctor = value;
   }
 
   // protected methods
