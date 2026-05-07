@@ -1,4 +1,4 @@
-export default abstract class HospitalBed {
+export abstract class HospitalBed {
   private _bedId: string;
   private _wardName: string;
   private _isOccupied: boolean;
