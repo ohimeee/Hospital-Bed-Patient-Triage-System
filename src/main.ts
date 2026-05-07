@@ -1,5 +1,4 @@
 
-
 abstract class CriticalBed extends HospitalBed {
   private _monitoringLevel: string;
 
