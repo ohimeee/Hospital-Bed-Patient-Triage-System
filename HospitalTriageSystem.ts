@@ -1,64 +1,70 @@
 abstract class HospitalBed {
-  private bedId: string;
-  private wardName: string;
-  private isOccupied: boolean;
-  private patientName: string;
+  private _bedId: string;
+  private _wardName: string;
+  private _isOccupied: boolean;
+  private _patientName: string;
 
-  constructor(bedId: string, wardName: string) {
-    this.bedId = bedId;
-    this.wardName = wardName;
-    this.isOccupied = false;
-    this.patientName = "None";
-  }
-
-  public getBedId(): string {
-    return this.bedId;
-  }
-  public setBedId(v: string): void {
-    this.bedId = v;
+  constructor(_bedId: string, _wardName: string) {
+    this._bedId = _bedId;
+    this._wardName = _wardName;
+    this._isOccupied = false;
+    this._patientName = "None";
   }
 
-  public getWardName(): string {
-    return this.wardName;
+  // getters
+  public get bedId(): string {
+    return this._bedId;
   }
-  public setWardName(v: string): void {
-    this.wardName = v;
+  public get wardName(): string {
+    return this._wardName;
   }
-
-  public getIsOccupied(): boolean {
-    return this.isOccupied;
+  public get isOccupied(): boolean {
+    return this._isOccupied;
   }
-  public setIsOccupied(v: boolean): void {
-    this.isOccupied = v;
-  }
-
-  public getPatientName(): string {
-    return this.patientName;
-  }
-  public setPatientName(v: string): void {
-    this.patientName = v;
+  public get patientName(): string {
+    return this._patientName;
   }
 
+  // setters
+  public set bedId(value: string) {
+    this._bedId = value;
+  }
+  public set wardName(value: string) {
+    this._wardName = value;
+  }
+  public set isOccupied(value: boolean) {
+    this._isOccupied = value;
+  }
+  public set patientName(value: string) {
+    this._patientName = value;
+  }
+
+  // protected methods
   protected baseAdmit(patientName: string): boolean {
-    if (this.isOccupied) return false;
-    this.isOccupied = true;
-    this.patientName = patientName;
-    return true;
+    if (this._isOccupied) {
+      return false;
+    } else {
+      this._isOccupied = true;
+      this._patientName = patientName;
+      return true;
+    }
   }
-
   protected baseDischarge(): boolean {
-    if (!this.isOccupied) return false;
-    this.isOccupied = false;
-    this.patientName = "None";
-    return true;
+    if (!this._isOccupied) {
+      return false;
+    } else {
+      this._isOccupied = false;
+      this._patientName = "None";
+      return true;
+    }
   }
 
   protected alreadyOccupiedMsg(): string {
-    return `${this.bedId} is already occupied by ${this.patientName}.`;
+    return `${this._bedId} is already occupied by ${this._patientName}.`;
   }
 
   protected alreadyVacantMsg(): string {
-    return `${this.bedId} is already vacant.`;
+    return `${this._bedId} is already vacant.`;
   }
 
   public abstract admitPatient(patientName: string): string;
@@ -67,43 +73,46 @@ abstract class HospitalBed {
 }
 
 abstract class CriticalBed extends HospitalBed {
-  private monitoringLevel: string;
+  private _monitoringLevel: string;
 
-  constructor(bedId: string, wardName: string, monitoringLevel: string) {
-    super(bedId, wardName);
-    this.monitoringLevel = monitoringLevel;
+  constructor(_bedId: string, _wardName: string, _monitoringLevel: string) {
+    super(_bedId, _wardName);
+    this._monitoringLevel = _monitoringLevel;
   }
 
   public getMonitoringLevel(): string {
-    return this.monitoringLevel;
-  }
-  public setMonitoringLevel(v: string): void {
-    this.monitoringLevel = v;
+    return this._monitoringLevel;
   }
 
   public getBedInfo(): string {
-    return `${this.getBedId()} - Monitoring level: ${this.monitoringLevel}`;
+    return `${this.bedId} - Monitoring level: ${this._monitoringLevel}`;
+  }
+
+  public setMonitoringLevel(value: string) {
+    this._monitoringLevel = value;
   }
 }
 
 abstract class GeneralBed extends HospitalBed {
-  private wardFloor: string;
+  private _wardFloor: string;
 
   constructor(bedId: string, wardName: string, wardFloor: string) {
     super(bedId, wardName);
-    this.wardFloor = wardFloor;
+    this._wardFloor = wardFloor;
   }
 
   public getWardFloor(): string {
-    return this.wardFloor;
-  }
-  public setWardFloor(v: string): void {
-    this.wardFloor = v;
+    return this._wardFloor;
   }
 
   public getBedInfo(): string {
-    return `${this.getBedId()} - Floor: ${this.wardFloor}`;
+    return `${this.bedId} - Floor: ${this._wardFloor}`;
   }
+
+  public setWardFloor(value: string) {
+    this._wardFloor = value;
+  }
+
 }
 
 class ICUBed extends CriticalBed {
@@ -114,13 +123,13 @@ class ICUBed extends CriticalBed {
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
     if (!admitted) return `ICU Bed ${this.alreadyOccupiedMsg()}`;
-    return `ICU Bed ${this.getBedId()} admitted. Check if patient needs ventilator and flag staff.`;
+    return `ICU Bed ${this.bedId} admitted. Check if patient needs ventilator and flag staff.`;
   }
 
   public dischargePatient(): string {
     const discharged = this.baseDischarge();
     if (!discharged) return `ICU Bed ${this.alreadyVacantMsg()}`;
-    return `ICU Bed ${this.getBedId()} released. Requires doctor approval before freeing bed.`;
+    return `ICU Bed ${this.bedId} released. Requires doctor approval before freeing bed.`;
   }
 }
 
@@ -132,13 +141,13 @@ class EmergencyBed extends CriticalBed {
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
     if (!admitted) return `Emergency Bed ${this.alreadyOccupiedMsg()}`;
-    return `Emergency Bed ${this.getBedId()} admitted. Fast-tracked admission, no prior paperwork needed.`;
+    return `Emergency Bed ${this.bedId} admitted. Fast-tracked admission, no prior paperwork needed.`;
   }
 
   public dischargePatient(): string {
     const discharged = this.baseDischarge();
     if (!discharged) return `Emergency Bed ${this.alreadyVacantMsg()}`;
-    return `Emergency Bed ${this.getBedId()} released. Patient auto-moved to regular ward if stable.`;
+    return `Emergency Bed ${this.bedId} released. Patient auto-moved to regular ward if stable.`;
   }
 }
 
@@ -150,13 +159,13 @@ class PediatricBed extends GeneralBed {
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
     if (!admitted) return `Pediatric Bed ${this.alreadyOccupiedMsg()}`;
-    return `Pediatric Bed ${this.getBedId()} admitted. Requires guardian info before admission.`;
+    return `Pediatric Bed ${this.bedId} admitted. Requires guardian info before admission.`;
   }
 
   public dischargePatient(): string {
     const discharged = this.baseDischarge();
     if (!discharged) return `Pediatric Bed ${this.alreadyVacantMsg()}`;
-    return `Pediatric Bed ${this.getBedId()} released. Discharge summary sent to guardian.`;
+    return `Pediatric Bed ${this.bedId} released. Discharge summary sent to guardian.`;
   }
 }
 
@@ -168,13 +177,13 @@ class MaternityBed extends GeneralBed {
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
     if (!admitted) return `Maternity Bed ${this.alreadyOccupiedMsg()}`;
-    return `Maternity Bed ${this.getBedId()} admitted. Expected delivery date logged.`;
+    return `Maternity Bed ${this.bedId} admitted. Expected delivery date logged.`;
   }
 
   public dischargePatient(): string {
     const discharged = this.baseDischarge();
     if (!discharged) return `Maternity Bed ${this.alreadyVacantMsg()}`;
-    return `Maternity Bed ${this.getBedId()} released. Newborn record required before release.`;
+    return `Maternity Bed ${this.bedId} released. Newborn record required before release.`;
   }
 }
 
@@ -221,11 +230,11 @@ class HospitalTriageSystem {
       Maternity: MaternityBed,
     };
     const BedClass = typeMap[bedType];
-    return this.bedsList.find((bed) => bed instanceof BedClass && !bed.getIsOccupied());
+    return this.bedsList.find((bed) => bed instanceof BedClass && !bed.isOccupied);
   }
 
   private findBedById(bedId: string): HospitalBed | undefined {
-    return this.bedsList.find((bed) => bed.getBedId() === bedId);
+    return this.bedsList.find((bed) => bed.bedId === bedId);
   }
 
   private createBed(bedType: BedType, bedId: string): HospitalBed {
@@ -258,7 +267,7 @@ class HospitalTriageSystem {
     const bed = this.createBed(bedType, cleanedBedId);
     this.bedsList.push(bed);
 
-    return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.getWardName()}.`;
+    return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.wardName}.`;
   }
 
   public admitPatient(bedType: BedType, patientName: string): string {
@@ -270,7 +279,7 @@ class HospitalTriageSystem {
   public dischargePatient(bedId: string): string {
     const bed = this.findBedById(bedId);
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
-    if (!bed.getIsOccupied()) return `[INFO] Bed ${bedId} is already vacant.`;
+    if (!bed.isOccupied) return `[INFO] Bed ${bedId} is already vacant.`;
     return `[DISCHARGE] ${bed.dischargePatient()}`;
   }
 
@@ -280,7 +289,7 @@ class HospitalTriageSystem {
 
   public getCapacitySummary(): { occupied: number; total: number; percent: number } {
     const total = this.bedsList.length;
-    const occupied = this.bedsList.filter((bed) => bed.getIsOccupied()).length;
+    const occupied = this.bedsList.filter((bed) => bed.isOccupied).length;
     const percent = Math.round((occupied / total) * 100);
     return { occupied, total, percent };
   }
@@ -330,15 +339,15 @@ function mountHospitalSystem() {
       .map(
         (bed) => `
             <div class="bed-card">
-                <strong>${bed.getBedId()}</strong>
-                <p>${bed.getWardName()}</p>
+                <strong>${bed.bedId}</strong>
+                <p>${bed.wardName}</p>
                 <p>${bed.getBedInfo()}</p>
                 <strong>
-                    <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Unoccupied"}</p>
+                    <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
                 </strong>
 
-                <button data-id="${bed.getBedId()}">
-                    ${bed.getIsOccupied() ? "Discharge" : "Available"}
+                <button data-id="${bed.bedId}">
+                    ${bed.isOccupied ? "Discharge" : "Available"}
                 </button>
             </div>
         `,
@@ -348,12 +357,14 @@ function mountHospitalSystem() {
     bedsGrid.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = (btn as HTMLButtonElement).dataset.id!;
-        const bed = system.getBedsList().find((b) => b.getBedId() === id);
+        const bed = system.getBedsList().find((b) => b.bedId === id);
 
         if (!bed) return;
 
-        if (bed.getIsOccupied()) {
+        if (bed.isOccupied) {
           logMsg(system.dischargePatient(id));
+        } else {
+          logMsg(`[INFO] Selected ${id}`);
         }
 
         refresh();
@@ -369,7 +380,7 @@ function mountHospitalSystem() {
       return;
     }
 
-    logMsg(system.admitPatient(bedType.value as BedType, name));
+    logMsg(system.admitPatient(bedType.value as any, name));
     patientName.value = "";
     refresh();
   });
