@@ -166,14 +166,20 @@ function mountHospitalSystem() {
                 <button data-id="${bed.bedId}">
                     ${bed.isOccupied ? "Discharge" : "Available"}
                 </button>
+
+                <button data-id="${bed.bedId} class="deleteButton">
+                   Delete Bed 
+                </button>
             </div>
         `,
       )
       .join("");
+    
 
-    bedsGrid.querySelectorAll("button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = (btn as HTMLButtonElement).dataset.id!;
+  
+    bedsGrid.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
 
         if (!bed) return;
@@ -187,8 +193,17 @@ function mountHospitalSystem() {
         refresh();
       });
     });
-  };
 
+    //bedsGrid.querySelectorAll("deleteButton").forEach((button) => {
+      //button.addEventListener("click", () => {
+        //if (bed) {
+          //delete bed
+        //}
+      //});
+    //});
+  };
+  
+  //Admit button clicked
   document.getElementById("admitButton")!.addEventListener("click", () => {
     const name = patientName.value.trim();
 
