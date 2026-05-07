@@ -346,10 +346,10 @@ function mountHospitalSystem() {
                 <strong>${escapeHtml(bed.getBedId())}</strong>
                 <p>${escapeHtml(bed.getWardName())}</p>
                 <p>${escapeHtml(bed.getBedInfo())}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
+                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Unoccupied"}</p>
 
                 <button data-id="${escapeHtml(bed.getBedId())}">
-                    ${bed.getIsOccupied() ? "Discharge" : "Select"}
+                    ${bed.getIsOccupied() ? "Discharge" : "Available"}
                 </button>
             </div>
         `).join("");
