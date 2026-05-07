@@ -16,6 +16,16 @@ export class PediatricBed extends GeneralBed {
     if (!discharged) return `Pediatric Bed ${this.alreadyVacantMsg()}`;
     return `Pediatric Bed ${this.bedId} released. Discharge summary sent to guardian.`;
   }
+
+  public assignDoctor(doctorName: string): string {
+    const assigned = this.baseAssignDoctor(doctorName);
+    if (!assigned) return `Pediatric Bed ${this.alreadyHasDoctorMsg()}`;
+    return `Dr. ${doctorName} assigned to Pediatric Bed ${this.bedId}.`;
+  }
+
+  public unassignDoctor(): string {
+    const unassigned = this.baseUnassignDoctor();
+    if (!unassigned) return `Pediatric Bed ${this.noDoctorAssignedMsg()}`;
+    return `Doctor unassigned from Pediatric Bed ${this.bedId}.`;
+  }
 }
-
-

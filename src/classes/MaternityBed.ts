@@ -16,6 +16,16 @@ export class MaternityBed extends GeneralBed {
     if (!discharged) return `Maternity Bed ${this.alreadyVacantMsg()}`;
     return `Maternity Bed ${this.bedId} released. Newborn record required before release.`;
   }
+
+  public assignDoctor(doctorName: string): string {
+    const assigned = this.baseAssignDoctor(doctorName);
+    if (!assigned) return `Maternity Bed ${this.alreadyHasDoctorMsg()}`;
+    return `Dr. ${doctorName} assigned to Maternity Bed ${this.bedId}.`;
+  }
+
+  public unassignDoctor(): string {
+    const unassigned = this.baseUnassignDoctor();
+    if (!unassigned) return `Maternity Bed ${this.noDoctorAssignedMsg()}`;
+    return `Doctor unassigned from Maternity Bed ${this.bedId}.`;
+  }
 }
-
-

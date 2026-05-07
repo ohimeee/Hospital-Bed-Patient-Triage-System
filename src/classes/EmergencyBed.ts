@@ -16,6 +16,18 @@ export class EmergencyBed extends CriticalBed {
     if (!discharged) return `Emergency Bed ${this.alreadyVacantMsg()}`;
     return `Emergency Bed ${this.bedId} released. Patient auto-moved to regular ward if stable.`;
   }
+
+  public assignDoctor(doctorName: string): string {
+    const assigned = this.baseAssignDoctor(doctorName);
+    if (!assigned) return `Emergency Bed ${this.alreadyHasDoctorMsg()}`;
+    return `Dr. ${doctorName} assigned to Emergency Bed ${this.bedId}.`;
+  }
+
+  public unassignDoctor(): string {
+    const unassigned = this.baseUnassignDoctor();
+    if (!unassigned) return `Emergency Bed ${this.noDoctorAssignedMsg()}`;
+    return `Doctor unassigned from Emergency Bed ${this.bedId}.`;
+  }
 }
 
 

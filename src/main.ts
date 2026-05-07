@@ -204,7 +204,7 @@ function mountHospitalSystem() {
       return;
     }
 
-    logMsg(system.admitPatient(bedType.value as any, name));
+    logMsg(system.admitPatient(bedType.value as BedType, name));
     patientName.value = "";
     refresh();
   });

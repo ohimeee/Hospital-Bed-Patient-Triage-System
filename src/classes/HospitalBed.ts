@@ -2,6 +2,7 @@ export abstract class HospitalBed {
   private _bedId: string;
   private _wardName: string;
   private _isOccupied: boolean;
+  private _hasAssignedDoctor: boolean;
   private _patientName: string;
   private _assignedDoctor: string;
 
@@ -9,6 +10,7 @@ export abstract class HospitalBed {
     this._bedId = _bedId;
     this._wardName = _wardName;
     this._isOccupied = false;
+    this._hasAssignedDoctor = false;
     this._patientName = "None";
     this._assignedDoctor = "None";
   }
@@ -22,6 +24,9 @@ export abstract class HospitalBed {
   }
   public get isOccupied(): boolean {
     return this._isOccupied;
+  }
+  public get hasAssignedDoctor(): boolean {
+    return this._hasAssignedDoctor;
   }
   public get patientName(): string {
     return this._patientName;
@@ -40,6 +45,11 @@ export abstract class HospitalBed {
   public set isOccupied(value: boolean) {
     this._isOccupied = value;
   }
+
+  public set hasAssignedDoctor(value: boolean) {
+    this._hasAssignedDoctor = value;
+  }
+
   public set patientName(value: string) {
     this._patientName = value;
   }
@@ -67,6 +77,26 @@ export abstract class HospitalBed {
     }
   }
 
+  protected baseAssignDoctor(doctorName: string): boolean {
+    if (this._hasAssignedDoctor) {
+      return false;
+    } else {
+      this._hasAssignedDoctor = true;
+      this._assignedDoctor = doctorName;
+      return true;
+    }
+  }
+
+  protected baseUnassignDoctor(): boolean {
+    if (!this._hasAssignedDoctor) {
+      return false;
+    } else {
+      this._hasAssignedDoctor = false;
+      this._assignedDoctor = "None";
+      return true;
+    }
+  }
+
   protected alreadyOccupiedMsg(): string {
     return `${this._bedId} is already occupied by ${this._patientName}.`;
   }
@@ -75,7 +105,17 @@ export abstract class HospitalBed {
     return `${this._bedId} is already vacant.`;
   }
 
+  protected alreadyHasDoctorMsg(): string {
+    return `${this._bedId} already has Dr. ${this._assignedDoctor} assigned.`;
+  }
+
+  protected noDoctorAssignedMsg(): string {
+    return `${this._bedId} has no doctor assigned.`;
+  }
+
   public abstract admitPatient(patientName: string): string;
   public abstract dischargePatient(): string;
+  public abstract assignDoctor(doctorName: string): string;
+  public abstract unassignDoctor(): string;
   public abstract getBedInfo(): string;
 }
