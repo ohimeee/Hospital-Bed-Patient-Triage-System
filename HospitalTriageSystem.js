@@ -320,13 +320,12 @@ function mountHospitalSystem() {
                     return;
                 if (bed.getIsOccupied()) {
                     logMsg(system.dischargePatient(id));
-                    selectedBedId = null;
                 }
                 else {
                     logMsg("[INFO] Selected ".concat(id));
                 }
                 refresh();
-            };
+            });
         });
     };
     document.getElementById("admitButton").addEventListener("click", function () {
