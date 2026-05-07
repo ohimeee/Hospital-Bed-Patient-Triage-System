@@ -28,15 +28,13 @@ class HospitalTriageSystem {
   private _bedsList: HospitalBed[] = [];
 
   constructor() {
-    this.defaultBeds();
-  }
-
-  private defaultBeds(): void {
-    this._bedsList.push(new ICUBed("ICU-01", "ICU Ward", "High"));
-    this._bedsList.push(new ICUBed("ICU-02", "ICU Ward", "Medium"));
-    this._bedsList.push(new EmergencyBed("EM-01", "Emergency Ward", "High"));
-    this._bedsList.push(new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"));
-    this._bedsList.push(new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"));
+    this._bedsList = [
+      new ICUBed("ICU-01", "ICU Ward", "High"),
+      new ICUBed("ICU-02", "ICU Ward", "Medium"),
+      new EmergencyBed("EM-01", "Emergency Ward", "High"),
+      new PediatricBed("PED-01", "Pediatric Ward", "3rd Floor"),
+      new MaternityBed("MAT-01", "Maternity Ward", "2nd Floor"),
+    ];
   }
 
   private findAvailableBed(bedType: BedType): HospitalBed | undefined {
@@ -121,18 +119,24 @@ function mountHospitalSystem() {
 
   const patientName = document.getElementById("patientName") as HTMLInputElement;
   const bedType = document.getElementById("bedType") as HTMLSelectElement;
+
   const newBedId = document.getElementById("newBedId") as HTMLInputElement;
   const newBedType = document.getElementById("newBedType") as HTMLSelectElement;
-  const bedsGrid = document.getElementById("bedsGrid")!;
-  const log = document.getElementById("activityLog")!;
+  
+  const bedsGrid = document.getElementById("bedsGrid") as HTMLDivElement;
+  const log = document.getElementById("activityLog") as HTMLDivElement;
 
-  const totalBeds = document.getElementById("totalBeds")!;
-  const occupiedBeds = document.getElementById("occupiedBeds")!;
-  const availableBeds = document.getElementById("availableBeds")!;
+  const totalBeds = document.getElementById("totalBeds") as HTMLSpanElement;
+  const occupiedBeds = document.getElementById("occupiedBeds") as HTMLSpanElement;
+  const availableBeds = document.getElementById("availableBeds") as HTMLSpanElement;
 
-  const percent = document.getElementById("capacity-percent")!;
-  const pillText = document.getElementById("capacity-text")!;
-  const pill = document.getElementById("capacity-pill")!;
+  const percent = document.getElementById("capacity-percent") as HTMLSpanElement;
+  const pillText = document.getElementById("capacity-text") as HTMLSpanElement;
+  const pill = document.getElementById("capacity-pill") as HTMLDivElement;
+
+  const admitBtn = document.getElementById("admitButton") as HTMLButtonElement;
+  const addBedBtn = document.getElementById("addBedButton") as HTMLButtonElement;
+  const clearLogBtn = document.getElementById("clearLogButton") as HTMLButtonElement;
 
   const logMsg = (msg: string) => {
     const p = document.createElement("p");
@@ -167,16 +171,14 @@ function mountHospitalSystem() {
                     ${bed.isOccupied ? "Discharge" : "Available"}
                 </button>
 
-                <button data-id="${bed.bedId} class="deleteButton">
+                <button data-id="${bed.bedId}" class="deleteButton">
                    Delete Bed 
                 </button>
             </div>
         `,
       )
       .join("");
-    
 
-  
     bedsGrid.querySelectorAll("button").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
@@ -195,16 +197,16 @@ function mountHospitalSystem() {
     });
 
     //bedsGrid.querySelectorAll("deleteButton").forEach((button) => {
-      //button.addEventListener("click", () => {
-        //if (bed) {
-          //delete bed
-        //}
-      //});
+    //button.addEventListener("click", () => {
+    //if (bed) {
+    //delete bed
+    //}
+    //});
     //});
   };
-  
+
   //Admit button clicked
-  document.getElementById("admitButton")!.addEventListener("click", () => {
+  admitBtn.addEventListener("click", () => {
     const name = patientName.value.trim();
 
     if (!name) {
@@ -217,7 +219,7 @@ function mountHospitalSystem() {
     refresh();
   });
 
-  document.getElementById("addBedButton")!.addEventListener("click", () => {
+  addBedBtn.addEventListener("click", () => {
     const bedId = newBedId.value.trim();
 
     const result = system.addBed(newBedType.value as BedType, bedId);
@@ -230,7 +232,7 @@ function mountHospitalSystem() {
     refresh();
   });
 
-  document.getElementById("clearLogButton")!.addEventListener("click", () => {
+  clearLogBtn.addEventListener("click", () => {
     log.innerHTML = "";
   });
 
