@@ -23,7 +23,7 @@
 
   <!-- Top row -->
   <g transform="translate(40,70)">
-    <rect class="box" width="230" height="165" rx="5"/>
+    <rect class="box" width="230" height="147" rx="5"/>
     <line class="line" x1="0" y1="36" x2="230" y2="36"/>
     <line class="line" x1="0" y1="70" x2="230" y2="70"/>
     <text class="title" x="10" y="22">MountHospitalSystem</text>
@@ -31,12 +31,11 @@
     <text class="text" x="10" y="56">system : HospitalTriageSystem</text>
     <text class="text" x="10" y="92">mountHospitalSystem() : void</text>
     <text class="text" x="10" y="110">logMsg(message: string) : void</text>
-    <text class="text" x="10" y="128">escapeHtml(value) : string</text>
-    <text class="text" x="10" y="146">refresh() : void</text>
+    <text class="text" x="10" y="128">refresh() : void</text>
   </g>
 
   <g transform="translate(350,70)">
-    <rect class="box" width="260" height="310" rx="5"/>
+    <rect class="box" width="260" height="292" rx="5"/>
     <line class="line" x1="0" y1="36" x2="260" y2="36"/>
     <line class="line" x1="0" y1="70" x2="260" y2="70"/>
     <text class="title" x="10" y="22">HospitalTriageSystem</text>
@@ -49,10 +48,9 @@
     <text class="small" x="10" y="182">addBed(type, id) : string</text>
     <text class="small" x="10" y="200">admitPatient(type, name) : string</text>
     <text class="small" x="10" y="218">dischargePatient(id) : string</text>
-    <text class="small" x="10" y="236">printWardSummary() : void</text>
-    <text class="small" x="10" y="254">getBedsList() : HospitalBed[]</text>
-    <text class="small" x="10" y="272">getCapacitySummary() : CapacitySummary</text>
-    <text class="small" x="10" y="290">getBedTypeLabel(bed) : string</text>
+    <text class="small" x="10" y="236">getBedsList() : HospitalBed[]</text>
+    <text class="small" x="10" y="254">getCapacitySummary() : CapacitySummary</text>
+    <text class="small" x="10" y="272">getBedTypeLabel(bed) : string</text>
   </g>
 
   <g transform="translate(675,70)">

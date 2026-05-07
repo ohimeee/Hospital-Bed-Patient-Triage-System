@@ -88,7 +88,6 @@ classDiagram
         +addBed(bedType: BedType, bedId: string) string
         +admitPatient(bedType: BedType, patientName: string) string
         +dischargePatient(bedId: string) string
-        +printWardSummary() void
         +getBedsList() HospitalBed[]
         +getCapacitySummary() CapacitySummary
         +getBedTypeLabel(bed: HospitalBed) string
@@ -98,7 +97,6 @@ classDiagram
         <<function>>
         +mountHospitalSystem() void
         -logMsg(message: string) void
-        -escapeHtml(value: string) string
         -refresh() void
     }
 
