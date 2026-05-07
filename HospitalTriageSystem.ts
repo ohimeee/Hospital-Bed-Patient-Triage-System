@@ -333,7 +333,9 @@ function mountHospitalSystem() {
                 <strong>${bed.getBedId()}</strong>
                 <p>${bed.getWardName()}</p>
                 <p>${bed.getBedInfo()}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Unoccupied"}</p>
+                <strong>
+                    <p>${bed.getIsOccupied() ? `Occupied (${bed.getPatientName()})` : "Unoccupied"}</p>
+                </strong>
 
                 <button data-id="${bed.getBedId()}">
                     ${bed.getIsOccupied() ? "Discharge" : "Available"}
