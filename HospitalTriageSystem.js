@@ -29,14 +29,30 @@ var HospitalBed = /** @class */ (function () {
         this.isOccupied = false;
         this.patientName = "None";
     }
-    HospitalBed.prototype.getBedId = function () { return this.bedId; };
-    HospitalBed.prototype.setBedId = function (v) { this.bedId = v; };
-    HospitalBed.prototype.getWardName = function () { return this.wardName; };
-    HospitalBed.prototype.setWardName = function (v) { this.wardName = v; };
-    HospitalBed.prototype.getIsOccupied = function () { return this.isOccupied; };
-    HospitalBed.prototype.setIsOccupied = function (v) { this.isOccupied = v; };
-    HospitalBed.prototype.getPatientName = function () { return this.patientName; };
-    HospitalBed.prototype.setPatientName = function (v) { this.patientName = v; };
+    HospitalBed.prototype.getBedId = function () {
+        return this.bedId;
+    };
+    HospitalBed.prototype.setBedId = function (v) {
+        this.bedId = v;
+    };
+    HospitalBed.prototype.getWardName = function () {
+        return this.wardName;
+    };
+    HospitalBed.prototype.setWardName = function (v) {
+        this.wardName = v;
+    };
+    HospitalBed.prototype.getIsOccupied = function () {
+        return this.isOccupied;
+    };
+    HospitalBed.prototype.setIsOccupied = function (v) {
+        this.isOccupied = v;
+    };
+    HospitalBed.prototype.getPatientName = function () {
+        return this.patientName;
+    };
+    HospitalBed.prototype.setPatientName = function (v) {
+        this.patientName = v;
+    };
     HospitalBed.prototype.baseAdmit = function (patientName) {
         if (this.isOccupied)
             return false;
@@ -66,8 +82,12 @@ var CriticalBed = /** @class */ (function (_super) {
         _this.monitoringLevel = monitoringLevel;
         return _this;
     }
-    CriticalBed.prototype.getMonitoringLevel = function () { return this.monitoringLevel; };
-    CriticalBed.prototype.setMonitoringLevel = function (v) { this.monitoringLevel = v; };
+    CriticalBed.prototype.getMonitoringLevel = function () {
+        return this.monitoringLevel;
+    };
+    CriticalBed.prototype.setMonitoringLevel = function (v) {
+        this.monitoringLevel = v;
+    };
     CriticalBed.prototype.getBedInfo = function () {
         return "".concat(this.getBedId(), " - Monitoring level: ").concat(this.monitoringLevel);
     };
@@ -80,8 +100,12 @@ var GeneralBed = /** @class */ (function (_super) {
         _this.wardFloor = wardFloor;
         return _this;
     }
-    GeneralBed.prototype.getWardFloor = function () { return this.wardFloor; };
-    GeneralBed.prototype.setWardFloor = function (v) { this.wardFloor = v; };
+    GeneralBed.prototype.getWardFloor = function () {
+        return this.wardFloor;
+    };
+    GeneralBed.prototype.setWardFloor = function (v) {
+        this.wardFloor = v;
+    };
     GeneralBed.prototype.getBedInfo = function () {
         return "".concat(this.getBedId(), " - Floor: ").concat(this.wardFloor);
     };
@@ -244,9 +268,7 @@ var HospitalTriageSystem = /** @class */ (function () {
         console.log("\n--- Ward Summary ---");
         var occupiedCount = 0;
         this.bedsList.forEach(function (bed) {
-            var status = bed.getIsOccupied()
-                ? "Occupied by ".concat(bed.getPatientName())
-                : "Available";
+            var status = bed.getIsOccupied() ? "Occupied by ".concat(bed.getPatientName()) : "Available";
             console.log("".concat(bed.getBedId(), " | ").concat(bed.getWardName(), " | ").concat(bed.getBedInfo(), " | ").concat(status));
             if (bed.getIsOccupied())
                 occupiedCount++;
@@ -294,14 +316,6 @@ function mountHospitalSystem() {
         p.textContent = msg;
         log.prepend(p);
     };
-    var escapeHtml = function (value) {
-        return value
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    };
     var refresh = function () {
         var data = system.getCapacitySummary();
         var beds = system.getBedsList();
@@ -311,7 +325,9 @@ function mountHospitalSystem() {
         percent.textContent = "".concat(data.percent, "%");
         pillText.textContent = data.percent >= 80 ? "Critical capacity" : "Capacity normal";
         pill.className = "capacity-pill ".concat(data.percent >= 80 ? "critical" : "normal");
-        bedsGrid.innerHTML = beds.map(function (bed) { return "\n            <div class=\"bed-card\">\n                <strong>".concat(escapeHtml(bed.getBedId()), "</strong>\n                <p>").concat(escapeHtml(bed.getWardName()), "</p>\n                <p>").concat(escapeHtml(bed.getBedInfo()), "</p>\n                <p>").concat(bed.getIsOccupied() ? "Occupied (".concat(escapeHtml(bed.getPatientName()), ")") : "Unoccupied", "</p>\n\n                <button data-id=\"").concat(escapeHtml(bed.getBedId()), "\">\n                    ").concat(bed.getIsOccupied() ? "Discharge" : "Available", "\n                </button>\n            </div>\n        "); }).join("");
+        bedsGrid.innerHTML = beds
+            .map(function (bed) { return "\n            <div class=\"bed-card\">\n                <strong>".concat(bed.getBedId(), "</strong>\n                <p>").concat(bed.getWardName(), "</p>\n                <p>").concat(bed.getBedInfo(), "</p>\n                <p>").concat(bed.getIsOccupied() ? "Occupied (".concat(bed.getPatientName(), ")") : "Unoccupied", "</p>\n\n                <button data-id=\"").concat(bed.getBedId(), "\">\n                    ").concat(bed.getIsOccupied() ? "Discharge" : "Available", "\n                </button>\n            </div>\n        "); })
+            .join("");
         bedsGrid.querySelectorAll("button").forEach(function (btn) {
             btn.addEventListener("click", function () {
                 var id = btn.dataset.id;
