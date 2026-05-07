@@ -354,8 +354,6 @@ function mountHospitalSystem() {
 
         if (bed.getIsOccupied()) {
           logMsg(system.dischargePatient(id));
-        } else {
-          logMsg(`[INFO] Selected ${id}`);
         }
 
         refresh();
