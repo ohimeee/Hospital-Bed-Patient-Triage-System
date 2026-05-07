@@ -299,6 +299,7 @@ class HospitalTriageSystem {
 
 function mountHospitalSystem() {
     const system = new HospitalTriageSystem();
+    let selectedBedId: string | null = null;
 
     const patientName = document.getElementById("patientName") as HTMLInputElement;
     const bedType = document.getElementById("bedType") as HTMLSelectElement;
@@ -341,21 +342,26 @@ function mountHospitalSystem() {
         pillText.textContent = data.percent >= 80 ? "Critical capacity" : "Capacity normal";
         pill.className = `capacity-pill ${data.percent >= 80 ? "critical" : "normal"}`;
 
-        bedsGrid.innerHTML = beds.map(bed => `
-            <div class="bed-card">
+        bedsGrid.innerHTML = beds.map(bed => {
+            const isSelected = selectedBedId === bed.getBedId();
+            const isOccupied = bed.getIsOccupied();
+            const btnText = isOccupied ? "Discharge" : (isSelected ? "Selected" : "Select");
+            const btnClass = `secondary-button ${isSelected && !isOccupied ? "selected-button" : ""}`.trim();
+            return `
+            <div class="bed-card ${isSelected && !isOccupied ? "selected" : ""}">
                 <strong>${escapeHtml(bed.getBedId())}</strong>
                 <p>${escapeHtml(bed.getWardName())}</p>
                 <p>${escapeHtml(bed.getBedInfo())}</p>
-                <p>${bed.getIsOccupied() ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
+                <p>${isOccupied ? `Occupied (${escapeHtml(bed.getPatientName())})` : "Available"}</p>
 
-                <button data-id="${escapeHtml(bed.getBedId())}">
-                    ${bed.getIsOccupied() ? "Discharge" : "Select"}
+                <button class="${btnClass}" data-id="${escapeHtml(bed.getBedId())}">
+                    ${btnText}
                 </button>
             </div>
-        `).join("");
+        `}).join("");
 
         bedsGrid.querySelectorAll("button").forEach(btn => {
-            btn.addEventListener("click", () => {
+            (btn as HTMLButtonElement).onclick = () => {
                 const id = (btn as HTMLButtonElement).dataset.id!;
                 const bed = system.getBedsList().find(b => b.getBedId() === id);
 
@@ -363,12 +369,14 @@ function mountHospitalSystem() {
 
                 if (bed.getIsOccupied()) {
                     logMsg(system.dischargePatient(id));
+                    selectedBedId = null;
                 } else {
+                    selectedBedId = id;
                     logMsg(`[INFO] Selected ${id}`);
                 }
 
                 refresh();
-            });
+            };
         });
     };
 
