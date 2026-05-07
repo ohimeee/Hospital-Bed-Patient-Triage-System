@@ -10,13 +10,6 @@ type BedDefaults = {
   detail: string;
 };
 
-const BED_TYPE_LABELS = new Map<Function, string>([
-  [ICUBed, "ICU Bed"],
-  [EmergencyBed, "Emergency Bed"],
-  [PediatricBed, "Pediatric Bed"],
-  [MaternityBed, "Maternity Bed"],
-]);
-
 const BED_DEFAULTS: Record<BedType, BedDefaults> = {
   ICU: { wardName: "ICU Ward", detail: "Medium" },
   Emergency: { wardName: "Emergency Ward", detail: "Medium" },
@@ -82,7 +75,7 @@ class HospitalTriageSystem {
     const bed = this.createBed(bedType, cleanedBedId);
     this._bedsList.push(bed);
 
-    return `[ADDED] ${this.getBedTypeLabel(bed)} ${cleanedBedId} added to ${bed.wardName}.`;
+    return `[ADDED] ${bedType} Bed ${cleanedBedId} added to ${bed.wardName}.`;
   }
 
   public admitPatient(bedType: BedType, patientName: string): string {
@@ -107,10 +100,6 @@ class HospitalTriageSystem {
     const occupied = this._bedsList.filter((bed) => bed.isOccupied).length;
     const percent = Math.round((occupied / total) * 100);
     return { occupied, total, percent };
-  }
-
-  public getBedTypeLabel(bed: HospitalBed): string {
-    return BED_TYPE_LABELS.get(bed.constructor) ?? "Hospital Bed";
   }
 }
 
