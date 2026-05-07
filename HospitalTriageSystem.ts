@@ -345,22 +345,7 @@ function mountHospitalSystem() {
       )
       .join("");
 
-    bedsGrid.querySelectorAll("button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = (btn as HTMLButtonElement).dataset.id!;
-        const bed = system.getBedsList().find((b) => b.getBedId() === id);
-
-        if (!bed) return;
-
-        if (bed.getIsOccupied()) {
-          logMsg(system.dischargePatient(id));
-        } else {
-          logMsg(`[INFO] Selected ${id}`);
-        }
-
-        refresh();
-      });
-    });
+    
   };
 
   document.getElementById("admitButton")!.addEventListener("click", () => {

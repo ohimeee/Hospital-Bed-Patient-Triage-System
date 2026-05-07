@@ -310,21 +310,6 @@ function mountHospitalSystem() {
         bedsGrid.innerHTML = beds
             .map(function (bed) { return "\n            <div class=\"bed-card\">\n                <strong>".concat(bed.getBedId(), "</strong>\n                <p>").concat(bed.getWardName(), "</p>\n                <p>").concat(bed.getBedInfo(), "</p>\n                <strong>\n                    <p>").concat(bed.getIsOccupied() ? "Occupied (".concat(bed.getPatientName(), ")") : "Unoccupied", "</p>\n                </strong>\n\n                <button data-id=\"").concat(bed.getBedId(), "\">\n                    ").concat(bed.getIsOccupied() ? "Discharge" : "Available", "\n                </button>\n            </div>\n        "); })
             .join("");
-        bedsGrid.querySelectorAll("button").forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                var id = btn.dataset.id;
-                var bed = system.getBedsList().find(function (b) { return b.getBedId() === id; });
-                if (!bed)
-                    return;
-                if (bed.getIsOccupied()) {
-                    logMsg(system.dischargePatient(id));
-                }
-                else {
-                    logMsg("[INFO] Selected ".concat(id));
-                }
-                refresh();
-            });
-        });
     };
     document.getElementById("admitButton").addEventListener("click", function () {
         var name = patientName.value.trim();
