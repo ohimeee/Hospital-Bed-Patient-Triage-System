@@ -18,6 +18,7 @@ classDiagram
         -wardName: string
         -isOccupied: boolean
         -patientName: string
+        +constructor(bedId: string, wardName: string)
         +getBedId() string
         +setBedId(bedId: string) void
         +getWardName() string
@@ -26,7 +27,11 @@ classDiagram
         +setIsOccupied(occupied: boolean) void
         +getPatientName() string
         +setPatientName(patientName: string) void
-        +admitPatient(pName: string)* string
+        #baseAdmit(patientName: string) boolean
+        #baseDischarge() boolean
+        #alreadyOccupiedMsg() string
+        #alreadyVacantMsg() string
+        +admitPatient(patientName: string)* string
         +dischargePatient()* string
         +getBedInfo()* string
     }
@@ -34,44 +39,51 @@ classDiagram
     class CriticalBed {
         <<abstract>>
         -monitoringLevel: string
+        +constructor(bedId: string, wardName: string, monitoringLevel: string)
         +getMonitoringLevel() string
         +setMonitoringLevel(monitoringLevel: string) void
+        +getBedInfo() string
     }
 
     class GeneralBed {
         <<abstract>>
         -wardFloor: string
+        +constructor(bedId: string, wardName: string, wardFloor: string)
         +getWardFloor() string
         +setWardFloor(wardFloor: string) void
+        +getBedInfo() string
     }
 
     class ICUBed {
-        +admitPatient(pName: string) string
+        +constructor(bedId: string, wardName: string, monitoringLevel: string)
+        +admitPatient(patientName: string) string
         +dischargePatient() string
-        +getBedInfo() string
     }
 
     class EmergencyBed {
-        +admitPatient(pName: string) string
+        +constructor(bedId: string, wardName: string, monitoringLevel: string)
+        +admitPatient(patientName: string) string
         +dischargePatient() string
-        +getBedInfo() string
     }
 
     class PediatricBed {
-        +admitPatient(pName: string) string
+        +constructor(bedId: string, wardName: string, wardFloor: string)
+        +admitPatient(patientName: string) string
         +dischargePatient() string
-        +getBedInfo() string
     }
 
     class MaternityBed {
-        +admitPatient(pName: string) string
+        +constructor(bedId: string, wardName: string, wardFloor: string)
+        +admitPatient(patientName: string) string
         +dischargePatient() string
-        +getBedInfo() string
     }
 
     class HospitalTriageSystem {
         -bedsList: HospitalBed[]
+        +constructor()
         -initializeData() void
+        -findAvailableBed(bedType: BedType) HospitalBed?
+        -findBedById(bedId: string) HospitalBed?
         -createBed(bedType: BedType, bedId: string) HospitalBed
         +addBed(bedType: BedType, bedId: string) string
         +admitPatient(bedType: BedType, patientName: string) string
@@ -79,12 +91,14 @@ classDiagram
         +printWardSummary() void
         +getBedsList() HospitalBed[]
         +getCapacitySummary() CapacitySummary
+        +getBedTypeLabel(bed: HospitalBed) string
     }
 
     class MountHospitalSystem {
         <<function>>
         +mountHospitalSystem() void
         -logMsg(message: string) void
+        -escapeHtml(value: string) string
         -refresh() void
     }
 
@@ -103,6 +117,12 @@ classDiagram
         percent: number
     }
 
+    class BedDefaults {
+        <<type>>
+        wardName: string
+        detail: string
+    }
+
     HospitalBed <|-- CriticalBed
     HospitalBed <|-- GeneralBed
     CriticalBed <|-- ICUBed
@@ -114,6 +134,7 @@ classDiagram
     MountHospitalSystem ..> HospitalTriageSystem : uses
     HospitalTriageSystem ..> BedType : accepts
     HospitalTriageSystem ..> CapacitySummary : returns
+    HospitalTriageSystem ..> BedDefaults : uses defaults
 ```
 
 ## Relationship Summary
@@ -123,4 +144,5 @@ classDiagram
 - `ICUBed` and `EmergencyBed` are critical bed types.
 - `PediatricBed` and `MaternityBed` are general bed types.
 - `HospitalTriageSystem` owns and manages the list of beds, including creating new bed objects through `addBed()`.
+- `BedType` limits the accepted bed categories, while `BedDefaults` stores the default ward and detail values used when creating new beds.
 - `mountHospitalSystem()` connects the browser UI to `HospitalTriageSystem` without putting bed creation rules inside the HTML.

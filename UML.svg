@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1080" viewBox="0 0 1200 1080">
   <defs>
     <style>
       .box { fill: #fff; stroke: #111; stroke-width: 1.4; }
@@ -19,39 +19,44 @@
     </marker>
   </defs>
 
-  <rect width="1200" height="760" fill="#fff"/>
+  <rect width="1200" height="1080" fill="#fff"/>
 
   <!-- Top row -->
   <g transform="translate(40,70)">
-    <rect class="box" width="230" height="145" rx="5"/>
+    <rect class="box" width="230" height="165" rx="5"/>
     <line class="line" x1="0" y1="36" x2="230" y2="36"/>
     <line class="line" x1="0" y1="70" x2="230" y2="70"/>
     <text class="title" x="10" y="22">MountHospitalSystem</text>
     <text class="abstract" x="128" y="22">&lt;&lt;function&gt;&gt;</text>
     <text class="text" x="10" y="56">system : HospitalTriageSystem</text>
     <text class="text" x="10" y="92">mountHospitalSystem() : void</text>
-    <text class="text" x="10" y="110">logMsg(message) : void</text>
-    <text class="text" x="10" y="128">refresh() : void</text>
+    <text class="text" x="10" y="110">logMsg(message: string) : void</text>
+    <text class="text" x="10" y="128">escapeHtml(value) : string</text>
+    <text class="text" x="10" y="146">refresh() : void</text>
   </g>
 
   <g transform="translate(350,70)">
-    <rect class="box" width="250" height="235" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="250" y2="36"/>
-    <line class="line" x1="0" y1="70" x2="250" y2="70"/>
+    <rect class="box" width="260" height="310" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="260" y2="36"/>
+    <line class="line" x1="0" y1="70" x2="260" y2="70"/>
     <text class="title" x="10" y="22">HospitalTriageSystem</text>
     <text class="text" x="10" y="56">bedsList : HospitalBed[]</text>
-    <text class="small" x="10" y="92">initializeData() : void</text>
-    <text class="small" x="10" y="110">createBed(type, id) : HospitalBed</text>
-    <text class="small" x="10" y="128">addBed(type, id) : string</text>
-    <text class="small" x="10" y="146">admitPatient(type, name) : string</text>
-    <text class="small" x="10" y="164">dischargePatient(bedId) : string</text>
-    <text class="small" x="10" y="182">printWardSummary() : void</text>
-    <text class="small" x="10" y="200">getBedsList() : HospitalBed[]</text>
-    <text class="small" x="10" y="218">getCapacitySummary() : CapacitySummary</text>
+    <text class="small" x="10" y="92">constructor()</text>
+    <text class="small" x="10" y="110">initializeData() : void</text>
+    <text class="small" x="10" y="128">findAvailableBed(type) : HospitalBed?</text>
+    <text class="small" x="10" y="146">findBedById(id) : HospitalBed?</text>
+    <text class="small" x="10" y="164">createBed(type, id) : HospitalBed</text>
+    <text class="small" x="10" y="182">addBed(type, id) : string</text>
+    <text class="small" x="10" y="200">admitPatient(type, name) : string</text>
+    <text class="small" x="10" y="218">dischargePatient(id) : string</text>
+    <text class="small" x="10" y="236">printWardSummary() : void</text>
+    <text class="small" x="10" y="254">getBedsList() : HospitalBed[]</text>
+    <text class="small" x="10" y="272">getCapacitySummary() : CapacitySummary</text>
+    <text class="small" x="10" y="290">getBedTypeLabel(bed) : string</text>
   </g>
 
-  <g transform="translate(720,70)">
-    <rect class="box" width="270" height="225" rx="5"/>
+  <g transform="translate(675,70)">
+    <rect class="box" width="270" height="430" rx="5"/>
     <line class="line" x1="0" y1="36" x2="270" y2="36"/>
     <line class="line" x1="0" y1="115" x2="270" y2="115"/>
     <text class="title" x="10" y="22">HospitalBed</text>
@@ -60,14 +65,25 @@
     <text class="text" x="10" y="74">wardName : string</text>
     <text class="text" x="10" y="92">isOccupied : boolean</text>
     <text class="text" x="10" y="110">patientName : string</text>
-    <text class="small" x="10" y="137">getBedId() : string</text>
-    <text class="small" x="10" y="155">getWardName() : string</text>
-    <text class="small" x="10" y="173">getIsOccupied() : boolean</text>
-    <text class="small" x="10" y="191">admitPatient(name) : string</text>
-    <text class="small" x="10" y="209">dischargePatient() : string</text>
+    <text class="small" x="10" y="137">constructor(id, ward)</text>
+    <text class="small" x="10" y="155">getBedId() : string</text>
+    <text class="small" x="10" y="173">setBedId(id) : void</text>
+    <text class="small" x="10" y="191">getWardName() : string</text>
+    <text class="small" x="10" y="209">setWardName(name) : void</text>
+    <text class="small" x="10" y="227">getIsOccupied() : boolean</text>
+    <text class="small" x="10" y="245">setIsOccupied(status) : void</text>
+    <text class="small" x="10" y="263">getPatientName() : string</text>
+    <text class="small" x="10" y="281">setPatientName(name) : void</text>
+    <text class="small" x="10" y="299">baseAdmit(name) : boolean</text>
+    <text class="small" x="10" y="317">baseDischarge() : boolean</text>
+    <text class="small" x="10" y="335">alreadyOccupiedMsg() : string</text>
+    <text class="small" x="10" y="353">alreadyVacantMsg() : string</text>
+    <text class="small" x="10" y="371">admitPatient(name)* : string</text>
+    <text class="small" x="10" y="389">dischargePatient()* : string</text>
+    <text class="small" x="10" y="407">getBedInfo()* : string</text>
   </g>
 
-  <g transform="translate(1030,95)">
+  <g transform="translate(990,95)">
     <rect class="box" width="130" height="145" rx="5"/>
     <line class="line" x1="0" y1="36" x2="130" y2="36"/>
     <text class="title" x="10" y="22">BedType</text>
@@ -77,89 +93,116 @@
     <text class="text" x="10" y="112">Maternity</text>
   </g>
 
+  <g transform="translate(355,405)">
+    <rect class="box" width="210" height="105" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="210" y2="36"/>
+    <text class="title" x="10" y="22">CapacitySummary</text>
+    <text class="abstract" x="130" y="22">&lt;&lt;type&gt;&gt;</text>
+    <text class="text" x="10" y="58">occupied : number</text>
+    <text class="text" x="10" y="76">total : number</text>
+    <text class="text" x="10" y="94">percent : number</text>
+  </g>
+
+  <g transform="translate(55,300)">
+    <rect class="box" width="190" height="86" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="190" y2="36"/>
+    <text class="title" x="10" y="22">BedDefaults</text>
+    <text class="abstract" x="110" y="22">&lt;&lt;type&gt;&gt;</text>
+    <text class="text" x="10" y="58">wardName : string</text>
+    <text class="text" x="10" y="76">detail : string</text>
+  </g>
+
   <!-- Middle row -->
-  <g transform="translate(555,360)">
-    <rect class="box" width="230" height="145" rx="5"/>
+  <g transform="translate(535,590)">
+    <rect class="box" width="230" height="180" rx="5"/>
     <line class="line" x1="0" y1="36" x2="230" y2="36"/>
     <line class="line" x1="0" y1="86" x2="230" y2="86"/>
     <text class="title" x="10" y="22">CriticalBed</text>
     <text class="abstract" x="120" y="22">&lt;&lt;abstract&gt;&gt;</text>
     <text class="text" x="10" y="58">monitoringLevel : string</text>
-    <text class="small" x="10" y="108">getMonitoringLevel() : string</text>
-    <text class="small" x="10" y="126">setMonitoringLevel(level) : void</text>
+    <text class="small" x="10" y="108">constructor(id, ward, level)</text>
+    <text class="small" x="10" y="126">getMonitoringLevel() : string</text>
+    <text class="small" x="10" y="144">setMonitoringLevel(level) : void</text>
+    <text class="small" x="10" y="162">getBedInfo() : string</text>
   </g>
 
-  <g transform="translate(860,360)">
-    <rect class="box" width="230" height="145" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="230" y2="36"/>
-    <line class="line" x1="0" y1="86" x2="230" y2="86"/>
+  <g transform="translate(830,590)">
+    <rect class="box" width="210" height="180" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="210" y2="36"/>
+    <line class="line" x1="0" y1="86" x2="210" y2="86"/>
     <text class="title" x="10" y="22">GeneralBed</text>
     <text class="abstract" x="120" y="22">&lt;&lt;abstract&gt;&gt;</text>
     <text class="text" x="10" y="58">wardFloor : string</text>
-    <text class="small" x="10" y="108">getWardFloor() : string</text>
-    <text class="small" x="10" y="126">setWardFloor(floor) : void</text>
+    <text class="small" x="10" y="108">constructor(id, ward, floor)</text>
+    <text class="small" x="10" y="126">getWardFloor() : string</text>
+    <text class="small" x="10" y="144">setWardFloor(floor) : void</text>
+    <text class="small" x="10" y="162">getBedInfo() : string</text>
   </g>
 
   <!-- Bottom row -->
-  <g transform="translate(250,590)">
-    <rect class="box" width="190" height="125" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="190" y2="36"/>
-    <line class="line" x1="0" y1="52" x2="190" y2="52"/>
+  <g transform="translate(250,900)">
+    <rect class="box" width="180" height="125" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="180" y2="36"/>
+    <line class="line" x1="0" y1="52" x2="180" y2="52"/>
     <text class="title" x="10" y="22">ICUBed</text>
-    <text class="small" x="10" y="76">admitPatient() : string</text>
-    <text class="small" x="10" y="94">dischargePatient() : string</text>
-    <text class="small" x="10" y="112">getBedInfo() : string</text>
+    <text class="small" x="10" y="76">constructor(id, ward, level)</text>
+    <text class="small" x="10" y="94">admitPatient(name) : string</text>
+    <text class="small" x="10" y="112">dischargePatient() : string</text>
   </g>
 
-  <g transform="translate(475,590)">
-    <rect class="box" width="190" height="125" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="190" y2="36"/>
-    <line class="line" x1="0" y1="52" x2="190" y2="52"/>
+  <g transform="translate(470,900)">
+    <rect class="box" width="180" height="125" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="180" y2="36"/>
+    <line class="line" x1="0" y1="52" x2="180" y2="52"/>
     <text class="title" x="10" y="22">EmergencyBed</text>
-    <text class="small" x="10" y="76">admitPatient() : string</text>
-    <text class="small" x="10" y="94">dischargePatient() : string</text>
-    <text class="small" x="10" y="112">getBedInfo() : string</text>
+    <text class="small" x="10" y="76">constructor(id, ward, level)</text>
+    <text class="small" x="10" y="94">admitPatient(name) : string</text>
+    <text class="small" x="10" y="112">dischargePatient() : string</text>
   </g>
 
-  <g transform="translate(735,590)">
-    <rect class="box" width="190" height="125" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="190" y2="36"/>
-    <line class="line" x1="0" y1="52" x2="190" y2="52"/>
+  <g transform="translate(690,900)">
+    <rect class="box" width="180" height="125" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="180" y2="36"/>
+    <line class="line" x1="0" y1="52" x2="180" y2="52"/>
     <text class="title" x="10" y="22">PediatricBed</text>
-    <text class="small" x="10" y="76">admitPatient() : string</text>
-    <text class="small" x="10" y="94">dischargePatient() : string</text>
-    <text class="small" x="10" y="112">getBedInfo() : string</text>
+    <text class="small" x="10" y="76">constructor(id, ward, floor)</text>
+    <text class="small" x="10" y="94">admitPatient(name) : string</text>
+    <text class="small" x="10" y="112">dischargePatient() : string</text>
   </g>
 
-  <g transform="translate(955,590)">
-    <rect class="box" width="190" height="125" rx="5"/>
-    <line class="line" x1="0" y1="36" x2="190" y2="36"/>
-    <line class="line" x1="0" y1="52" x2="190" y2="52"/>
+  <g transform="translate(910,900)">
+    <rect class="box" width="180" height="125" rx="5"/>
+    <line class="line" x1="0" y1="36" x2="180" y2="36"/>
+    <line class="line" x1="0" y1="52" x2="180" y2="52"/>
     <text class="title" x="10" y="22">MaternityBed</text>
-    <text class="small" x="10" y="76">admitPatient() : string</text>
-    <text class="small" x="10" y="94">dischargePatient() : string</text>
-    <text class="small" x="10" y="112">getBedInfo() : string</text>
+    <text class="small" x="10" y="76">constructor(id, ward, floor)</text>
+    <text class="small" x="10" y="94">admitPatient(name) : string</text>
+    <text class="small" x="10" y="112">dischargePatient() : string</text>
   </g>
 
   <!-- Associations -->
   <line class="line" x1="270" y1="165" x2="350" y2="165" marker-end="url(#diamond)"/>
-  <line class="line" x1="600" y1="165" x2="720" y2="165" marker-end="url(#diamond)"/>
-  <line class="line" x1="990" y1="165" x2="1030" y2="165" marker-end="url(#arrow)"/>
+  <line class="line" x1="610" y1="165" x2="675" y2="165" marker-end="url(#diamond)"/>
+  <line class="line" x1="945" y1="165" x2="990" y2="165" marker-end="url(#arrow)"/>
+  <line class="line" x1="480" y1="380" x2="480" y2="405" marker-end="url(#arrow)"/>
+  <line class="line" x1="350" y1="260" x2="245" y2="340" marker-end="url(#arrow)"/>
 
   <!-- Inheritance: HospitalBed to CriticalBed and GeneralBed -->
-  <path class="line" d="M855 295 L855 330 L670 330 L670 360" marker-start="url(#inherit)"/>
-  <path class="line" d="M855 295 L855 330 L975 330 L975 360" marker-start="url(#inherit)"/>
+  <path class="line" d="M810 500 L810 545 L650 545 L650 590" marker-start="url(#inherit)"/>
+  <path class="line" d="M810 500 L810 545 L935 545 L935 590" marker-start="url(#inherit)"/>
 
   <!-- Inheritance: CriticalBed to ICU and Emergency -->
-  <path class="line" d="M670 505 L670 550 L345 550 L345 590" marker-start="url(#inherit)"/>
-  <path class="line" d="M670 505 L670 550 L570 550 L570 590" marker-start="url(#inherit)"/>
+  <path class="line" d="M650 770 L650 840 L340 840 L340 900" marker-start="url(#inherit)"/>
+  <path class="line" d="M650 770 L650 840 L560 840 L560 900" marker-start="url(#inherit)"/>
 
   <!-- Inheritance: GeneralBed to Pediatric and Maternity -->
-  <path class="line" d="M975 505 L975 550 L830 550 L830 590" marker-start="url(#inherit)"/>
-  <path class="line" d="M975 505 L975 550 L1050 550 L1050 590" marker-start="url(#inherit)"/>
+  <path class="line" d="M935 770 L935 840 L780 840 L780 900" marker-start="url(#inherit)"/>
+  <path class="line" d="M935 770 L935 840 L1000 840 L1000 900" marker-start="url(#inherit)"/>
 
   <!-- Labels -->
   <text class="small" x="292" y="154">uses</text>
-  <text class="small" x="635" y="154">manages</text>
-  <text class="small" x="1000" y="154">accepts</text>
+  <text class="small" x="622" y="154">manages</text>
+  <text class="small" x="952" y="154">accepts</text>
+  <text class="small" x="488" y="397">returns</text>
+  <text class="small" x="270" y="315">uses defaults</text>
 </svg>
