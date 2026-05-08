@@ -68,7 +68,7 @@ function mountHospitalSystem() {
 
                 ${bed.isOccupied ? `<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>` : ""}
                 
-                <button data-id="${bed.bedId}" class="assignDoctorButton">
+                <button data-id="${bed.bedId}" class="setDoctorButton">
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
                 </button>
 
@@ -114,7 +114,7 @@ function mountHospitalSystem() {
     });
 
 
-    bedsGrid.querySelectorAll("button.assignDoctorButton").forEach((button) => {
+    bedsGrid.querySelectorAll("button.setDoctorButton").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
@@ -122,11 +122,13 @@ function mountHospitalSystem() {
         if (!bed) return;
 
         if (bed.hasAssignedDoctor) {
-          logMsg(system.unassignDoctor(id));
+          logMsg(system.setDoctor(id, "None"));
         } else {
           const doctorName = prompt("Enter the doctor's name:");
           if (doctorName) {
-            logMsg(system.assignDoctor(id, doctorName));
+            logMsg(system.setDoctor(id, doctorName.trim()));
+          } else {
+            return;
           }
         }
 

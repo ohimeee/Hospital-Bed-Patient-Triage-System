@@ -7,16 +7,13 @@ export class ICUBed extends CriticalBed {
     this.dischargeMessage = `ICU Bed ${this.bedId} released. Requires doctor approval before freeing bed.`;
   }
 
-  public assignDoctor(doctorName: string): string {
-    const assigned = this.baseAssignDoctor(doctorName);
-    if (!assigned) return `ICU Bed ${this.alreadyHasDoctorMsg()}`;
-    return `Dr. ${doctorName} assigned to ICU Bed ${this.bedId}.`;
-  }
-
-  public unassignDoctor(): string {
-    const unassigned = this.baseUnassignDoctor();
-    if (!unassigned) return `ICU Bed ${this.noDoctorAssignedMsg()}`;
-    return `Doctor unassigned from ICU Bed ${this.bedId}.`;
+  public setDoctor(doctorName: string): string {
+    const doctorSet = this.baseSetDoctor(doctorName);
+    if (doctorSet) {
+      return `Dr. ${doctorName} assigned to ICU Bed ${this.bedId}.`;
+    } else {
+      return `Dr. ${doctorName} unassigned from ICU Bed ${this.bedId}.`;
+    }
   }
 }
 
