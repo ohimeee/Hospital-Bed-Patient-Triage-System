@@ -103,7 +103,6 @@ export abstract class HospitalBed {
   }
   public set admitMessage(value: string) {
     this._admitMessage = value;
-    console.log("Recieved");
   }
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;
@@ -185,6 +184,7 @@ export abstract class HospitalBed {
       this._patientName = "None";
       this._totalBill = 0;
       this._daysAdmitted = 0;
+      this._hasAssignedDoctor = false;
       this._doctorName = "None";
       return true;
     }

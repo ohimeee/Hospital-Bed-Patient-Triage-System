@@ -185,7 +185,10 @@ export class HospitalTriageSystem {
       return `[ERROR] ${bedId} is not a Pediatric bed.`;
     }
 
-    return `[GUARDIAN] ${bed.addGuardianInfo(guardianName)}`;
+    const message = bed.addGuardianInfo(guardianName);
+    const prefix = bed.isOccupied ? "[GUARDIAN]" : "[ERROR]";
+
+    return `${prefix} ${message}`;
   }
 }
 
