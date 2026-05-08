@@ -1,6 +1,9 @@
+
+/*LAYOUT*/
 body {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 #app {
@@ -20,6 +23,7 @@ body {
 }
 
 .capacity-pill {
+  border: 1px solid black;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +43,22 @@ body {
 }
 
 .beds-grid {
+  padding: 20px;
+  border: 1px solid black;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+
+
+/*BED CARDS*/
+.bed-card {
+  background-color: #e3ffe8;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #baffc6;
+}
+
+.bed-card strong:first-child{
+
 }
