@@ -21,51 +21,7 @@
 
       <main class="layout">
         <section class="work-area">
-          <div class="panel triage-panel">
-            <h2>Patient Triage</h2>
-
-            <label>Patient Name</label>
-            <input id="patientName" type="text" placeholder="Enter patient name" />
-
-            <label>Bed Type</label>
-            <select id="bedType">
-              <option value="ICU">ICU</option>
-              <option value="Emergency">Emergency</option>
-              <option value="Pediatric">Pediatric</option>
-              <option value="Maternity">Maternity</option>
-            </select>
-
-            <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
-
-            <div class="form-divider"></div>
-
-            <h2>Add Bed</h2>
-
-            <label for="newBedId">Bed ID</label>
-            <input id="newBedId" type="text" placeholder="Example: ICU-03" />
-
-            <label for="newBedType">Bed Type</label>
-            <select id="newBedType">
-              <option value="ICU">ICU</option>
-              <option value="Emergency">Emergency</option>
-              <option value="Pediatric">Pediatric</option>
-              <option value="Maternity">Maternity</option>
-            </select>
-
-            <button id="addBedButton" class="secondary-button" type="button">Add Bed</button>
-
-            <div class="form-divider"></div>
-
-            <h2>Transfer Patient</h2>
-
-            <label for="fromBedId">From Bed ID</label>
-            <input id="fromBedId" type="text" placeholder="e.g., ICU-01" />
-
-            <label for="toBedId">To Bed ID</label>
-            <input id="toBedId" type="text" placeholder="e.g., MAT-01" />
-
-            <button id="transferBtn" class="secondary-button" type="button">Transfer Patient</button>
-          </div>
+          <button id="openMenuBtn" class="menu-button" type="button">Operations Menu</button>
 
           <div class="panel beds-panel">
             <div class="panel-heading">
@@ -94,12 +50,64 @@
         <section class="panel log-panel">
           <div class="panel-heading">
             <h2>Activity Log</h2>
-            <button id="clearLogButton">Clear</button>
+            <button id="clearLogButton" type="button">Clear</button>
           </div>
 
           <div id="activityLog"></div>
         </section>
       </main>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Operations Menu</h2>
+            <button id="closeModalBtn" class="close-btn" type="button">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <label for="operationType">Choose an operation</label>
+            <select id="operationType">
+              <option value="admit">Admit Patient</option>
+              <option value="add">Add Bed</option>
+              <option value="transfer">Transfer Patient</option>
+            </select>
+
+            <div id="admitForm" class="form-section">
+              <label>Patient Name</label>
+              <input id="patientName" type="text" placeholder="Enter patient name" />
+              <label>Bed Type</label>
+              <select id="bedType">
+                <option value="ICU">ICU</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Pediatric">Pediatric</option>
+                <option value="Maternity">Maternity</option>
+              </select>
+              <button id="admitButton" class="modal-btn" type="button">Admit Patient</button>
+            </div>
+
+            <div id="addBedForm" class="form-section hidden">
+              <label>Bed ID</label>
+              <input id="newBedId" type="text" placeholder="Example: ICU-03" />
+              <label>Bed Type</label>
+              <select id="newBedType">
+                <option value="ICU">ICU</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Pediatric">Pediatric</option>
+                <option value="Maternity">Maternity</option>
+              </select>
+              <button id="addBedButton" class="modal-btn" type="button">Add Bed</button>
+            </div>
+
+            <div id="transferForm" class="form-section hidden">
+              <label>From Bed ID</label>
+              <input id="fromBedId" type="text" placeholder="e.g., ICU-01" />
+              <label>To Bed ID</label>
+              <input id="toBedId" type="text" placeholder="e.g., MAT-01" />
+              <button id="transferBtn" class="modal-btn" type="button">Transfer Patient</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
     <script type="module" src="/src/main.ts"></script>
