@@ -31,8 +31,9 @@ body {
 }
 
 .summary-grid {
+  font-size: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   gap: 20px;
 }
 
@@ -43,8 +44,6 @@ body {
 }
 
 .beds-grid {
-  padding: 20px;
-  border: 1px solid black;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;

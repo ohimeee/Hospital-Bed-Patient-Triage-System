@@ -95,6 +95,7 @@ export class HospitalTriageSystem {
 
   public dischargePatient(bedId: string): string {
     const bed = this.findBedById(bedId);
+    console.log("recieved")
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
     if (!bed.isOccupied) return `[INFO] Bed ${bedId} is already vacant.`;
     return `[DISCHARGE] ${bed.dischargePatient()}`;

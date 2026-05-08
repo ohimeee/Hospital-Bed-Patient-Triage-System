@@ -21,23 +21,7 @@
       </header>
 
       <main class="layout">
-        <!-- SUMMARY -->
-        <section class="summary-grid">
-          <article class="summary-card">
-            <span>Total Beds</span>
-            <strong id="totalBeds">0</strong>
-          </article>
 
-          <article class="summary-card">
-            <span>Occupied</span>
-            <strong id="occupiedBeds">0</strong>
-          </article>
-
-          <article class="summary-card">
-            <span>Available</span>
-            <strong id="availableBeds">0</strong>
-          </article>
-        </section>
 
         <!-- TRIAGE -->
         <section class="work-area">
@@ -78,10 +62,26 @@
           <!-- BEDS -->
           <div class="panel beds-panel">
             <div class="panel-heading">
-              <h2>Ward Beds</h2>
+
+              <section class="summary-grid">
+                <article class="summary-card">
+                  <strong>TOTAL: </strong>
+                  <strong id="totalBeds">0</strong>
+                </article>
+
+                <article class="summary-card">
+                  <strong>OCCUPIED: </strong>
+                  <strong id="occupiedBeds">0</strong>
+                </article>
+
+                <article class="summary-card">
+                  <strong>AVAILABLE: </strong>
+                  <strong id="availableBeds">0</strong>
+                </article>
+              </section>
             </div>
 
-            <div id="bedsGrid" class="beds-grid"></div>
+          <div id="bedsGrid" class="beds-grid"></div>
           </div>
         </section>
 

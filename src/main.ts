@@ -59,10 +59,10 @@ function mountHospitalSystem() {
                 </strong>
 
                 <strong>
-                  <p>Billing: ${bed.totalBill}<p>
+                  <p>Billing: ${bed.totalBill}</p>
                 </strong>
 
-                ${bed.isOccupied ? '<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>' : ""}
+                ${bed.isOccupied ? `<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>` : ""}
                 
                 <button data-id="${bed.bedId}" class="assignDoctorButton">
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
@@ -80,7 +80,6 @@ function mountHospitalSystem() {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
-
         if (!bed) return;
 
         if (bed.isOccupied) {
