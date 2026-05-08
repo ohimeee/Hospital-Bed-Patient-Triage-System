@@ -128,6 +128,7 @@ export abstract class HospitalBed {
     return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
   }
 
+  // billing restoration for patient transfer
   public restoreBilling(totalBill: number, daysAdmitted: number): void {
     this._totalBill = totalBill;
     this._daysAdmitted = daysAdmitted;

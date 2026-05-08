@@ -121,29 +121,29 @@ export class HospitalTriageSystem {
   }
 
   public movePatient(fromBedId: string, toBedId: string): string {
-  const fromBed = this.findBedById(fromBedId);
-  const toBed = this.findBedById(toBedId);
+    const fromBed = this.findBedById(fromBedId);
+    const toBed = this.findBedById(toBedId);
 
-  if (!fromBed) return `[ERROR] Source bed ${fromBedId} not found.`;
-  if (!toBed) return `[ERROR] Destination bed ${toBedId} not found.`;
-  if (!fromBed.isOccupied) return `[ERROR] Bed ${fromBedId} has no patient to move.`;
-  if (toBed.isOccupied) return `[ERROR] Bed ${toBedId} is already occupied.`;
+    if (!fromBed) return `[ERROR] Source bed ${fromBedId} not found.`;
+    if (!toBed) return `[ERROR] Destination bed ${toBedId} not found.`;
+    if (!fromBed.isOccupied) return `[ERROR] Bed ${fromBedId} has no patient to move.`;
+    if (toBed.isOccupied) return `[ERROR] Bed ${toBedId} is already occupied.`;
 
-  const patientName = fromBed.patientName; 
-  const assignedDoctor = fromBed.doctorName; 
-  const totalBill = fromBed.totalBill;
-  const daysAdmitted = fromBed.daysAdmitted;
+    const patientName = fromBed.patientName; 
+    const assignedDoctor = fromBed.doctorName; 
+    const totalBill = fromBed.totalBill;
+    const daysAdmitted = fromBed.daysAdmitted;
 
-  fromBed.dischargePatient();
-  toBed.admitPatient(patientName);
-  toBed.restoreBilling(totalBill, daysAdmitted);
+    fromBed.dischargePatient();
+    toBed.admitPatient(patientName);
+    toBed.restoreBilling(totalBill, daysAdmitted);
   
-if (assignedDoctor) {
-    toBed.setDoctor(assignedDoctor);
-  }
+    if (assignedDoctor) {
+        toBed.setDoctor(assignedDoctor);
+      }
 
-  return `[MOVED] ${patientName} transferred from ${fromBedId} to ${toBedId}.`;
-}
+    return `[MOVED] ${patientName} transferred from ${fromBedId} to ${toBedId}.`;
+  }
 
 
   public getBedsList(): HospitalBed[] {
@@ -157,7 +157,7 @@ if (assignedDoctor) {
     return { occupied, total, percent };
   }
 
-  
+  // Simulates one hospital day (24 seconds) and charges all occupied beds.
   public passOneDay(): string[] {
     const messages: string[] = [];
 
@@ -174,7 +174,7 @@ if (assignedDoctor) {
     return messages;
   }
 
-  public addGuardianInfo(bedId: string, guardianName: string): string {
+  public addGuardianToBed(bedId: string, guardianName: string): string {
     const bed = this.findBedById(bedId);
 
     if (!bed) {

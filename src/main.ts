@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const system = new HospitalTriageSystem();
   const ui = new UIManager(system);
 
+  // 24 seconds represents one hospital day
   setInterval(() => {
     ui.simulateDay();
   }, 24000);
