@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  font-weight: bold;
+}
+
+.capacity-pill {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.summary-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.work-area {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.beds-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}

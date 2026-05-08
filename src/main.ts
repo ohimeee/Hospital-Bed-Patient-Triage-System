@@ -1,5 +1,6 @@
 import { HospitalTriageSystem } from "./system/HospitalTriageSystem.ts";
 import type { BedType } from "./system/HospitalTriageSystem.ts";
+import "./style.css";
 
 function mountHospitalSystem() {
   const system = new HospitalTriageSystem();
