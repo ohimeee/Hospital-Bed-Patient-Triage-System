@@ -5,6 +5,7 @@ export abstract class HospitalBed {
   private _hasAssignedDoctor: boolean;
   private _patientName: string;
   private _doctorName: string;
+  private _bedType: string;
 
   // billing
   private _dailyRate: number;
@@ -14,25 +15,22 @@ export abstract class HospitalBed {
   // admitting/discharging
   private _admitMessage: string;
   private _dischargeMessage: string;
-  
-  // doctor assigning
-  private _assignDoctorMessage: string;
-  private _unassignDoctorMessage: string;
 
   constructor(_bedId: string, _wardName: string, _dailyRate: number) {
     this._bedId = _bedId;
     this._wardName = _wardName;
-    this._dailyRate = _dailyRate;
     this._isOccupied = false;
     this._hasAssignedDoctor = false;
     this._patientName = "None";
     this._doctorName = "None";
+    this._bedType = "None";
+
+    this._dailyRate = _dailyRate;
     this._totalBill = 0;
     this._daysAdmitted = 0;
+
     this._admitMessage = "None";
     this._dischargeMessage = "None";
-    this._assignDoctorMessage = "None";
-    this._unassignDoctorMessage = "None";
   }
 
   // getters
@@ -69,14 +67,9 @@ export abstract class HospitalBed {
   public get dischargeMessage(): string {
     return this._dischargeMessage;
   }
-  public get assignDoctorMessage(): string {
-    return this._assignDoctorMessage;
+  public get bedType(): string {
+    return this._bedType;
   }
-  public get unassignDoctorMessage(): string {
-    return this._unassignDoctorMessage;
-  }
-
-
 
   // setters
   public set bedId(value: string) {
@@ -112,12 +105,10 @@ export abstract class HospitalBed {
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;
   }
-  public set assignDoctorMessage(value: string) {
-    this._assignDoctorMessage = value;
+  public set bedType(value: string) {
+    this._bedType = value;
   }
-  public set unassignDoctorMessage(value: string) {
-    this._unassignDoctorMessage = value;
-  }
+
 
 
 
@@ -160,14 +151,14 @@ export abstract class HospitalBed {
 
   // set doctor message
   public setDoctor(doctorName: string): string {
+    const nameCache = this._doctorName;  // Theres a better way to do this istg
     const doctorSet = this.baseSetDoctor(doctorName);
     if (!doctorSet) {
-      if (!this._assignDoctorMessage) return `Dr. ${doctorName} assigned to this bed ${this.bedId}.`
-      return this._assignDoctorMessage;
+      return `Dr. ${nameCache} unassigned from ${this.bedType} ${this.bedId}.`
     } else {
-      if (!this._unassignDoctorMessage) return `Dr. ${doctorName} unassigned from bed ${this.bedId}.`
-      return this._unassignDoctorMessage;
+      return `Dr. ${doctorName} assigned to ${this.bedType}:w ${this.bedId}.`
     }
+    nameCache == null;
   }
 
 
@@ -222,6 +213,5 @@ export abstract class HospitalBed {
     return `${this._bedId} has no doctor assigned.`;
   }
 
-  public abstract setDoctor(doctorName: string): string;
   public abstract getBedInfo(): string;
 }

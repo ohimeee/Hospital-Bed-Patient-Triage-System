@@ -5,8 +5,7 @@ export class EmergencyBed extends CriticalBed {
     super(bedId, wardName, monitoringLevel, 3000);
     this.admitMessage = `Emergency Bed ${this.bedId} admitted. Fast-tracked admission, no prior paperwork needed.`;
     this.dischargeMessage = `Emergency Bed ${this.bedId} released. Patient auto-moved to regular ward if stable.`;
-    this.assignDoctorMessage = `Dr. ${doctorName} assigned to Emergency Bed ${this.bedId}.`;
-    this.unassignDoctorMessage = `Dr. ${doctorName} unassigned from Emergency Bed ${this.bedId}.`;
+    this.bedType = "Emergency Bed";
   }
 }
 
