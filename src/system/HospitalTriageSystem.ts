@@ -141,6 +141,39 @@ export class HospitalTriageSystem {
 
     return messages;
   }
+
+  public movePatient(sourceId: string, targetId: string): string {
+    const sourceBed = this.findBedById(sourceId);
+    const targetBed = this.findBedById(targetId);
+
+    if (!sourceBed || !targetBed) {
+      return `[ERROR] One or both beds (${sourceId}, ${targetId}) could not be found.`;
+    }
+
+    if (!sourceBed.isOccupied) {
+      return `[ERROR] Source bed ${sourceId} is empty. No patient to move.`;
+    }
+
+    if (targetBed.isOccupied) {
+      return `[ERROR] Target bed ${targetId} is already occupied.`;
+    }
+
+    const patientName = sourceBed.patientName; 
+    const assignDoctor = sourceBed.hasAssignedDoctor ? sourceBed.doctorName : null;
+    
+    if (patientName) {
+      targetBed.admitPatient(patientName);
+      sourceBed.dischargePatient(); 
+    if (assignDoctor) {
+        targetBed.assignDoctor(assignDoctor);
+        sourceBed.unassignDoctor();
+    }
+      return `[MOVE] Patient ${patientName} moved from ${sourceId} to ${targetId}.`;
+    } else {
+      return `[ERROR] Source bed ${sourceId} flagged as occupied, but no patient name found.`;
+    }
+  }
 }
+
 
 
