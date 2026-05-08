@@ -90,6 +90,7 @@ export abstract class HospitalBed {
   }
   public set admitMessage(value: string) {
     this._admitMessage = value;
+    console.log("Recieved");
   }
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;
@@ -108,24 +109,28 @@ export abstract class HospitalBed {
 
     return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
   }
-  
-  // admit/discharge logic moved up
-  public admitPatient(patientName: string, admitMessage: string): string {
-    const admitted = this.baseAdmit(patientName);
-    if (!admitted) return `Pediatric Bed ${this.alreadyOccupiedMsg()}`;
-    return admitMessage;
-  }
-
-  public dischargePatient(dischargeMessage: string): string {
-    const discharged = this.baseDischarge();
-    if (!discharged) return `Pediatric Bed ${this.alreadyVacantMsg()}`;
-    return dischargeMessage;
-  }
 
   public restoreBilling(totalBill: number, daysAdmitted: number): void {
     this._totalBill = totalBill;
     this._daysAdmitted = daysAdmitted;
   }
+
+  
+  // admit/discharge logic moved up
+  public admitPatient(patientName: string): string {
+    const admitted = this.baseAdmit(patientName);
+    if (!admitted) return `this.bedId ${this.alreadyOccupiedMsg()}`;
+    if (!this._admitMessage) return
+    return this._admitMessage;
+  }
+
+  public dischargePatient(): string {
+    const discharged = this.baseDischarge();
+    if (!discharged) return `this.bedId ${this.alreadyVacantMsg()}`;
+    if (!this._dischargeMessage) return
+    return this._dischargeMessage;
+  }
+
 
   // protected methods
   protected baseAdmit(patientName: string): boolean {
