@@ -94,6 +94,8 @@ function mountHospitalSystem() {
         const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
 
+        if (!bed) return;
+
         if (bed.isOccupied) {
           logMsg('[INFO] You cannot delete a bed while a patient is still admitted to it.')
         } else {
