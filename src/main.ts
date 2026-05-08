@@ -72,6 +72,11 @@ function mountHospitalSystem() {
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
                 </button>
 
+                ${bed.constructor.name === "PediatricBed" ? `<button data-id="${bed.bedId}" class="guardianButton">Add Guardian</button>` : ""}
+                ${bed.constructor.name === "PediatricBed" ? `<p>Guardian: ${(bed as any).guardianName}</p>` : ""}
+
+
+
                 <button data-id="${bed.bedId}" class="deleteButton">
                    Delete Bed 
                 </button>
@@ -131,12 +136,30 @@ function mountHospitalSystem() {
             return;
           }
         }
+      
+      
 
+        refresh();
+      });
+    });
+
+    bedsGrid.querySelectorAll("button.guardianButton").forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = (button as HTMLButtonElement).dataset.id!;
+        const guardianName = prompt("Enter guardian name:");
+
+        if (!guardianName) {
+          logMsg("[INFO] Enter guardian name first.");
+          return;
+        }
+
+        logMsg(system.addGuardianInfo(id, guardianName.trim()));
         refresh();
       });
     });
   };
 
+    
   //Admit button clicked
   admitBtn.addEventListener("click", () => {
     const name = patientName.value.trim();
