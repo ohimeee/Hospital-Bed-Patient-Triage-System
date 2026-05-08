@@ -80,7 +80,6 @@ function mountHospitalSystem() {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
-
         if (!bed) return;
 
         if (bed.isOccupied) {
