@@ -15,6 +15,12 @@ export class UIManager {
     this.modal = this.getElement("modal") as HTMLDivElement;
     this.operationType = this.getElement("operationType") as HTMLSelectElement;
 
+    this.setupEventListeners();
+    this.showForm();
+    this.refresh();
+  }
+
+  private setupEventListeners() {
     this.getButton("openMenuBtn")?.addEventListener("click", () => this.openModal());
     this.getButton("closeModalBtn")?.addEventListener("click", () => this.closeModal());
     this.getButton("clearLogButton")?.addEventListener("click", () => (this.log.innerHTML = ""));
@@ -22,44 +28,26 @@ export class UIManager {
     this.getButton("addBedButton")?.addEventListener("click", () => this.addBed());
     this.getButton("transferBtn")?.addEventListener("click", () => this.transferPatient());
     this.getButton("monitorBtn")?.addEventListener("click", () => this.changeMonitoringLevel());
-
     this.operationType?.addEventListener("change", () => this.showForm());
     this.modal?.addEventListener("click", (event) => {
       if (event.target === this.modal) this.closeModal();
     });
-
-    this.showForm();
-    this.refresh();
   }
 
-  openModal() {
+  private openModal() {
     this.modal.classList.add("show");
     this.showForm();
   }
 
-  closeModal() {
+  private closeModal() {
     this.modal.classList.remove("show");
   }
 
-  showForm() {
-    const admitForm = document.getElementById("admitForm");
-    const addBedForm = document.getElementById("addBedForm");
-    const transferForm = document.getElementById("transferForm");
-    const monitorForm = document.getElementById("monitorForm");
-
-    [admitForm, addBedForm, transferForm, monitorForm].forEach((form) => {
-      form?.classList.add("hidden");
-    });
-
-    if (this.operationType.value === "admit") {
-      admitForm?.classList.remove("hidden");
-    } else if (this.operationType.value === "add") {
-      addBedForm?.classList.remove("hidden");
-    } else if (this.operationType.value === "monitor") {
-      monitorForm?.classList.remove("hidden");
-    } else {
-      transferForm?.classList.remove("hidden");
-    }
+  private showForm() {
+    const formMap: Record<string, string> = { admit: "admitForm", add: "addBedForm", monitor: "monitorForm", transfer: "transferForm" };
+    ["admitForm", "addBedForm", "transferForm", "monitorForm"].forEach((id) => document.getElementById(id)?.classList.add("hidden"));
+    const activeForm = formMap[this.operationType.value] || "transferForm";
+    document.getElementById(activeForm)?.classList.remove("hidden");
   }
 
   changeMonitoringLevel() {
@@ -119,64 +107,69 @@ export class UIManager {
   }
 
   refresh() {
-    const data = this.system.getCapacitySummary();
-    const beds = this.system.getBedsList();
+    this.updateCapacitySummary();
+    this.renderBedCards();
+  }
 
+  private updateCapacitySummary() {
+    const data = this.system.getCapacitySummary();
     this.getElement("totalBeds").textContent = String(data.total);
     this.getElement("occupiedBeds").textContent = String(data.occupied);
     this.getElement("availableBeds").textContent = String(data.total - data.occupied);
     this.getElement("capacity-percent").textContent = `${data.percent}%`;
-    this.getElement("capacity-text").textContent = data.percent >= 80 ? "Critical capacity" : "Capacity normal";
-    this.getElement("capacity-pill").className = `capacity-pill ${data.percent >= 80 ? "critical" : "normal"}`;
+    const isCritical = data.percent >= 80;
+    this.getElement("capacity-text").textContent = isCritical ? "Critical capacity" : "Capacity normal";
+    this.getElement("capacity-pill").className = `capacity-pill ${isCritical ? "critical" : "normal"}`;
+  }
 
+  private renderBedCards() {
     this.bedsGrid.innerHTML = "";
+    this.system.getBedsList().forEach((bed) => this.renderBedCard(bed));
+  }
 
-    beds.forEach((bed) => {
-      const card = document.createElement("div");
-      card.className = `bed-card ${this.getBedColorClass(bed.wardName)}`;
+  private renderBedCard(bed: any) {
+    const card = document.createElement("div");
+    card.className = `bed-card ${this.getBedColorClass(bed.wardName)}`;
+    card.innerHTML = `
+      <strong>${bed.bedId}</strong>
+      <p>${bed.wardName}</p>
+      <p>${bed.getBedInfo()}</p>
+      <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
+      <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
+      <p>Monitoring: ${bed.getMonitoringLevel()}</p>
+      <p>Bill: ₱${bed.totalBill}</p>
+      ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
+      <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
+      <button class="delete-btn" type="button">Delete Bed</button>
+    `;
+    this.bedsGrid.appendChild(card);
+    card.querySelector(".discharge-btn")?.addEventListener("click", () => this.handleDischarge(bed));
+    card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
+    card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
+  }
 
-      card.innerHTML = `
-        <strong>${bed.bedId}</strong>
-        <p>${bed.wardName}</p>
-        <p>${bed.getBedInfo()}</p>
-        <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
-        <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
-        <p>Monitoring: ${bed.getMonitoringLevel()}</p>
-        <p>Bill: ₱${bed.totalBill}</p>
-        ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
-        <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
-        <button class="delete-btn" type="button">Delete Bed</button>
-      `;
+  private handleDischarge(bed: any) {
+    this.addLog(this.system.dischargePatient(bed.bedId));
+    this.refresh();
+  }
 
-      this.bedsGrid.appendChild(card);
+  private handleDoctor(bed: any) {
+    if (bed.hasAssignedDoctor) {
+      this.addLog(this.system.setDoctor(bed.bedId, "None"));
+    } else {
+      const doctorName = prompt("Enter the doctor's name:");
+      if (doctorName) this.addLog(this.system.setDoctor(bed.bedId, doctorName.trim()));
+    }
+    this.refresh();
+  }
 
-      card.querySelector(".discharge-btn")?.addEventListener("click", () => {
-        this.addLog(this.system.dischargePatient(bed.bedId));
-        this.refresh();
-      });
-
-      card.querySelector(".doctor-btn")?.addEventListener("click", () => {
-        if (bed.hasAssignedDoctor) {
-          this.addLog(this.system.setDoctor(bed.bedId, "None"));
-        } else {
-          const doctorName = prompt("Enter the doctor's name:");
-          if (!doctorName) return;
-          this.addLog(this.system.setDoctor(bed.bedId, doctorName.trim()));
-        }
-
-        this.refresh();
-      });
-
-      card.querySelector(".delete-btn")?.addEventListener("click", () => {
-        if (bed.isOccupied) {
-          this.addLog("[INFO] You cannot delete a bed while a patient is still admitted to it.");
-          return;
-        }
-
-        this.addLog(this.system.deleteBed(bed.bedId));
-        this.refresh();
-      });
-    });
+  private handleDelete(bed: any) {
+    if (bed.isOccupied) {
+      this.addLog("[INFO] You cannot delete a bed while a patient is still admitted to it.");
+      return;
+    }
+    this.addLog(this.system.deleteBed(bed.bedId));
+    this.refresh();
   }
 
   private getBedColorClass(wardName: string) {
