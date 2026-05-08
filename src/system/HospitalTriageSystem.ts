@@ -80,12 +80,11 @@ export class HospitalTriageSystem {
   }
 
   public deleteBed(bedId: string): string {
-    const exists = this._bedsList.some(bed => bed.bedId === bedId);
+    const exists = this._bedsList.some((bed) => bed.bedId === bedId);
     if (!exists) return `[ERROR] Bed ${bedId} not found.`;
-    this._bedsList = this._bedsList.filter(bed => bed.bedId !== bedId);
+    this._bedsList = this._bedsList.filter((bed) => bed.bedId !== bedId);
     return `[DELETED] Bed ${bedId} removed.`;
   }
-
 
   public admitPatient(bedType: BedType, patientName: string): string {
     const bed = this.findAvailableBed(bedType);
@@ -95,48 +94,42 @@ export class HospitalTriageSystem {
 
   public dischargePatient(bedId: string): string {
     const bed = this.findBedById(bedId);
-    console.log("recieved")
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
     if (!bed.isOccupied) return `[INFO] Bed ${bedId} is already vacant.`;
     return `[DISCHARGE] ${bed.dischargePatient()}`;
   }
 
-  public assignDoctor(bedId: string, doctorName: string): string {
+  public setDoctor(bedId: string, doctorName: string): string {
     const bed = this.findBedById(bedId);
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
-    if (bed.hasAssignedDoctor) return `[INFO] Bed ${bedId} already has a doctor assigned.`;
-    return `[ASSIGN] ${bed.assignDoctor(doctorName)}`;
-  }
 
-  public unassignDoctor(bedId: string): string {
-    const bed = this.findBedById(bedId);
-    if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
-    if (!bed.hasAssignedDoctor) return `[INFO] Bed ${bedId} has no doctor assigned.`;
-    return `[UNASSIGN] ${bed.unassignDoctor()}`;
+    if (bed.hasAssignedDoctor) {
+      return `[UNASSIGN] ${bed.setDoctor(doctorName)}`;
+    } else {
+      return `[ASSIGN] ${bed.setDoctor(doctorName)}`;
+    }
   }
 
   public movePatient(fromBedId: string, toBedId: string): string {
-  const fromBed = this.findBedById(fromBedId);
-  const toBed = this.findBedById(toBedId);
+    const fromBed = this.findBedById(fromBedId);
+    const toBed = this.findBedById(toBedId);
 
-  if (!fromBed) return `[ERROR] Source bed ${fromBedId} not found.`;
-  if (!toBed) return `[ERROR] Destination bed ${toBedId} not found.`;
-  if (!fromBed.isOccupied) return `[ERROR] Bed ${fromBedId} has no patient to move.`;
-  if (toBed.isOccupied) return `[ERROR] Bed ${toBedId} is already occupied.`;
+    if (!fromBed) return `[ERROR] Source bed ${fromBedId} not found.`;
+    if (!toBed) return `[ERROR] Destination bed ${toBedId} not found.`;
+    if (!fromBed.isOccupied) return `[ERROR] Bed ${fromBedId} has no patient to move.`;
+    if (toBed.isOccupied) return `[ERROR] Bed ${toBedId} is already occupied.`;
 
-  const patientName = fromBed.patientName; 
-  const assignedDoctor = fromBed.doctorName; 
-  fromBed.dischargePatient();
-  toBed.admitPatient(patientName);
+    const patientName = fromBed.patientName;
+    const assignedDoctor = fromBed.doctorName;
+    fromBed.dischargePatient();
+    toBed.admitPatient(patientName);
 
- 
-  if (assignedDoctor) {
-    toBed.assignDoctor(assignedDoctor);
+    if (assignedDoctor) {
+      toBed.setDoctor(assignedDoctor);
+    }
+
+    return `[MOVED] ${patientName} transferred from ${fromBedId} to ${toBedId}.`;
   }
-
-  return `[MOVED] ${patientName} transferred from ${fromBedId} to ${toBedId}.`;
-}
-
 
   public getBedsList(): HospitalBed[] {
     return [...this._bedsList];
@@ -149,7 +142,6 @@ export class HospitalTriageSystem {
     return { occupied, total, percent };
   }
 
-  
   public passOneDay(): string[] {
     const messages: string[] = [];
 
@@ -166,5 +158,3 @@ export class HospitalTriageSystem {
     return messages;
   }
 }
-
-

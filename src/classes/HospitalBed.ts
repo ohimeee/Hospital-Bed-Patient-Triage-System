@@ -102,29 +102,18 @@ export abstract class HospitalBed {
     } else {
       this._isOccupied = false;
       this._patientName = "None";
-      this._totalBill = 0;
-      this._daysAdmitted = 0;
-
       return true;
     }
   }
 
-  protected baseAssignDoctor(doctorName: string): boolean {
+  protected baseSetDoctor(doctorName: string): boolean {
     if (this._hasAssignedDoctor) {
+      this._hasAssignedDoctor = false;
+      this._doctorName = "None";
       return false;
     } else {
       this._hasAssignedDoctor = true;
       this._doctorName = doctorName;
-      return true;
-    }
-  }
-
-  protected baseUnassignDoctor(): boolean {
-    if (!this._hasAssignedDoctor) {
-      return false;
-    } else {
-      this._hasAssignedDoctor = false;
-      this._doctorName = "None";
       return true;
     }
   }
@@ -147,7 +136,6 @@ export abstract class HospitalBed {
 
   public abstract admitPatient(patientName: string): string;
   public abstract dischargePatient(): string;
-  public abstract assignDoctor(doctorName: string): string;
-  public abstract unassignDoctor(): string;
+  public abstract setDoctor(doctorName: string): string;
   public abstract getBedInfo(): string;
 }
