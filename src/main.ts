@@ -26,6 +26,7 @@ function mountHospitalSystem() {
   const addBedBtn = document.getElementById("addBedButton") as HTMLButtonElement;
   const clearLogBtn = document.getElementById("clearLogButton") as HTMLButtonElement;
 
+
   const logMsg = (msg: string) => {
     const p = document.createElement("p");
     p.textContent = msg;
@@ -152,6 +153,17 @@ function mountHospitalSystem() {
   });
 
   refresh();
+
+  setInterval(() => {
+  const messages = system.passOneDay();
+
+  for (let message of messages) {
+    logMsg(message);
+  }
+
+  refresh();
+  }, 24000);
+
 }
 
 document.addEventListener("DOMContentLoaded", mountHospitalSystem);
