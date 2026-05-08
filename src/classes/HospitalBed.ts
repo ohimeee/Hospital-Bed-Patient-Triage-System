@@ -185,6 +185,7 @@ export abstract class HospitalBed {
       this._patientName = "None";
       this._totalBill = 0;
       this._daysAdmitted = 0;
+      this._doctorName = "None";
       return true;
     }
   }
