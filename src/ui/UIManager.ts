@@ -1,6 +1,5 @@
 import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
-import { PediatricBed } from "../classes/PediatricBed.ts";
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -22,6 +21,7 @@ export class UIManager {
     this.getButton("admitButton")?.addEventListener("click", () => this.admitPatient());
     this.getButton("addBedButton")?.addEventListener("click", () => this.addBed());
     this.getButton("transferBtn")?.addEventListener("click", () => this.transferPatient());
+    this.getButton("monitorBtn")?.addEventListener("click", () => this.changeMonitoringLevel());
 
     this.operationType?.addEventListener("change", () => this.showForm());
     this.modal?.addEventListener("click", (event) => {
@@ -45,18 +45,37 @@ export class UIManager {
     const admitForm = document.getElementById("admitForm") as HTMLDivElement;
     const addBedForm = document.getElementById("addBedForm") as HTMLDivElement;
     const transferForm = document.getElementById("transferForm") as HTMLDivElement;
+    const monitorForm = document.getElementById("monitorForm") as HTMLDivElement;
 
     admitForm.classList.add("hidden");
     addBedForm.classList.add("hidden");
     transferForm.classList.add("hidden");
+    monitorForm.classList.add("hidden");
 
     if (this.operationType.value === "admit") {
       admitForm.classList.remove("hidden");
     } else if (this.operationType.value === "add") {
       addBedForm.classList.remove("hidden");
+    } else if (this.operationType.value === "monitor") {
+      monitorForm.classList.remove("hidden");
     } else {
       transferForm.classList.remove("hidden");
     }
+  }
+
+  changeMonitoringLevel() {
+    const bedId = this.getInputValue("monitorBedId").toUpperCase();
+    const level = this.getSelectValue("monitorLevel");
+
+    if (!bedId) {
+      this.addLog("[INFO] Please enter a bed ID first.");
+      return;
+    }
+
+    this.addLog(this.system.setMonitoringLevel(bedId, level));
+    this.setInputValue("monitorBedId", "");
+    this.refresh();
+    this.closeModal();
   }
 
   admitPatient() {
@@ -123,11 +142,10 @@ export class UIManager {
         <p>${bed.getBedInfo()}</p>
         <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
         <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
+        <p>Monitoring: ${bed.getMonitoringLevel()}</p>
         <p>Bill: ₱${bed.totalBill}</p>
-        ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
         ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
         <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
-        ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
         <button class="delete-btn" type="button">Delete Bed</button>
       `;
 
@@ -147,18 +165,6 @@ export class UIManager {
           this.addLog(this.system.setDoctor(bed.bedId, doctorName.trim()));
         }
 
-        this.refresh();
-      });
-
-      card.querySelector(".guardian-btn")?.addEventListener("click", () => {
-        const guardianName = prompt("Enter guardian name:");
-
-        if (!guardianName) {
-          this.addLog("[INFO] Enter guardian name first.");
-          return;
-        }
-
-        this.addLog(this.system.addGuardianInfo(bed.bedId, guardianName.trim()));
         this.refresh();
       });
 

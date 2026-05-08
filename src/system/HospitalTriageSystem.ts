@@ -111,6 +111,15 @@ export class HospitalTriageSystem {
     }
   }
 
+  public setMonitoringLevel(bedId: string, monitoringLevel: string): string {
+    const cleanedBedId = bedId.trim().toUpperCase();
+    const bed = this.findBedById(cleanedBedId);
+    if (!bed) return `[ERROR] Bed ID ${cleanedBedId} not found.`;
+
+    bed.setMonitoringLevel(monitoringLevel);
+    return `[UPDATED] Monitoring level for ${cleanedBedId} set to ${monitoringLevel}.`;
+  }
+
   public movePatient(fromBedId: string, toBedId: string): string {
   const fromBed = this.findBedById(fromBedId);
   const toBed = this.findBedById(toBedId);
@@ -164,21 +173,6 @@ if (assignedDoctor) {
 
     return messages;
   }
-
-  public addGuardianInfo(bedId: string, guardianName: string): string {
-    const bed = this.findBedById(bedId);
-
-    if (!bed) {
-      return `[ERROR] Bed ID ${bedId} not found.`;
-    }
-
-    if (!(bed instanceof PediatricBed)) {
-      return `[ERROR] ${bedId} is not a Pediatric bed.`;
-    }
-
-    return `[GUARDIAN] ${bed.addGuardianInfo(guardianName)}`;
-  }
-
 }
 
 
