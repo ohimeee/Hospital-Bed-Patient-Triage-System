@@ -42,24 +42,23 @@ export class UIManager {
   }
 
   showForm() {
-    const admitForm = document.getElementById("admitForm") as HTMLDivElement;
-    const addBedForm = document.getElementById("addBedForm") as HTMLDivElement;
-    const transferForm = document.getElementById("transferForm") as HTMLDivElement;
-    const monitorForm = document.getElementById("monitorForm") as HTMLDivElement;
+    const admitForm = document.getElementById("admitForm");
+    const addBedForm = document.getElementById("addBedForm");
+    const transferForm = document.getElementById("transferForm");
+    const monitorForm = document.getElementById("monitorForm");
 
-    admitForm.classList.add("hidden");
-    addBedForm.classList.add("hidden");
-    transferForm.classList.add("hidden");
-    monitorForm.classList.add("hidden");
+    [admitForm, addBedForm, transferForm, monitorForm].forEach((form) => {
+      form?.classList.add("hidden");
+    });
 
     if (this.operationType.value === "admit") {
-      admitForm.classList.remove("hidden");
+      admitForm?.classList.remove("hidden");
     } else if (this.operationType.value === "add") {
-      addBedForm.classList.remove("hidden");
+      addBedForm?.classList.remove("hidden");
     } else if (this.operationType.value === "monitor") {
-      monitorForm.classList.remove("hidden");
+      monitorForm?.classList.remove("hidden");
     } else {
-      transferForm.classList.remove("hidden");
+      transferForm?.classList.remove("hidden");
     }
   }
 
