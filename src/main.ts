@@ -58,6 +58,10 @@ function mountHospitalSystem() {
                   <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
                 </strong>
 
+                <strong>
+                  <p>Billing: ${bed.totalBill}<p>
+                </strong>
+
                 ${bed.isOccupied ? '<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>' : ""}
                 
                 <button data-id="${bed.bedId}" class="assignDoctorButton">
@@ -170,6 +174,33 @@ function mountHospitalSystem() {
 
     refresh();
   }, 24000);
+
+// Move patient button clicked
+    const moveBtn = document.getElementById('move-patient-btn');
+    const fromInput = document.getElementById('from-bed-id') as HTMLInputElement;
+    const toInput = document.getElementById('to-bed-id') as HTMLInputElement;
+    const statusDiv = document.getElementById('status-message');
+
+    moveBtn?.addEventListener('click', () => {
+        const fromId = fromInput.value.trim();
+        const toId = toInput.value.trim();
+
+        if (!fromId || !toId) {
+            if (statusDiv) statusDiv.innerText = "Please enter both Bed IDs.";
+            return;
+        }
+
+        const result = system.movePatient(fromId, toId);
+
+        if (statusDiv) {
+            statusDiv.innerText = result;
+            fromInput.value = '';
+            toInput.value = '';
+        }
+
+        refresh();
+    });
+
 }
 
 document.addEventListener("DOMContentLoaded", mountHospitalSystem);
