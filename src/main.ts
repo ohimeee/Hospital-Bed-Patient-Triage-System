@@ -10,7 +10,7 @@ function mountHospitalSystem() {
 
   const newBedId = document.getElementById("newBedId") as HTMLInputElement;
   const newBedType = document.getElementById("newBedType") as HTMLSelectElement;
-  
+
   const bedsGrid = document.getElementById("bedsGrid") as HTMLDivElement;
   const log = document.getElementById("activityLog") as HTMLDivElement;
 
@@ -25,7 +25,6 @@ function mountHospitalSystem() {
   const admitBtn = document.getElementById("admitButton") as HTMLButtonElement;
   const addBedBtn = document.getElementById("addBedButton") as HTMLButtonElement;
   const clearLogBtn = document.getElementById("clearLogButton") as HTMLButtonElement;
-
 
   const logMsg = (msg: string) => {
     const p = document.createElement("p");
@@ -59,10 +58,8 @@ function mountHospitalSystem() {
                   <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
                 </strong>
 
-                <button data-id="${bed.bedId}" class="dischargeButton">
-                    ${bed.isOccupied ? "Discharge" : "Available"}
-                </button>
-
+                ${bed.isOccupied ? '<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>' : ""}
+                
                 <button data-id="${bed.bedId}" class="assignDoctorButton">
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
                 </button>
@@ -155,15 +152,14 @@ function mountHospitalSystem() {
   refresh();
 
   setInterval(() => {
-  const messages = system.passOneDay();
+    const messages = system.passOneDay();
 
-  for (let message of messages) {
-    logMsg(message);
-  }
+    for (let message of messages) {
+      logMsg(message);
+    }
 
-  refresh();
+    refresh();
   }, 24000);
-
 }
 
 document.addEventListener("DOMContentLoaded", mountHospitalSystem);
