@@ -5,11 +5,19 @@ export abstract class HospitalBed {
   private _hasAssignedDoctor: boolean;
   private _patientName: string;
   private _doctorName: string;
+
+  // billing
   private _dailyRate: number;
   private _totalBill: number;
   private _daysAdmitted: number;
+
+  // admitting/discharging
   private _admitMessage: string;
   private _dischargeMessage: string;
+  
+  // doctor assigning
+  private _assignDoctorMessage: string;
+  private _unassignDoctorMessage: string;
 
   constructor(_bedId: string, _wardName: string, _dailyRate: number) {
     this._bedId = _bedId;
@@ -59,6 +67,13 @@ export abstract class HospitalBed {
   public get dischargeMessage(): string {
     return this._dischargeMessage;
   }
+  public get assignDoctorMessage(): string {
+    return this._assignDoctorMessage;
+  }
+  public get unassignDoctorMessage(): string {
+    return this._unassignDoctorMessage;
+  }
+
 
 
   // setters
@@ -95,6 +110,13 @@ export abstract class HospitalBed {
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;
   }
+  public set assignDoctorMessage(value: string) {
+    this._assignDoctorMessage = value;
+  }
+  public set unassignDoctorMessage(value: string) {
+    this._unassignDoctorMessage = value;
+  }
+
 
 
 
@@ -116,6 +138,7 @@ export abstract class HospitalBed {
   }
 
 
+
   // admit/discharge logic moved up
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
@@ -130,6 +153,11 @@ export abstract class HospitalBed {
     if (!this._dischargeMessage) return `Patient discharged from ${this._bedId}. Total Bill: ₱${this._totalBill}.`;
     return this._dischargeMessage;
   }
+
+  // set doctor message
+  
+
+
 
 
   // protected methods
