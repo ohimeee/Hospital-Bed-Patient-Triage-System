@@ -59,10 +59,10 @@ function mountHospitalSystem() {
                 </strong>
 
                 <strong>
-                  <p>Billing: ${bed.totalBill}<p>
+                  <p>Billing: ${bed.totalBill}</p>
                 </strong>
 
-                ${bed.isOccupied ? '<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>' : ""}
+                ${bed.isOccupied ? `<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>` : ""}
                 
                 <button data-id="${bed.bedId}" class="assignDoctorButton">
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
