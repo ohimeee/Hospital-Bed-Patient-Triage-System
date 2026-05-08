@@ -102,6 +102,9 @@ export abstract class HospitalBed {
     } else {
       this._isOccupied = false;
       this._patientName = "None";
+      this._totalBill = 0;
+      this._daysAdmitted = 0;
+
       return true;
     }
   }
