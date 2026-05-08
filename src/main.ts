@@ -54,9 +54,16 @@ function mountHospitalSystem() {
                 <strong>
                     <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
                 </strong>
+                <strong>
+                  <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
+                </strong>
 
-                <button data-id="${bed.bedId}">
+                <button data-id="${bed.bedId}" class="dischargeButton">
                     ${bed.isOccupied ? "Discharge" : "Available"}
+                </button>
+
+                <button data-id="${bed.bedId}" class="assignDoctorButton">
+                    ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
                 </button>
 
                 <button data-id="${bed.bedId}" class="deleteButton">
@@ -67,7 +74,7 @@ function mountHospitalSystem() {
       )
       .join("");
 
-    bedsGrid.querySelectorAll("button").forEach((button) => {
+    bedsGrid.querySelectorAll("button.dischargeButton").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
         const bed = system.getBedsList().find((b) => b.bedId === id);
@@ -78,6 +85,26 @@ function mountHospitalSystem() {
           logMsg(system.dischargePatient(id));
         } else {
           logMsg(`[INFO] Selected ${id}`);
+        }
+
+        refresh();
+      });
+    });
+
+    bedsGrid.querySelectorAll("button.assignDoctorButton").forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = (button as HTMLButtonElement).dataset.id!;
+        const bed = system.getBedsList().find((b) => b.bedId === id);
+
+        if (!bed) return;
+
+        if (bed.hasAssignedDoctor) {
+          logMsg(system.unassignDoctor(id));
+        } else {
+          const doctorName = prompt("Enter the doctor's name:");
+          if (doctorName) {
+            logMsg(system.assignDoctor(id, doctorName));
+          }
         }
 
         refresh();
