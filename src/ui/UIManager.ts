@@ -1,5 +1,7 @@
 import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
+import { PediatricBed } from "../classes/PediatricBed.ts";
+
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -138,13 +140,16 @@ export class UIManager {
       <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
       <p>Monitoring: ${bed.getMonitoringLevel()}</p>
       <p>Bill: ₱${bed.totalBill}</p>
+      ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
       ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
       <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
+      ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
     this.bedsGrid.appendChild(card);
     card.querySelector(".discharge-btn")?.addEventListener("click", () => this.handleDischarge(bed));
     card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
+    card.querySelector(".guardian-btn")?.addEventListener("click", () => this.handleGuardian(bed));
     card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
   }
 
@@ -160,6 +165,18 @@ export class UIManager {
       const doctorName = prompt("Enter the doctor's name:");
       if (doctorName) this.addLog(this.system.setDoctor(bed.bedId, doctorName.trim()));
     }
+    this.refresh();
+  }
+
+  private handleGuardian(bed: PediatricBed) {
+    const guardianName = prompt("Enter guardian name:");
+
+    if (!guardianName) {
+      this.addLog("[INFO] Enter guardian name first.");
+      return;
+    }
+
+    this.addLog(this.system.addGuardianInfo(bed.bedId, guardianName.trim()));
     this.refresh();
   }
 
