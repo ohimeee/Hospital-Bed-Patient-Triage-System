@@ -68,7 +68,7 @@ function mountHospitalSystem() {
 
                 ${bed.isOccupied ? `<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>` : ""}
                 
-                <button data-id="${bed.bedId}" class="assignDoctorButton">
+                <button data-id="${bed.bedId}" class="setDoctorButton">
                     ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}
                 </button>
 
