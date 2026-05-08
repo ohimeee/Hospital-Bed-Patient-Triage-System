@@ -121,14 +121,14 @@ export abstract class HospitalBed {
   public admitPatient(patientName: string): string {
     const admitted = this.baseAdmit(patientName);
     if (!admitted) return `this.bedId ${this.alreadyOccupiedMsg()}`;
-    if (!this._admitMessage) return
+    if (!this._admitMessage) return 
     return this._admitMessage;
   }
 
   public dischargePatient(): string {
     const discharged = this.baseDischarge();
     if (!discharged) return `this.bedId ${this.alreadyVacantMsg()}`;
-    if (!this._dischargeMessage) return
+    if (!this._dischargeMessage) return 
     return this._dischargeMessage;
   }
 
