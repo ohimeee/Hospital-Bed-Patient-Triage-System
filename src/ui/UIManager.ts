@@ -2,7 +2,6 @@ import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
 import { PediatricBed } from "../classes/PediatricBed.ts";
 
-
 export class UIManager {
   private system: HospitalTriageSystem;
   private bedsGrid: HTMLDivElement;
@@ -46,8 +45,15 @@ export class UIManager {
   }
 
   private showForm() {
-    const formMap: Record<string, string> = { admit: "admitForm", add: "addBedForm", monitor: "monitorForm", transfer: "transferForm" };
-    ["admitForm", "addBedForm", "transferForm", "monitorForm"].forEach((id) => document.getElementById(id)?.classList.add("hidden"));
+    const formMap: Record<string, string> = {
+      admit: "admitForm",
+      add: "addBedForm",
+      monitor: "monitorForm",
+      transfer: "transferForm",
+    };
+    ["admitForm", "addBedForm", "transferForm", "monitorForm"].forEach((id) =>
+      document.getElementById(id)?.classList.add("hidden"),
+    );
     const activeForm = formMap[this.operationType.value] || "transferForm";
     document.getElementById(activeForm)?.classList.remove("hidden");
   }
@@ -120,8 +126,11 @@ export class UIManager {
     this.getElement("availableBeds").textContent = String(data.total - data.occupied);
     this.getElement("capacity-percent").textContent = `${data.percent}%`;
     const isCritical = data.percent >= 80;
-    this.getElement("capacity-text").textContent = isCritical ? "Critical capacity" : "Capacity normal";
-    this.getElement("capacity-pill").className = `capacity-pill ${isCritical ? "critical" : "normal"}`;
+    this.getElement("capacity-text").textContent = isCritical
+      ? "Critical capacity"
+      : "Capacity normal";
+    this.getElement("capacity-pill").className =
+      `capacity-pill ${isCritical ? "critical" : "normal"}`;
   }
 
   private renderBedCards() {
@@ -147,7 +156,9 @@ export class UIManager {
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
     this.bedsGrid.appendChild(card);
-    card.querySelector(".discharge-btn")?.addEventListener("click", () => this.handleDischarge(bed));
+    card
+      .querySelector(".discharge-btn")
+      ?.addEventListener("click", () => this.handleDischarge(bed));
     card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
     card.querySelector(".guardian-btn")?.addEventListener("click", () => this.handleGuardian(bed));
     card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
@@ -228,4 +239,3 @@ export class UIManager {
     this.refresh();
   }
 }
-
