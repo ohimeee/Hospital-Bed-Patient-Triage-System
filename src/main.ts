@@ -89,6 +89,22 @@ function mountHospitalSystem() {
       });
     });
 
+    bedsGrid.querySelectorAll("button.deleteButton").forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = (button as HTMLButtonElement).dataset.id!;
+        const bed = system.getBedsList().find((b) => b.bedId === id);
+
+        if (bed.isOccupied) {
+          logMsg('[INFO] You cannot delete a bed while a patient is still admitted to it.')
+        } else {
+          logMsg(system.deleteBed(id));
+          refresh();
+        }
+
+      });
+    });
+
+
     bedsGrid.querySelectorAll("button.assignDoctorButton").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
@@ -108,14 +124,6 @@ function mountHospitalSystem() {
         refresh();
       });
     });
-
-    //bedsGrid.querySelectorAll("deleteButton").forEach((button) => {
-    //button.addEventListener("click", () => {
-    //if (bed) {
-    //delete bed
-    //}
-    //});
-    //});
   };
 
   //Admit button clicked

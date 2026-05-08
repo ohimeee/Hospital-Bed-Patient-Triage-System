@@ -64,11 +64,9 @@ export abstract class HospitalBed {
   public set isOccupied(value: boolean) {
     this._isOccupied = value;
   }
-
   public set hasAssignedDoctor(value: boolean) {
     this._hasAssignedDoctor = value;
   }
-
   public set patientName(value: string) {
     this._patientName = value;
   }

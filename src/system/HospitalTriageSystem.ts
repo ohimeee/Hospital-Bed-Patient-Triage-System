@@ -79,6 +79,14 @@ export class HospitalTriageSystem {
     return `[ADDED] ${bedType} Bed ${cleanedBedId} added to ${bed.wardName}.`;
   }
 
+  public deleteBed(bedId: string): string {
+    const exists = this._bedsList.some(bed => bed.bedId === bedId);
+    if (!exists) return `[ERROR] Bed ${bedId} not found.`;
+    this._bedsList = this._bedsList.filter(bed => bed.bedId !== bedId);
+    return `[DELETED] Bed ${bedId} removed.`;
+  }
+
+
   public admitPatient(bedType: BedType, patientName: string): string {
     const bed = this.findAvailableBed(bedType);
     if (!bed) return `[FAILED] No available ${bedType} beds found.`;
@@ -117,21 +125,22 @@ export class HospitalTriageSystem {
     return { occupied, total, percent };
   }
 
+  
   public passOneDay(): string[] {
-  const messages: string[] = [];
+    const messages: string[] = [];
 
-  for (let bed of this._bedsList) {
-    if (bed.isOccupied) {
-      messages.push(bed.chargeOneDay());
+    for (let bed of this._bedsList) {
+      if (bed.isOccupied) {
+        messages.push(bed.chargeOneDay());
+      }
     }
+
+    if (messages.length === 0) {
+      messages.push("[BILLING] One day passed. No occupied beds to charge.");
+    }
+
+    return messages;
   }
-
-  if (messages.length === 0) {
-    messages.push("[BILLING] One day passed. No occupied beds to charge.");
-  }
-
-  return messages;
-  }
-
-
 }
+
+
