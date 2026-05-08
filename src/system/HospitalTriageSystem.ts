@@ -174,6 +174,7 @@ export class HospitalTriageSystem {
     return messages;
   }
 
+  // Finds a pediatric bed and adds guardian info if the bed has a patient
   public addGuardianToBed(bedId: string, guardianName: string): string {
     const bed = this.findBedById(bedId);
 

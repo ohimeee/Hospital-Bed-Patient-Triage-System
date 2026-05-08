@@ -16,7 +16,7 @@ export class PediatricBed extends GeneralBed {
     return this._guardianName;
   }
 
-  // Adds guardian information for Pediatric beds
+  // Stores guardian information for the current pediatric patient
   public addGuardianInfo(guardianName: string): string {
     if (!this.isOccupied) {
       return `Pediatric Bed ${this.bedId} has no patient for guardian info.`;
