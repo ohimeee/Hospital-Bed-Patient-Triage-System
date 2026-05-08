@@ -42,15 +42,15 @@ export abstract class HospitalBed {
     return this._doctorName;
   }
   public get dailyRate(): number {
-  return this._dailyRate;
+    return this._dailyRate;
   }
 
   public get totalBill(): number {
-  return this._totalBill;
+    return this._totalBill;
   }
 
   public get daysAdmitted(): number {
-  return this._daysAdmitted;
+    return this._daysAdmitted;
   }
 
 
@@ -94,7 +94,7 @@ export abstract class HospitalBed {
     }
   }
 
-    public chargeOneDay(): string {
+  public chargeOneDay(): string {
     if (!this._isOccupied) {
       return `${this._bedId} is vacant. No charge.`;
     }
