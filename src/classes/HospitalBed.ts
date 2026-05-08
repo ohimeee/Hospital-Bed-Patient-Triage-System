@@ -83,7 +83,10 @@ export abstract class HospitalBed {
     return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
   }
 
-
+  public restoreBilling(totalBill: number, daysAdmitted: number): void {
+  this._totalBill = totalBill;
+  this._daysAdmitted = daysAdmitted;
+  }
 
   // protected methods
   protected baseAdmit(patientName: string): boolean {
@@ -102,6 +105,8 @@ export abstract class HospitalBed {
     } else {
       this._isOccupied = false;
       this._patientName = "None";
+      this._totalBill = 0;
+      this._daysAdmitted = 0;
       return true;
     }
   }
