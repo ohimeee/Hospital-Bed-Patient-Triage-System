@@ -101,8 +101,8 @@ export abstract class HospitalBed {
   }
 
   public restoreBilling(totalBill: number, daysAdmitted: number): void {
-  this._totalBill = totalBill;
-  this._daysAdmitted = daysAdmitted;
+    this._totalBill = totalBill;
+    this._daysAdmitted = daysAdmitted;
   }
 
   // protected methods

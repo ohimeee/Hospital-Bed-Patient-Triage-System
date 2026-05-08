@@ -131,8 +131,8 @@ export class HospitalTriageSystem {
   fromBed.dischargePatient();
   toBed.admitPatient(patientName);
   toBed.restoreBilling(totalBill, daysAdmitted);
- 
-  if (assignedDoctor) {
+  
+if (assignedDoctor) {
     toBed.assignDoctor(assignedDoctor);
   }
 
