@@ -7,7 +7,7 @@ export class PediatricBed extends GeneralBed {
     super(bedId, wardName, wardFloor, 2000);
     this._guardianName = "None";
 
-    this.admitMessage = `Pediatric Bed ${this.bedId} admitted. Requires guardian info before admission.`;
+    this.admitMessage = `Pediatric Bed ${this.bedId} admitted. Guardian info should be added.`;
     this.dischargeMessage = `Pediatric Bed ${this.bedId} released. Discharge summary sent to guardian.`;
     this.bedType = "Pediatric Bed";
   }

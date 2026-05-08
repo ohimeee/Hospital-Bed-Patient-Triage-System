@@ -11,6 +11,7 @@ export abstract class HospitalBed {
   private _dailyRate: number;
   private _totalBill: number;
   private _daysAdmitted: number;
+  private _monitoringLevel: string;
 
   // admitting/discharging
   private _admitMessage: string;
@@ -28,9 +29,12 @@ export abstract class HospitalBed {
     this._dailyRate = _dailyRate;
     this._totalBill = 0;
     this._daysAdmitted = 0;
+    this._monitoringLevel = "Normal";
 
     this._admitMessage = "None";
     this._dischargeMessage = "None";
+    this._assignDoctorMessage = "None";
+    this._unassignDoctorMessage = "None";
   }
 
   // getters
@@ -101,6 +105,7 @@ export abstract class HospitalBed {
   }
   public set admitMessage(value: string) {
     this._admitMessage = value;
+    console.log("Recieved");
   }
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;
@@ -211,6 +216,14 @@ export abstract class HospitalBed {
 
   protected noDoctorAssignedMsg(): string {
     return `${this._bedId} has no doctor assigned.`;
+  }
+
+  public setMonitoringLevel(value: string): void {
+    this._monitoringLevel = value;
+  }
+
+  public getMonitoringLevel(): string {
+    return this._monitoringLevel;
   }
 
   public abstract getBedInfo(): string;

@@ -111,6 +111,15 @@ export class HospitalTriageSystem {
     }
   }
 
+  public setMonitoringLevel(bedId: string, monitoringLevel: string): string {
+    const cleanedBedId = bedId.trim().toUpperCase();
+    const bed = this.findBedById(cleanedBedId);
+    if (!bed) return `[ERROR] Bed ID ${cleanedBedId} not found.`;
+
+    bed.setMonitoringLevel(monitoringLevel);
+    return `[UPDATED] Monitoring level for ${cleanedBedId} set to ${monitoringLevel}.`;
+  }
+
   public movePatient(fromBedId: string, toBedId: string): string {
   const fromBed = this.findBedById(fromBedId);
   const toBed = this.findBedById(toBedId);
@@ -178,7 +187,6 @@ if (assignedDoctor) {
 
     return `[GUARDIAN] ${bed.addGuardianInfo(guardianName)}`;
   }
-
 }
 
 
