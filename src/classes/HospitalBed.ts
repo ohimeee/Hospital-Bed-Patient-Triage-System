@@ -22,6 +22,8 @@ export abstract class HospitalBed {
     this._doctorName = "None";
     this._totalBill = 0;
     this._daysAdmitted = 0;
+    this._admitMessage = "None";
+    this._dischargeMessage = "None";
   }
 
   // getters
