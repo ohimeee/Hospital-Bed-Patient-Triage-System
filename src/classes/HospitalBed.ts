@@ -71,7 +71,11 @@ export abstract class HospitalBed {
   public set doctorName(value: string) {
     this._doctorName = value;
   }
+  public set totalBill(value: number) {
+    this._totalBill = value;
+  }
 
+  // billing
   public chargeOneDay(): string {
     if (!this._isOccupied) {
       return `${this._bedId} is vacant. no charge.`;
@@ -81,6 +85,19 @@ export abstract class HospitalBed {
     this._totalBill += this._dailyRate;
 
     return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
+  }
+  
+  // admit/discharge logic moved up
+  public admitPatient(patientName: string, admitMessage: string): string {
+    const admitted = this.baseAdmit(patientName);
+    if (!admitted) return `Pediatric Bed ${this.alreadyOccupiedMsg()}`;
+    return admitMessage;
+  }
+
+  public dischargePatient(dischargeMessage: string): string {
+    const discharged = this.baseDischarge();
+    if (!discharged) return `Pediatric Bed ${this.alreadyVacantMsg()}`;
+    return dischargeMessage;
   }
 
 
