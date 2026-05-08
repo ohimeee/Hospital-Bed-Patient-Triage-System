@@ -8,6 +8,8 @@ export abstract class HospitalBed {
   private _dailyRate: number;
   private _totalBill: number;
   private _daysAdmitted: number;
+  private _admitMessage: string;
+  private _dischargeMessage: string;
 
 
   constructor(_bedId: string, _wardName: string, _dailyRate: number) {
@@ -50,6 +52,12 @@ export abstract class HospitalBed {
   public get daysAdmitted(): number {
     return this._daysAdmitted;
   }
+  public get admitMessage(): string {
+    return this._admitMessage;
+  }
+  public get dischargeMessage(): string {
+    return this._dischargeMessage;
+  }
 
 
   // setters
@@ -71,9 +79,23 @@ export abstract class HospitalBed {
   public set doctorName(value: string) {
     this._doctorName = value;
   }
+  public set dailyRate(value: number) {
+    this._dailyRate = value;
+  }
   public set totalBill(value: number) {
     this._totalBill = value;
   }
+  public set daysAdmitted(value: number) {
+    this._daysAdmitted = value;
+  }
+  public set admitMessage(value: string) {
+    this._admitMessage = value;
+  }
+  public set dischargeMessage(value: string) {
+    this._dischargeMessage = value;
+  }
+
+
 
   // billing
   public chargeOneDay(): string {
@@ -164,8 +186,6 @@ export abstract class HospitalBed {
     return `${this._bedId} has no doctor assigned.`;
   }
 
-  public abstract admitPatient(patientName: string): string;
-  public abstract dischargePatient(): string;
   public abstract assignDoctor(doctorName: string): string;
   public abstract unassignDoctor(): string;
   public abstract getBedInfo(): string;
