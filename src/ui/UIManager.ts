@@ -141,9 +141,9 @@ export class UIManager {
       <p>Monitoring: ${bed.getMonitoringLevel()}</p>
       <p>Bill: ₱${bed.totalBill}</p>
       ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
+      ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
       <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
-      ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
     this.bedsGrid.appendChild(card);

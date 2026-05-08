@@ -33,8 +33,6 @@ export abstract class HospitalBed {
 
     this._admitMessage = "None";
     this._dischargeMessage = "None";
-    this._assignDoctorMessage = "None";
-    this._unassignDoctorMessage = "None";
   }
 
   // getters
@@ -161,7 +159,7 @@ export abstract class HospitalBed {
     if (!doctorSet) {
       return `Dr. ${nameCache} unassigned from ${this.bedType} ${this.bedId}.`
     } else {
-      return `Dr. ${doctorName} assigned to ${this.bedType}:w ${this.bedId}.`
+      return `Dr. ${doctorName} assigned to ${this.bedType} ${this.bedId}.`
     }
     nameCache == null;
   }
