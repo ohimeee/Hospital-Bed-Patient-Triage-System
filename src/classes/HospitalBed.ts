@@ -42,15 +42,13 @@ export abstract class HospitalBed {
     return this._doctorName;
   }
   public get dailyRate(): number {
-  return this._dailyRate;
+    return this._dailyRate;
   }
-
   public get totalBill(): number {
-  return this._totalBill;
+    return this._totalBill;
   }
-
   public get daysAdmitted(): number {
-  return this._daysAdmitted;
+    return this._daysAdmitted;
   }
 
 
@@ -74,6 +72,19 @@ export abstract class HospitalBed {
     this._doctorName = value;
   }
 
+  public chargeOneDay(): string {
+    if (!this._isOccupied) {
+      return `${this._bedId} is vacant. no charge.`;
+    }
+
+    this._daysAdmitted += 1;
+    this._totalBill += this._dailyRate;
+
+    return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
+  }
+
+
+
   // protected methods
   protected baseAdmit(patientName: string): boolean {
     if (this._isOccupied) {
@@ -84,6 +95,7 @@ export abstract class HospitalBed {
       return true;
     }
   }
+
   protected baseDischarge(): boolean {
     if (!this._isOccupied) {
       return false;
@@ -92,17 +104,6 @@ export abstract class HospitalBed {
       this._patientName = "None";
       return true;
     }
-  }
-
-    public chargeOneDay(): string {
-    if (!this._isOccupied) {
-      return `${this._bedId} is vacant. No charge.`;
-    }
-
-    this._daysAdmitted += 1;
-    this._totalBill += this._dailyRate;
-
-    return `${this._bedId} charged ₱${this._dailyRate}. Total bill: ₱${this._totalBill}.`;
   }
 
   protected baseAssignDoctor(doctorName: string): boolean {

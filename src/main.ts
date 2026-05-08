@@ -58,6 +58,10 @@ function mountHospitalSystem() {
                   <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
                 </strong>
 
+                <strong>
+                  <p>Billing: ${bed.totalBill}<p>
+                </strong>
+
                 ${bed.isOccupied ? '<button data-id="${bed.bedId}" class="dischargeButton"> Discharge </button>' : ""}
                 
                 <button data-id="${bed.bedId}" class="assignDoctorButton">
