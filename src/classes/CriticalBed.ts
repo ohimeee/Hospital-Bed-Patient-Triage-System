@@ -3,8 +3,8 @@ import { HospitalBed } from "./HospitalBed.ts";
 export abstract class CriticalBed extends HospitalBed {
   private _monitoringLevel: string;
 
-  constructor(_bedId: string, _wardName: string, _monitoringLevel: string) {
-    super(_bedId, _wardName);
+  constructor(_bedId: string, _wardName: string, _monitoringLevel: string, _dailyRate: number) {
+    super(_bedId, _wardName, _dailyRate);
     this._monitoringLevel = _monitoringLevel;
   }
 

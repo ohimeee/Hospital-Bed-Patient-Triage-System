@@ -2,7 +2,7 @@ import { GeneralBed } from "./GeneralBed.ts";
 
 export class MaternityBed extends GeneralBed {
   constructor(bedId: string, wardName: string, wardFloor: string) {
-    super(bedId, wardName, wardFloor);
+    super(bedId, wardName, wardFloor, 2500);
   }
 
   public admitPatient(patientName: string): string {

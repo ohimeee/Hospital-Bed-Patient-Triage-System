@@ -25,6 +25,7 @@ function mountHospitalSystem() {
   const addBedBtn = document.getElementById("addBedButton") as HTMLButtonElement;
   const clearLogBtn = document.getElementById("clearLogButton") as HTMLButtonElement;
 
+
   const logMsg = (msg: string) => {
     const p = document.createElement("p");
     p.textContent = msg;
@@ -93,8 +94,15 @@ function mountHospitalSystem() {
     bedsGrid.querySelectorAll("button.deleteButton").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;
-        logMsg(system.deleteBed(id));
-        refresh();
+        const bed = system.getBedsList().find((b) => b.bedId === id);
+
+        if (bed.isOccupied) {
+          logMsg('[INFO] You cannot delete a bed while a patient is still admitted to it.')
+        } else {
+          logMsg(system.deleteBed(id));
+          refresh();
+        }
+
       });
     });
 
@@ -118,14 +126,6 @@ function mountHospitalSystem() {
         refresh();
       });
     });
-
-    //bedsGrid.querySelectorAll("deleteButton").forEach((button) => {
-    //button.addEventListener("click", () => {
-    //if (bed) {
-    //delete bed
-    //}
-    //});
-    //});
   };
 
   //Admit button clicked
@@ -160,6 +160,17 @@ function mountHospitalSystem() {
   });
 
   refresh();
+
+  setInterval(() => {
+  const messages = system.passOneDay();
+
+  for (let message of messages) {
+    logMsg(message);
+  }
+
+  refresh();
+  }, 24000);
+
 }
 
 document.addEventListener("DOMContentLoaded", mountHospitalSystem);

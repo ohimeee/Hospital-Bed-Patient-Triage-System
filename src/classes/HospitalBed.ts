@@ -5,14 +5,21 @@ export abstract class HospitalBed {
   private _hasAssignedDoctor: boolean;
   private _patientName: string;
   private _doctorName: string;
+  private _dailyRate: number;
+  private _totalBill: number;
+  private _daysAdmitted: number;
 
-  constructor(_bedId: string, _wardName: string) {
+
+  constructor(_bedId: string, _wardName: string, _dailyRate: number) {
     this._bedId = _bedId;
     this._wardName = _wardName;
+    this._dailyRate = _dailyRate;
     this._isOccupied = false;
     this._hasAssignedDoctor = false;
     this._patientName = "None";
     this._doctorName = "None";
+    this._totalBill = 0;
+    this._daysAdmitted = 0;
   }
 
   // getters
@@ -34,6 +41,18 @@ export abstract class HospitalBed {
   public get doctorName(): string {
     return this._doctorName;
   }
+  public get dailyRate(): number {
+  return this._dailyRate;
+  }
+
+  public get totalBill(): number {
+  return this._totalBill;
+  }
+
+  public get daysAdmitted(): number {
+  return this._daysAdmitted;
+  }
+
 
   // setters
   public set bedId(value: string) {
@@ -73,6 +92,17 @@ export abstract class HospitalBed {
       this._patientName = "None";
       return true;
     }
+  }
+
+    public chargeOneDay(): string {
+    if (!this._isOccupied) {
+      return `${this._bedId} is vacant. No charge.`;
+    }
+
+    this._daysAdmitted += 1;
+    this._totalBill += this._dailyRate;
+
+    return `${this._bedId} charged ₱${this._dailyRate}. Total bill: ₱${this._totalBill}.`;
   }
 
   protected baseAssignDoctor(doctorName: string): boolean {

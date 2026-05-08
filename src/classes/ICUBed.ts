@@ -2,7 +2,7 @@ import { CriticalBed } from "./CriticalBed.ts";
 
 export class ICUBed extends CriticalBed {
   constructor(bedId: string, wardName: string, monitoringLevel: string) {
-    super(bedId, wardName, monitoringLevel);
+    super(bedId, wardName, monitoringLevel, 5000);
   }
 
   public admitPatient(patientName: string): string {

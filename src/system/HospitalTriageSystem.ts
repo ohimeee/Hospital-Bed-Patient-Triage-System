@@ -124,4 +124,23 @@ export class HospitalTriageSystem {
     const percent = Math.round((occupied / total) * 100);
     return { occupied, total, percent };
   }
+
+  
+  public passOneDay(): string[] {
+    const messages: string[] = [];
+
+    for (let bed of this._bedsList) {
+      if (bed.isOccupied) {
+        messages.push(bed.chargeOneDay());
+      }
+    }
+
+    if (messages.length === 0) {
+      messages.push("[BILLING] One day passed. No occupied beds to charge.");
+    }
+
+    return messages;
+  }
 }
+
+
