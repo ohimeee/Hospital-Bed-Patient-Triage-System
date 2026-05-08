@@ -11,7 +11,6 @@ export abstract class HospitalBed {
   private _admitMessage: string;
   private _dischargeMessage: string;
 
-
   constructor(_bedId: string, _wardName: string, _dailyRate: number) {
     this._bedId = _bedId;
     this._wardName = _wardName;
