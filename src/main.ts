@@ -90,6 +90,15 @@ function mountHospitalSystem() {
       });
     });
 
+    bedsGrid.querySelectorAll("button.deleteButton").forEach((button) => {
+      button.addEventListener("click", () => {
+        const id = (button as HTMLButtonElement).dataset.id!;
+        logMsg(system.deleteBed(id));
+        refresh();
+      });
+    });
+
+
     bedsGrid.querySelectorAll("button.assignDoctorButton").forEach((button) => {
       button.addEventListener("click", () => {
         const id = (button as HTMLButtonElement).dataset.id!;

@@ -79,6 +79,14 @@ export class HospitalTriageSystem {
     return `[ADDED] ${bedType} Bed ${cleanedBedId} added to ${bed.wardName}.`;
   }
 
+  public deleteBed(bedId: string): string {
+    const exists = this._bedsList.some(bed => bed.bedId === bedId);
+    if (!exists) return `[ERROR] Bed ${bedId} not found.`;
+    this._bedsList = this._bedsList.filter(bed => bed.bedId !== bedId);
+    return `[DELETED] Bed ${bedId} removed.`;
+  }
+
+
   public admitPatient(bedType: BedType, patientName: string): string {
     const bed = this.findAvailableBed(bedType);
     if (!bed) return `[FAILED] No available ${bedType} beds found.`;
