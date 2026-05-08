@@ -4,7 +4,7 @@ export abstract class HospitalBed {
   private _isOccupied: boolean;
   private _hasAssignedDoctor: boolean;
   private _patientName: string;
-  private _assignedDoctor: string;
+  private _doctorName: string;
 
   constructor(_bedId: string, _wardName: string) {
     this._bedId = _bedId;
@@ -12,7 +12,7 @@ export abstract class HospitalBed {
     this._isOccupied = false;
     this._hasAssignedDoctor = false;
     this._patientName = "None";
-    this._assignedDoctor = "None";
+    this._doctorName = "None";
   }
 
   // getters
@@ -31,8 +31,8 @@ export abstract class HospitalBed {
   public get patientName(): string {
     return this._patientName;
   }
-  public get assignedDoctor(): string {
-    return this._assignedDoctor;
+  public get doctorName(): string {
+    return this._doctorName;
   }
 
   // setters
@@ -53,8 +53,8 @@ export abstract class HospitalBed {
   public set patientName(value: string) {
     this._patientName = value;
   }
-  public set assignedDoctor(value: string) {
-    this._assignedDoctor = value;
+  public set doctorName(value: string) {
+    this._doctorName = value;
   }
 
   // protected methods
@@ -82,7 +82,7 @@ export abstract class HospitalBed {
       return false;
     } else {
       this._hasAssignedDoctor = true;
-      this._assignedDoctor = doctorName;
+      this._doctorName = doctorName;
       return true;
     }
   }
@@ -92,7 +92,7 @@ export abstract class HospitalBed {
       return false;
     } else {
       this._hasAssignedDoctor = false;
-      this._assignedDoctor = "None";
+      this._doctorName = "None";
       return true;
     }
   }
@@ -106,7 +106,7 @@ export abstract class HospitalBed {
   }
 
   protected alreadyHasDoctorMsg(): string {
-    return `${this._bedId} already has Dr. ${this._assignedDoctor} assigned.`;
+    return `${this._bedId} already has Dr. ${this._doctorName} assigned.`;
   }
 
   protected noDoctorAssignedMsg(): string {

@@ -92,6 +92,20 @@ export class HospitalTriageSystem {
     return `[DISCHARGE] ${bed.dischargePatient()}`;
   }
 
+  public assignDoctor(bedId: string, doctorName: string): string {
+    const bed = this.findBedById(bedId);
+    if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
+    if (bed.hasAssignedDoctor) return `[INFO] Bed ${bedId} already has a doctor assigned.`;
+    return `[ASSIGN] ${bed.assignDoctor(doctorName)}`;
+  }
+
+  public unassignDoctor(bedId: string): string {
+    const bed = this.findBedById(bedId);
+    if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
+    if (!bed.hasAssignedDoctor) return `[INFO] Bed ${bedId} has no doctor assigned.`;
+    return `[UNASSIGN] ${bed.unassignDoctor()}`;
+  }
+
   public getBedsList(): HospitalBed[] {
     return [...this._bedsList];
   }
