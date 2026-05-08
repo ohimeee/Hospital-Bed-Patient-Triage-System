@@ -103,7 +103,7 @@ export class HospitalTriageSystem {
   public setDoctor(bedId: string, doctorName: string): string {
     const bed = this.findBedById(bedId);
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
-
+    if (!bed.isOccupied) return `[ERROR] Cannot assign a doctor to a bed with no patient.`
     if (bed.hasAssignedDoctor) {
       return `[UNASSIGN] ${bed.setDoctor(doctorName)}`;
     } else {
