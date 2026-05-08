@@ -31,6 +31,8 @@ export abstract class HospitalBed {
     this._daysAdmitted = 0;
     this._admitMessage = "None";
     this._dischargeMessage = "None";
+    this._assignDoctorMessage = "None";
+    this._unassignDoctorMessage = "None";
   }
 
   // getters
@@ -155,10 +157,19 @@ export abstract class HospitalBed {
     return this._dischargeMessage;
   }
 
+
+
   // set doctor message
-  
-
-
+  public setDoctor(doctorName: string): string {
+    const doctorSet = this.baseSetDoctor(doctorName);
+    if (!doctorSet) {
+      if (!this._assignDoctorMessage) return `Dr. ${doctorName} assigned to this bed ${this.bedId}.`
+      return this._assignDoctorMessage;
+    } else {
+      if (!this._unassignDoctorMessage) return `Dr. ${doctorName} unassigned from bed ${this.bedId}.`
+      return this._unassignDoctorMessage;
+    }
+  }
 
 
   // protected methods
