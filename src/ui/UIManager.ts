@@ -1,5 +1,6 @@
 import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
+import { PediatricBed } from "../classes/PediatricBed.ts";
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -123,8 +124,10 @@ export class UIManager {
         <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
         <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
         <p>Bill: ₱${bed.totalBill}</p>
+        ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
         ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
         <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
+        ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
         <button class="delete-btn" type="button">Delete Bed</button>
       `;
 
@@ -144,6 +147,18 @@ export class UIManager {
           this.addLog(this.system.setDoctor(bed.bedId, doctorName.trim()));
         }
 
+        this.refresh();
+      });
+
+      card.querySelector(".guardian-btn")?.addEventListener("click", () => {
+        const guardianName = prompt("Enter guardian name:");
+
+        if (!guardianName) {
+          this.addLog("[INFO] Enter guardian name first.");
+          return;
+        }
+
+        this.addLog(this.system.addGuardianInfo(bed.bedId, guardianName.trim()));
         this.refresh();
       });
 

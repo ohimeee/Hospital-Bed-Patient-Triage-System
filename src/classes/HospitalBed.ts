@@ -108,7 +108,6 @@ export abstract class HospitalBed {
   }
   public set admitMessage(value: string) {
     this._admitMessage = value;
-    console.log("Recieved");
   }
   public set dischargeMessage(value: string) {
     this._dischargeMessage = value;

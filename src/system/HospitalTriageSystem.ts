@@ -164,6 +164,21 @@ if (assignedDoctor) {
 
     return messages;
   }
+
+  public addGuardianInfo(bedId: string, guardianName: string): string {
+    const bed = this.findBedById(bedId);
+
+    if (!bed) {
+      return `[ERROR] Bed ID ${bedId} not found.`;
+    }
+
+    if (!(bed instanceof PediatricBed)) {
+      return `[ERROR] ${bedId} is not a Pediatric bed.`;
+    }
+
+    return `[GUARDIAN] ${bed.addGuardianInfo(guardianName)}`;
+  }
+
 }
 
 
