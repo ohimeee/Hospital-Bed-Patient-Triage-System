@@ -108,7 +108,13 @@ export abstract class HospitalBed {
 
     return `${this._bedId} Charged ₱${this._dailyRate}. Total Bill: ₱${this._totalBill}.`;
   }
+
   
+  public restoreBilling(totalBill: number, daysAdmitted: number): void {
+    this._totalBill = totalBill;
+    this._daysAdmitted = daysAdmitted;
+  }
+
   // admit/discharge logic moved up
   public admitPatient(patientName: string, admitMessage: string): string {
     const admitted = this.baseAdmit(patientName);
@@ -120,11 +126,6 @@ export abstract class HospitalBed {
     const discharged = this.baseDischarge();
     if (!discharged) return `Pediatric Bed ${this.alreadyVacantMsg()}`;
     return dischargeMessage;
-  }
-
-  public restoreBilling(totalBill: number, daysAdmitted: number): void {
-    this._totalBill = totalBill;
-    this._daysAdmitted = daysAdmitted;
   }
 
   // protected methods
