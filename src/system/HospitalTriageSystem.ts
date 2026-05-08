@@ -114,6 +114,29 @@ export class HospitalTriageSystem {
     return `[UNASSIGN] ${bed.unassignDoctor()}`;
   }
 
+  public movePatient(fromBedId: string, toBedId: string): string {
+  const fromBed = this.findBedById(fromBedId);
+  const toBed = this.findBedById(toBedId);
+
+  if (!fromBed) return `[ERROR] Source bed ${fromBedId} not found.`;
+  if (!toBed) return `[ERROR] Destination bed ${toBedId} not found.`;
+  if (!fromBed.isOccupied) return `[ERROR] Bed ${fromBedId} has no patient to move.`;
+  if (toBed.isOccupied) return `[ERROR] Bed ${toBedId} is already occupied.`;
+
+  const patientName = fromBed.patientName; 
+  const assignedDoctor = fromBed.doctorName; 
+
+  fromBed.dischargePatient();
+  toBed.admitPatient(patientName);
+
+  
+  if (assignedDoctor) {
+    toBed.assignDoctor(assignedDoctor);
+  }
+
+  return `[MOVED] ${patientName} transferred from ${fromBedId} to ${toBedId}.`;
+}
+
   public getBedsList(): HospitalBed[] {
     return [...this._bedsList];
   }
