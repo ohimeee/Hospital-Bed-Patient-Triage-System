@@ -3,8 +3,8 @@ import { HospitalBed } from "./HospitalBed.ts";
 export abstract class GeneralBed extends HospitalBed {
   private _wardFloor: string;
 
-  constructor(bedId: string, wardName: string, wardFloor: string) {
-    super(bedId, wardName);
+  constructor(bedId: string, wardName: string, wardFloor: string, dailyRate: number) {
+    super(bedId, wardName, dailyRate);
     this._wardFloor = wardFloor;
   }
 
