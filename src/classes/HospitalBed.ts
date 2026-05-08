@@ -155,14 +155,12 @@ export abstract class HospitalBed {
 
   // set doctor message
   public setDoctor(doctorName: string): string {
-    const nameCache = this._doctorName;  // Theres a better way to do this istg
     const doctorSet = this.baseSetDoctor(doctorName);
     if (!doctorSet) {
-      return `Dr. ${nameCache} unassigned from ${this.bedType} ${this.bedId}.`
+      return `Dr. ${doctorName} unassigned from ${this.bedType} ${this.bedId}.`
     } else {
       return `Dr. ${doctorName} assigned to ${this.bedType} ${this.bedId}.`
     }
-    nameCache == null;
   }
 
 
@@ -185,6 +183,7 @@ export abstract class HospitalBed {
       this._patientName = "None";
       this._totalBill = 0;
       this._daysAdmitted = 0;
+      this._hasAssignedDoctor = false;
       this._doctorName = "None";
       return true;
     }
