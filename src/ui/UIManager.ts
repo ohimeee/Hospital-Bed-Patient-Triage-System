@@ -158,7 +158,7 @@ export class UIManager {
       ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
       ${bed instanceof MaternityBed ? `<p>Delivery: ${bed.hasDelivered ? `${bed.deliveryDate} - ${bed.newbornName}` : "Not delivered"}</p>` : ""}
       ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
-      <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
+      <button class="doctor-btn" type="button">${bed.hasAssignedDoctor && bed.isOccupied ? "Unassign Doctor" : "Assign Doctor"}</button>
       ${bed instanceof PediatricBed && bed.isOccupied ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       ${bed instanceof MaternityBed && bed.isOccupied ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
       ${bed instanceof EmergencyBed && bed.isOccupied ? `<button class="triage-btn" type="button">Sepsis Triage</button>` : ""}
