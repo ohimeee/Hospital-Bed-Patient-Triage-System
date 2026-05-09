@@ -13,10 +13,7 @@
           <button id="openMenuBtn" class="menu-button" type="button">Operations Menu</button>
         </div>
 
-        <div id="capacity-pill" class="capacity-pill normal">
-          <span id="capacity-percent">0%</span>
-          <small id="capacity-text">Capacity normal</small>
-        </div>
+        
       </header>
 
       <main class="layout">
@@ -35,10 +32,20 @@
                   <strong id="occupiedBeds">0</strong>
                 </article>
 
-                <article class="summary-card">
-                  <strong>AVAILABLE: </strong>
-                  <strong id="availableBeds">0</strong>
-                </article>
+                <div class="available-with-progress">
+                  <article class="summary-card">
+                    <strong>AVAILABLE: </strong>
+                    <strong id="availableBeds">0</strong>
+                  </article>
+
+                  <div id="capacity-pill" class="capacity-pill normal">
+                    <div id="capacity-fill" class="capacity-fill" style="width:0%"></div>
+                    <div class="capacity-labels">
+                      <span id="capacity-percent">0%</span>
+                      <small id="capacity-text">Capacity normal</small>
+                    </div>
+                  </div>
+                </div>
               </section>
             </div>
 

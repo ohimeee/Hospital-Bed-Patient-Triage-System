@@ -128,6 +128,8 @@ export class UIManager {
     this.getElement("occupiedBeds").textContent = String(data.occupied);
     this.getElement("availableBeds").textContent = String(data.total - data.occupied);
     this.getElement("capacity-percent").textContent = `${data.percent}%`;
+    const fill = document.getElementById("capacity-fill") as HTMLElement | null;
+    if (fill) fill.style.width = `${data.percent}%`;
     const isCritical = data.percent >= 80;
     this.getElement("capacity-text").textContent = isCritical
       ? "Critical capacity"
