@@ -71,10 +71,6 @@ export abstract class HospitalBed {
   public set doctorName(value: string) {
     this._doctorName = value;
   }
-  public set totalBill(value: number) {
-    this._totalBill = value;
-  }
-
 
   public chargeOneDay(): string {
     if (!this._isOccupied) {

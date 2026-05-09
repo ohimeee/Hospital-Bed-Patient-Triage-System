@@ -98,8 +98,6 @@ export class HospitalTriageSystem {
     console.log("recieved")
     if (!bed) return `[ERROR] Bed ID ${bedId} not found.`;
     if (!bed.isOccupied) return `[INFO] Bed ${bedId} is already vacant.`;
-
-    bed.totalBill = 0;
     return `[DISCHARGE] ${bed.dischargePatient()}`;
   }
 
