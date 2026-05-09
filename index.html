@@ -69,6 +69,7 @@
               <option value="admit">Admit Patient</option>
               <option value="add">Add Bed</option>
               <option value="transfer">Transfer Patient</option>
+              <option value="monitor">Change Monitoring Level</option>
             </select>
 
             <div id="admitForm" class="form-section">
@@ -103,6 +104,18 @@
               <label>To Bed ID</label>
               <input id="toBedId" type="text" placeholder="e.g., MAT-01" />
               <button id="transferBtn" class="modal-btn" type="button">Transfer Patient</button>
+            </div>
+
+            <div id="monitorForm" class="form-section hidden">
+              <label>Bed ID</label>
+              <input id="monitorBedId" type="text" placeholder="e.g., ICU-01" />
+              <label>Monitoring Level</label>
+              <select id="monitorLevel">
+                <option value="Normal">Normal</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Intensive">Intensive</option>
+              </select>
+              <button id="monitorBtn" class="modal-btn" type="button">Update Monitoring</button>
             </div>
           </div>
         </div>
