@@ -1,101 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CARESYNC</title>
-  </head>
-  <body>
-    <div id="app">
-      <!-- HEADER -->
-      <header class="topbar">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hospital Bed Availability & Triage System</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+<div id="app">
+    <header class="topbar">
         <div>
-          <p class="eyebrow">Hospital Operations</p>
-          <h1>CARESYNC: Bed Availability & Patient Triage</h1>
+            <p class="eyebrow">Hospital Operations</p>
+            <h1>Bed Availability & Patient Triage</h1>
         </div>
 
         <div id="capacity-pill" class="capacity-pill normal">
-          <span id="capacity-percent">0%</span>
-          <small id="capacity-text">Capacity normal</small>
+            <span id="capacity-percent">0%</span>
+            <small id="capacity-text">Capacity normal</small>
         </div>
-      </header>
+    </header>
 
-      <main class="layout">
+    <main class="layout">
+        <section class="summary-grid">
+            <article class="summary-card">
+                <span>Total Beds</span>
+                <strong id="totalBeds">0</strong>
+            </article>
 
+            <article class="summary-card">
+                <span>Occupied</span>
+                <strong id="occupiedBeds">0</strong>
+            </article>
 
-        <!-- TRIAGE -->
+            <article class="summary-card">
+                <span>Available</span>
+                <strong id="availableBeds">0</strong>
+            </article>
+        </section>
+
         <section class="work-area">
-          <div class="panel triage-panel">
-            <h2>Patient Triage</h2>
+            <div class="panel triage-panel">
+                
+                <h2>Patient Triage</h2>
+                <label>Patient Name</label>
+                <input id="patientName" type="text" placeholder="Enter patient name"/>
 
-            <label>Patient Name</label>
-            <input id="patientName" type="text" placeholder="Enter patient name" />
+                <label>Bed Type</label>
+                <select id="bedType">
+                    <option value="ICU">ICU</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Pediatric">Pediatric</option>
+                    <option value="Maternity">Maternity</option>
+                </select>
+                <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
 
-            <label>Bed Type</label>
-            <select id="bedType">
-              <option value="ICU">ICU</option>
-              <option value="Emergency">Emergency</option>
-              <option value="Pediatric">Pediatric</option>
-              <option value="Maternity">Maternity</option>
-            </select>
+                <div class="form-divider"></div>
 
-            <button id="admitButton" class="primary-button" type="button">Admit Patient</button>
+                <h2>Add Bed</h2>
+                <label for="newBedId">Bed ID</label>
+                <input id="newBedId" type="text" placeholder="Example: ICU-03"/>
 
-            <div class="form-divider"></div>
+                <label for="newBedType">Bed Type</label>
+                <select id="newBedType">
+                    <option value="ICU">ICU</option>
+                    <option value="Emergency">Emergency</option>
+                    <option value="Pediatric">Pediatric</option>
+                    <option value="Maternity">Maternity</option>
+                </select>
+                <button id="addBedButton" class="secondary-button" type="button">Add Bed</button>
 
-            <h2>Add Bed</h2>
+                <div class="form-divider"></div>
 
-            <label for="newBedId">Bed ID</label>
-            <input id="newBedId" type="text" placeholder="Example: ICU-03" />
+                <h2>Transfer Patient</h2>
+                <label for="fromBedId">From Bed ID</label>
+                <input id="fromBedId" type="text" placeholder="e.g., ICU-01"/>
 
-            <label for="newBedType">Bed Type</label>
-            <select id="newBedType">
-              <option value="ICU">ICU</option>
-              <option value="Emergency">Emergency</option>
-              <option value="Pediatric">Pediatric</option>
-              <option value="Maternity">Maternity</option>
-            </select>
+                <label for="toBedId">To Bed ID</label>
+                <input id="toBedId" type="text" placeholder="e.g., MAT-01"/>
 
-            <button id="addBedButton" class="secondary-button" type="button">Add Bed</button>
-          </div>
-
-          <!-- BEDS -->
-          <div class="panel beds-panel">
-            <div class="panel-heading">
-
-              <section class="summary-grid">
-                <article class="summary-card">
-                  <strong>TOTAL: </strong>
-                  <strong id="totalBeds">0</strong>
-                </article>
-
-                <article class="summary-card">
-                  <strong>OCCUPIED: </strong>
-                  <strong id="occupiedBeds">0</strong>
-                </article>
-
-                <article class="summary-card">
-                  <strong>AVAILABLE: </strong>
-                  <strong id="availableBeds">0</strong>
-                </article>
-              </section>
+                <button id="transferBtn" class="secondary-button" type="button">Transfer Patient</button>
             </div>
 
-          <div id="bedsGrid" class="beds-grid"></div>
-          </div>
+            <div class="panel beds-panel">
+                <div class="panel-heading">
+                    <h2>Ward Beds</h2>
+                </div>
+                <div id="bedsGrid" class="beds-grid"></div>
+            </div>
         </section>
 
-        <!-- LOG -->
         <section class="panel log-panel">
-          <div class="panel-heading">
-            <h2>Activity Log</h2>
-            <button id="clearLogButton">Clear</button>
-          </div>
-
-          <div id="activityLog"></div>
+            <div class="panel-heading">
+                <h2>Activity Log</h2>
+                <button id="clearLogButton">Clear</button>
+            </div>
+            <div id="activityLog"></div>
         </section>
-      </main>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    </main>
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
 </html>
