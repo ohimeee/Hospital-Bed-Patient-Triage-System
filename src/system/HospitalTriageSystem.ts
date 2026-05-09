@@ -208,4 +208,16 @@ export class HospitalTriageSystem {
 
     return `${prefix} ${message}`;
   }
+
+  public triage(bedId: string, temp: number, hr: number): string {
+    const bed = this.findBedById(bedId);
+    if (!bed) return "Bed not found.";
+
+    if (bed instanceof EmergencyBed) {
+      return bed.checkSepsisRisk(temp, hr);
+    }
+
+    return `[ERROR] Bed ${bedId} is a ${bed.bedType}, not an Emergency Bed.`;
+  }
+  
 }

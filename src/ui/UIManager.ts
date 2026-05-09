@@ -2,6 +2,7 @@ import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
 import { PediatricBed } from "../classes/PediatricBed.ts";
 import { MaternityBed } from "../classes/MaternityBed.ts";
+import { EmergencyBed } from "../classes/EmergencyBed.ts";
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -142,6 +143,7 @@ export class UIManager {
   private renderBedCard(bed: any) {
     const card = document.createElement("div");
     card.className = `bed-card ${this.getBedColorClass(bed.wardName)}`;
+    
     card.innerHTML = `
       <strong>${bed.bedId}</strong>
       <p>${bed.wardName}</p>
@@ -156,16 +158,45 @@ export class UIManager {
       <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
       ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       ${bed instanceof MaternityBed ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
+      ${bed instanceof EmergencyBed && bed.isOccupied ? `<button class="triage-btn" type="button">Sepsis Triage</button>` : ""}
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
+
     this.bedsGrid.appendChild(card);
-    card
-      .querySelector(".discharge-btn")
-      ?.addEventListener("click", () => this.handleDischarge(bed));
+
+    // Event listeners attached AFTER the card is added to the DOM
+    card.querySelector(".discharge-btn")?.addEventListener("click", () => this.handleDischarge(bed));
     card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
     card.querySelector(".guardian-btn")?.addEventListener("click", () => this.handleGuardian(bed));
     card.querySelector(".record-delivery-btn")?.addEventListener("click", () => this.handleRecordDelivery(bed));
     card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
+    
+    // Explicitly binding the Triage button
+    const triageBtn = card.querySelector(".triage-btn");
+    if (triageBtn) {
+        triageBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.handleTriage(bed);
+        });
+    }
+  }
+
+  private handleTriage(bed: any) {
+    const tempStr = prompt(`Enter Temp (°C) for Bed ${bed.bedId}:`, "37.0");
+    const hrStr = prompt(`Enter Heart Rate (BPM) for Bed ${bed.bedId}:`, "80");
+
+    if (tempStr === null || hrStr === null) return;
+
+    const temp = parseFloat(tempStr);
+    const hr = parseInt(hrStr);
+
+    if (isNaN(temp) || isNaN(hr)) {
+      this.addLog("[ERROR] Invalid vital signs format.");
+      return;
+    }
+
+    this.addLog(this.system.triage(bed.bedId, temp, hr));
+    this.refresh();
   }
 
   private handleDischarge(bed: any) {
