@@ -3,6 +3,7 @@ import type { BedType } from "../system/HospitalTriageSystem.ts";
 import { PediatricBed } from "../classes/PediatricBed.ts";
 import { MaternityBed } from "../classes/MaternityBed.ts";
 import { EmergencyBed } from "../classes/EmergencyBed.ts";
+import { ICUBed } from "../classes/ICUBed.ts";
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -159,19 +160,18 @@ export class UIManager {
       ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
       ${bed instanceof MaternityBed ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
       ${bed instanceof EmergencyBed && bed.isOccupied ? `<button class="triage-btn" type="button">Sepsis Triage</button>` : ""}
+      ${bed instanceof ICUBed && bed.isOccupied ? `<button class="icu-status-btn" type="button">ICU Status</button>` : ""}
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
 
     this.bedsGrid.appendChild(card);
 
-    // Event listeners attached AFTER the card is added to the DOM
     card.querySelector(".discharge-btn")?.addEventListener("click", () => this.handleDischarge(bed));
     card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
     card.querySelector(".guardian-btn")?.addEventListener("click", () => this.handleGuardian(bed));
     card.querySelector(".record-delivery-btn")?.addEventListener("click", () => this.handleRecordDelivery(bed));
     card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
     
-    // Explicitly binding the Triage button
     const triageBtn = card.querySelector(".triage-btn");
     if (triageBtn) {
         triageBtn.addEventListener("click", (e) => {
@@ -179,6 +179,32 @@ export class UIManager {
             this.handleTriage(bed);
         });
     }
+
+    const icuStatusBtn = card.querySelector(".icu-status-btn");
+    if (icuStatusBtn) {
+        icuStatusBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.handleICUCheck(bed);
+        });
+    }
+  }
+
+  private handleICUCheck(bed: any) {
+    const spo2Str = prompt(`Enter SpO2 (%) for Bed ${bed.bedId}:`, "95");
+    const bpStr = prompt(`Enter Systolic BP (mmHg) for Bed ${bed.bedId}:`, "120");
+
+    if (spo2Str === null || bpStr === null) return;
+
+    const spo2 = parseFloat(spo2Str);
+    const bp = parseFloat(bpStr);
+
+    if (isNaN(spo2) || isNaN(bp)) {
+      this.addLog("[ERROR] Invalid vital signs format for ICU.");
+      return;
+    }
+
+    this.addLog(this.system.checkCriticalStatus(bed.bedId, spo2, bp));
+    this.refresh();
   }
 
   private handleTriage(bed: any) {

@@ -157,7 +157,7 @@ export class HospitalTriageSystem {
     return { occupied, total, percent };
   }
 
-  // Simulates one hospital day (24 seconds) and charges all occupied beds.
+
   public passOneDay(): string[] {
     const messages: string[] = [];
 
@@ -174,7 +174,6 @@ export class HospitalTriageSystem {
     return messages;
   }
 
-  // Finds a pediatric bed and adds guardian info if the bed has a patient
   public addGuardianToBed(bedId: string, guardianName: string): string {
     const bed = this.findBedById(bedId);
 
@@ -219,5 +218,26 @@ export class HospitalTriageSystem {
 
     return `[ERROR] Bed ${bedId} is a ${bed.bedType}, not an Emergency Bed.`;
   }
+
+  public checkCriticalStatus(id: string, spo2: number, systolicBP: number): string {
+    let criticalIssues = 0;
+
+    if (spo2 < 90) {
+        criticalIssues = criticalIssues + 1;
+    }
+
+    if (systolicBP < 90 || systolicBP > 180) {
+        criticalIssues = criticalIssues + 1;
+    }
+
+    if (criticalIssues >= 2) {
+        return `[EMERGENCY] Bed ${id}: Organ failure risk. Notify Doctor!`;
+    } else if (criticalIssues === 1) {
+        return `[WARNING] Bed ${id}: Unstable vitals. Increase monitoring.`;
+    } else {
+        return `[STABLE] Bed ${id}: Vitals within ICU limits.`;
+    }
+}
   
+
 }
