@@ -16,7 +16,9 @@ export abstract class HospitalBed {
   // admitting/discharging
   private _admitMessage: string;
   private _dischargeMessage: string;
+  
 
+  // move sa dalom lol
   constructor(_bedId: string, _wardName: string, _dailyRate: number) {
     this._bedId = _bedId;
     this._wardName = _wardName;

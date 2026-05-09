@@ -249,11 +249,10 @@ export class UIManager {
 
     if (!guardianName) {
       this.addLog("[INFO] Enter guardian name first.");
-      return;
+    } else {
+      this.addLog(this.system.addGuardianToBed(bed.bedId, guardianName.trim()));
+      this.refresh();
     }
-
-    this.addLog(this.system.addGuardianToBed(bed.bedId, guardianName.trim()));
-    this.refresh();
   }
 
   private handleRecordDelivery(bed: any) {
@@ -262,28 +261,33 @@ export class UIManager {
 
     if (!deliveryDate || !newbornName) {
       this.addLog("[INFO] Please enter both delivery date and newborn's name.");
-      return;
+    } else {
+      this.addLog(this.system.setRecordDelivery(bed.bedId, deliveryDate.trim(), newbornName.trim()));
+      this.refresh();
     }
-
-    this.addLog(this.system.setRecordDelivery(bed.bedId, deliveryDate.trim(), newbornName.trim()));
-    this.refresh();
   }
 
   private handleDelete(bed: any) {
     if (bed.isOccupied) {
       this.addLog("[INFO] You cannot delete a bed while a patient is still admitted to it.");
-      return;
+    } else {
+      this.addLog(this.system.deleteBed(bed.bedId));
+      this.refresh();
     }
-    this.addLog(this.system.deleteBed(bed.bedId));
-    this.refresh();
   }
 
   private getBedColorClass(wardName: string) {
-    if (wardName.includes("ICU")) return "critical-bed";
-    if (wardName.includes("Emergency")) return "warning-bed";
-    if (wardName.includes("Pediatric")) return "pediatric-bed";
-    if (wardName.includes("Maternity")) return "maternity-bed";
-    return "normal-bed";
+    if (wardName.includes("ICU")) {
+      return "critical-bed";
+    } else if (wardName.includes("Emergency")) {
+      return "warning-bed";
+    } else if (wardName.includes("Pediatric")) {
+      return "pediatric-bed";
+    } else if (wardName.includes("Maternity")) {
+      return "maternity-bed";
+    } else {
+      return "normal-bed";
+    }
   }
 
   private addLog(msg: string) {
