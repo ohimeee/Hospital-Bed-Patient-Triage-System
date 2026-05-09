@@ -255,7 +255,7 @@ export class UIManager {
   }
 
   private handleRecordDelivery(bed: any) {
-    const deliveryDate = prompt("Enter delivery date (e.g., 2024-06-01):");
+    const deliveryDate = prompt("Enter delivery date (e.g., May 5, 2007):");
     const newbornName = prompt("Enter newborn's name:");
 
     if (!deliveryDate || !newbornName) {
