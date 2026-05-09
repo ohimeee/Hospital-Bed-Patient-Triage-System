@@ -153,6 +153,8 @@ export class UIManager {
       <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
       <p>Monitoring: ${bed.getMonitoringLevel()}</p>
       <p>Bill: ₱${bed.totalBill}</p>
+      ${bed instanceof EmergencyBed ? `<p>Temperature: ${bed.temperature.toFixed(1)} °C</p><p>BPM: ${bed.heartRate}</p>` : ""}
+      ${bed instanceof ICUBed ? `<p>SpO2: ${bed.oxygenLevel}%</p><p>Systolic BP: ${bed.bloodPressure} mmHg</p>` : ""}
       ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
       ${bed instanceof MaternityBed ? `<p>Delivery: ${bed.hasDelivered ? `${bed.deliveryDate} - ${bed.newbornName}` : "Not delivered"}</p>` : ""}
       ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
@@ -214,7 +216,7 @@ export class UIManager {
     if (tempStr === null || hrStr === null) return;
 
     const temp = parseFloat(tempStr);
-    const hr = parseInt(hrStr);
+    const hr = parseInt(hrStr, 10);
 
     if (isNaN(temp) || isNaN(hr)) {
       this.addLog("[ERROR] Invalid vital signs format.");

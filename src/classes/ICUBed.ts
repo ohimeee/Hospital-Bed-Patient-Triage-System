@@ -18,19 +18,28 @@ export class ICUBed extends CriticalBed {
     let criticalIssues = 0;
 
     if (spo2 < 90) {
-      criticalIssues = criticalIssues + 1;
+      criticalIssues++;
     }
 
     if (systolicBP < 90 || systolicBP > 180) {
-      criticalIssues = criticalIssues + 1;
+      criticalIssues++;
     }
 
     if (criticalIssues >= 2) {
-      return `[EMERGENCY] Bed ${this.bedId}: Organ failure risk. Notify Doctor!`;
+      return `[EMERGENCY] Bed ${this.bedId}: ICU vitals critical. Notify doctor immediately!`;
     } else if (criticalIssues === 1) {
-      return `[WARNING] Bed ${this.bedId}: Unstable vitals. Increase monitoring.`;
+      return `[WARNING] Bed ${this.bedId}: ICU vitals unstable. Increase monitoring.`;
     }
 
-    return `[STABLE] Bed ${this.bedId}: Vitals within ICU limits.`;
+    return `[STABLE] Bed ${this.bedId}: ICU vitals within acceptable range.`;
+  }
+
+  public dischargePatient(): string {
+    const discharged = this.baseDischarge();
+    if (!discharged) return this.alreadyVacantMsg();
+    this.oxygenLevel = 0;
+    this.bloodPressure = 0;
+    if (!this.dischargeMessage) return `Patient discharged from ${this.bedId}. Total Bill: ₱${this.totalBill}.`;
+    return this.dischargeMessage;
   }
 }

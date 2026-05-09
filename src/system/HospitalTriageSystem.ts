@@ -220,24 +220,14 @@ export class HospitalTriageSystem {
   }
 
   public checkCriticalStatus(id: string, spo2: number, systolicBP: number): string {
-    let criticalIssues = 0;
-
-    if (spo2 < 90) {
-        criticalIssues = criticalIssues + 1;
+    const bed = this.findBedById(id);
+    if (!bed) return `[ERROR] Bed ${id} not found.`;
+    if (!(bed instanceof ICUBed)) {
+      return `[ERROR] Bed ${id} is not an ICU bed.`;
     }
 
-    if (systolicBP < 90 || systolicBP > 180) {
-        criticalIssues = criticalIssues + 1;
-    }
-
-    if (criticalIssues >= 2) {
-        return `[EMERGENCY] Bed ${id}: Organ failure risk. Notify Doctor!`;
-    } else if (criticalIssues === 1) {
-        return `[WARNING] Bed ${id}: Unstable vitals. Increase monitoring.`;
-    } else {
-        return `[STABLE] Bed ${id}: Vitals within ICU limits.`;
-    }
-}
+    return bed.checkCriticalStatus(spo2, systolicBP);
+  }
   
 
 }
