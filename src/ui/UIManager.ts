@@ -134,8 +134,14 @@ export class UIManager {
     this.getElement("capacity-text").textContent = isCritical
       ? "Critical capacity"
       : "Capacity normal";
-    this.getElement("capacity-pill").className =
-      `capacity-pill ${isCritical ? "critical" : "normal"}`;
+    const pill = this.getElement("capacity-pill");
+    pill.className = `capacity-pill ${isCritical ? "critical" : "normal"}`;
+
+    // adjust label color for legibility depending on fill percent
+    const labels = pill.querySelector(".capacity-labels") as HTMLElement | null;
+    if (labels) {
+      labels.style.color = data.percent >= 50 ? "#fff" : "#000";
+    }
   }
 
   private renderBedCards() {
