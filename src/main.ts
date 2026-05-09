@@ -22,6 +22,10 @@ function mountHospitalSystem() {
   const pillText = document.getElementById("capacity-text") as HTMLSpanElement;
   const pill = document.getElementById("capacity-pill") as HTMLDivElement;
 
+  const fromBedIdInput = document.getElementById("fromBedId") as HTMLInputElement;
+  const toBedIdInput = document.getElementById("toBedId") as HTMLInputElement;
+  const transferBtn = document.getElementById("transferBtn") as HTMLButtonElement;
+
   const admitBtn = document.getElementById("admitButton") as HTMLButtonElement;
   const addBedBtn = document.getElementById("addBedButton") as HTMLButtonElement;
   const clearLogBtn = document.getElementById("clearLogButton") as HTMLButtonElement;
@@ -158,6 +162,23 @@ function mountHospitalSystem() {
     refresh();
   });
 
+  transferBtn?.addEventListener("click", () => {
+    const fromId = fromBedIdInput.value.trim();
+    const toId = toBedIdInput.value.trim();
+
+    if (!fromId || !toId) {
+      logMsg("[INFO] Please provide both From and To Bed IDs.");
+      return;
+    }
+
+    const result = system.movePatient(fromId, toId);
+    logMsg(result);
+    
+    fromBedIdInput.value = "";
+    toBedIdInput.value = "";
+    refresh();
+  });
+
   clearLogBtn.addEventListener("click", () => {
     log.innerHTML = "";
   });
@@ -174,31 +195,7 @@ function mountHospitalSystem() {
     refresh();
   }, 24000);
 
-// Move patient button clicked
-    const moveBtn = document.getElementById('move-patient-btn');
-    const fromInput = document.getElementById('from-bed-id') as HTMLInputElement;
-    const toInput = document.getElementById('to-bed-id') as HTMLInputElement;
-    const statusDiv = document.getElementById('status-message');
 
-    moveBtn?.addEventListener('click', () => {
-        const fromId = fromInput.value.trim();
-        const toId = toInput.value.trim();
-
-        if (!fromId || !toId) {
-            if (statusDiv) statusDiv.innerText = "Please enter both Bed IDs.";
-            return;
-        }
-
-        const result = system.movePatient(fromId, toId);
-
-        if (statusDiv) {
-            statusDiv.innerText = result;
-            fromInput.value = '';
-            toInput.value = '';
-        }
-
-        refresh();
-    });
 
 }
 
