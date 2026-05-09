@@ -25,9 +25,10 @@ body {
 .capacity-pill {
   border: 1px solid black;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 .summary-grid {
@@ -49,6 +50,9 @@ body {
   gap: 20px;
 }
 
+.panel-heading {
+  display: flex;
+}
 
 /*BED CARDS*/
 .bed-card {
