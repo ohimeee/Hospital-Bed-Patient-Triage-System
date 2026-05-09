@@ -1,6 +1,7 @@
 import { HospitalTriageSystem } from "../system/HospitalTriageSystem.ts";
 import type { BedType } from "../system/HospitalTriageSystem.ts";
 import { PediatricBed } from "../classes/PediatricBed.ts";
+import { MaternityBed } from "../classes/MaternityBed.ts";
 
 export class UIManager {
   private system: HospitalTriageSystem;
@@ -150,9 +151,11 @@ export class UIManager {
       <p>Monitoring: ${bed.getMonitoringLevel()}</p>
       <p>Bill: ₱${bed.totalBill}</p>
       ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
+      ${bed instanceof MaternityBed ? `<p>Delivery: ${bed.hasDelivered ? `${bed.deliveryDate} - ${bed.newbornName}` : "Not delivered"}</p>` : ""}
       ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
       <button class="doctor-btn" type="button">${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>
       ${bed instanceof PediatricBed ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
+      ${bed instanceof MaternityBed ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
       <button class="delete-btn" type="button">Delete Bed</button>
     `;
     this.bedsGrid.appendChild(card);
@@ -161,6 +164,7 @@ export class UIManager {
       ?.addEventListener("click", () => this.handleDischarge(bed));
     card.querySelector(".doctor-btn")?.addEventListener("click", () => this.handleDoctor(bed));
     card.querySelector(".guardian-btn")?.addEventListener("click", () => this.handleGuardian(bed));
+    card.querySelector(".record-delivery-btn")?.addEventListener("click", () => this.handleRecordDelivery(bed));
     card.querySelector(".delete-btn")?.addEventListener("click", () => this.handleDelete(bed));
   }
 
@@ -188,6 +192,19 @@ export class UIManager {
     }
 
     this.addLog(this.system.addGuardianToBed(bed.bedId, guardianName.trim()));
+    this.refresh();
+  }
+
+  private handleRecordDelivery(bed: any) {
+    const deliveryDate = prompt("Enter delivery date (e.g., 2024-06-01):");
+    const newbornName = prompt("Enter newborn's name:");
+
+    if (!deliveryDate || !newbornName) {
+      this.addLog("[INFO] Please enter both delivery date and newborn's name.");
+      return;
+    }
+
+    this.addLog(this.system.setRecordDelivery(bed.bedId, deliveryDate.trim(), newbornName.trim()));
     this.refresh();
   }
 

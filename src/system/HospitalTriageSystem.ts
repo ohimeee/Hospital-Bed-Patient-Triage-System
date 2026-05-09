@@ -191,6 +191,21 @@ export class HospitalTriageSystem {
 
     return `${prefix} ${message}`;
   }
+
+  public setRecordDelivery(bedId: string, deliveryDate: string, newbornName: string): string {
+    const bed = this.findBedById(bedId);
+
+    if (!bed) {
+      return `[ERROR] Bed ID ${bedId} not found.`;
+    }
+
+    if (!(bed instanceof MaternityBed)) {
+      return `[ERROR] ${bedId} is not a Maternity bed.`;
+    }
+
+    const message = bed.recordDelivery(deliveryDate, newbornName);
+    const prefix = bed.isOccupied ? "[DELIVERY]" : "[ERROR]";
+
+    return `${prefix} ${message}`;
+  }
 }
-
-
