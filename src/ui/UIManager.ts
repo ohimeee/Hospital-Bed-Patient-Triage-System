@@ -154,24 +154,41 @@ export class UIManager {
     card.className = `bed-card ${this.getBedColorClass(bed.wardName)}`;
     
     card.innerHTML = `
-      <strong>${bed.bedId}</strong>
-      <p>${bed.wardName}</p>
-      <p>${bed.getBedInfo()}</p>
-      <p>${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</p>
-      <p>${bed.hasAssignedDoctor ? `Doctor: ${bed.doctorName}` : "No doctor assigned"}</p>
-      <p>Monitoring: ${bed.getMonitoringLevel()}</p>
-      <p>Bill: ₱${bed.totalBill}</p>
-      ${bed instanceof EmergencyBed ? `<p>Temperature: ${bed.temperature.toFixed(1)} °C</p><p>BPM: ${bed.heartRate}</p>` : ""}
-      ${bed instanceof ICUBed ? `<p>SpO2: ${bed.oxygenLevel}%</p><p>Systolic BP: ${bed.bloodPressure} mmHg</p>` : ""}
-      ${bed instanceof PediatricBed ? `<p>Guardian: ${bed.guardianName}</p>` : ""}
-      ${bed instanceof MaternityBed ? `<p>Delivery: ${bed.hasDelivered ? `${bed.deliveryDate} - ${bed.newbornName}` : "Not delivered"}</p>` : ""}
-      ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
-      ${bed.isOccupied ? `<button class="doctor-btn" type="button"> ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>` : ""}
-      ${bed instanceof PediatricBed && bed.isOccupied ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
-      ${bed instanceof MaternityBed && bed.isOccupied ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
-      ${bed instanceof EmergencyBed && bed.isOccupied ? `<button class="triage-btn" type="button">Sepsis Triage</button>` : ""}
-      ${bed instanceof ICUBed && bed.isOccupied ? `<button class="icu-status-btn" type="button">ICU Status</button>` : ""}
-      <button class="delete-btn" type="button">Delete Bed</button>
+      <div class="bed-band">
+        <span class="bed-number">${bed.bedId}</span>
+        <span class="bed-ward">${bed.wardName}</span>
+      </div>
+      <div class="bed-card-body">
+        <p class="bed-meta">${bed.getBedInfo()}</p>
+        <span class="status-pill ${bed.isOccupied ? "is-occupied" : "is-available"}">${bed.isOccupied ? `Occupied (${bed.patientName})` : "Unoccupied"}</span>
+        <div class="bed-rows">
+          <div class="bed-row">
+            <span class="bed-label">Doctor</span>
+            <span class="bed-value">${bed.hasAssignedDoctor ? bed.doctorName : "No doctor assigned"}</span>
+          </div>
+          <div class="bed-row">
+            <span class="bed-label">Monitoring</span>
+            <span class="bed-value">${bed.getMonitoringLevel()}</span>
+          </div>
+          <div class="bed-row">
+            <span class="bed-label">Bill</span>
+            <span class="bed-value">₱${bed.totalBill}</span>
+          </div>
+          ${bed instanceof EmergencyBed ? `<div class="bed-row"><span class="bed-label">Temperature</span><span class="bed-value">${bed.temperature.toFixed(1)} °C</span></div><div class="bed-row"><span class="bed-label">BPM</span><span class="bed-value">${bed.heartRate}</span></div>` : ""}
+          ${bed instanceof ICUBed ? `<div class="bed-row"><span class="bed-label">SpO2</span><span class="bed-value">${bed.oxygenLevel}%</span></div><div class="bed-row"><span class="bed-label">Systolic BP</span><span class="bed-value">${bed.bloodPressure} mmHg</span></div>` : ""}
+          ${bed instanceof PediatricBed ? `<div class="bed-row"><span class="bed-label">Guardian</span><span class="bed-value">${bed.guardianName}</span></div>` : ""}
+          ${bed instanceof MaternityBed ? `<div class="bed-row"><span class="bed-label">Delivery</span><span class="bed-value">${bed.hasDelivered ? `${bed.deliveryDate} - ${bed.newbornName}` : "Not delivered"}</span></div>` : ""}
+        </div>
+        <div class="bed-actions">
+          ${bed.isOccupied ? `<button class="discharge-btn" type="button">Discharge</button>` : ""}
+          ${bed.isOccupied ? `<button class="doctor-btn" type="button"> ${bed.hasAssignedDoctor ? "Unassign Doctor" : "Assign Doctor"}</button>` : ""}
+          ${bed instanceof PediatricBed && bed.isOccupied ? `<button class="guardian-btn" type="button">Add Guardian</button>` : ""}
+          ${bed instanceof MaternityBed && bed.isOccupied ? `<button class="record-delivery-btn" type="button">Record Delivery</button>` : ""}
+          ${bed instanceof EmergencyBed && bed.isOccupied ? `<button class="triage-btn" type="button">Sepsis Triage</button>` : ""}
+          ${bed instanceof ICUBed && bed.isOccupied ? `<button class="icu-status-btn" type="button">ICU Status</button>` : ""}
+          <button class="delete-btn" type="button">Delete Bed</button>
+        </div>
+      </div>
     `;
 
     this.bedsGrid.appendChild(card);

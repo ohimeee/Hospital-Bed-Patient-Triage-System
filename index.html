@@ -3,19 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CARESYNC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Martian+Mono:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>CareSync &mdash; Bed Availability &amp; Patient Triage</title>
   </head>
   <body>
     <div id="app">
       <header class="topbar">
-        <div>
-          <h1 class = "titleText">>CARESYNC: 
-            <span class = "smallerText"> Bed Availability & Patient Triage 
-            </span></h1>
-          <button id="openMenuBtn" class="menu-button" type="button">Operations Menu</button>
+        <div class="brand">
+          <h1 class="titleText">CareSync</h1>
+          <p class="subtitle">Bed Availability &amp; Patient Triage</p>
         </div>
-
-        
+        <button id="openMenuBtn" class="menu-button" type="button">Operations Menu</button>
       </header>
 
       <main class="layout">
@@ -24,22 +27,23 @@
           <div class="panel beds-panel">
             <div class="panel-heading">
               <section class="summary-grid">
-                <article class="summary-card">
-                  <strong>TOTAL: </strong>
-                  <strong id="totalBeds">0</strong>
+                <article class="stat">
+                  <span class="stat-label">Total beds</span>
+                  <span class="stat-value" id="totalBeds">0</span>
                 </article>
 
-                <article class="summary-card">
-                  <strong>OCCUPIED: </strong>
-                  <strong id="occupiedBeds">0</strong>
+                <article class="stat">
+                  <span class="stat-label">Occupied</span>
+                  <span class="stat-value" id="occupiedBeds">0</span>
                 </article>
 
-                <div class="available-with-progress">
-                  <article class="summary-card">
-                    <strong>AVAILABLE: </strong>
-                    <strong id="availableBeds">0</strong>
-                  </article>
+                <article class="stat">
+                  <span class="stat-label">Available</span>
+                  <span class="stat-value" id="availableBeds">0</span>
+                </article>
 
+                <article class="stat stat-capacity">
+                  <span class="stat-label">Capacity</span>
                   <div id="capacity-pill" class="capacity-pill normal">
                     <div id="capacity-fill" class="capacity-fill" style="width:0%"></div>
                     <div class="capacity-labels">
@@ -47,7 +51,7 @@
                       <small id="capacity-text">Capacity normal</small>
                     </div>
                   </div>
-                </div>
+                </article>
               </section>
             </div>
 
@@ -130,7 +134,7 @@
         </div>
       </div>
     </div>
-    
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
